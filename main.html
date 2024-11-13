@@ -1,0 +1,1880 @@
+<!--╔══════════════════════════════════════════════════════════════════════════════════════════╗
+    ║                                Name: buttonGenerator                                     ║
+    ║                                Author: Carson Morris                                     ║
+    ║                                   Date: 11/12/2024                                       ║
+    ║                                      Rev: 9.0                                            ║
+    ╚══════════════════════════════════════════════════════════════════════════════════════════╝-->
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Custom Button Generator</title>
+        <style id="dynamicStyles">
+            /* Dynamic styles will be inserted here */
+        </style>
+        <style>
+            /* Reset and base styles */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: Arial, sans-serif;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+            /* Header */
+            header {
+                background-color: #4CAF50;
+                color: white;
+                padding: 15px 20px;
+                text-align: center;
+                flex: 0 0 auto;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                position: relative; /* To position the credit text */
+            }
+            header h1 {
+                font-size: 24px;
+            }
+            /* Credit Text */
+            .credit {
+                position: absolute;
+                bottom: 10px;
+                right: 20px;
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.8);
+                font-style: italic;
+            }
+            /* Main content */
+            main {
+                flex: 1 1 auto;
+                display: flex;
+                height: calc(100vh - 60px); /* Adjust based on header height */
+            }
+            /* Sidebar */
+            #controls {
+                width: 40%;
+                background-color: #f9f9f9;
+                padding: 20px;
+                overflow-y: auto;
+                border-right: 1px solid #ddd;
+                display: flex;
+                flex-direction: column;
+            }
+            /* Tab Navigation */
+            .tab-navigation {
+                display: flex;
+                margin-bottom: 20px;
+            }
+            .tab-navigation button {
+                flex: 1;
+                padding: 10px;
+                cursor: pointer;
+                background-color: #e0e0e0;
+                border: none;
+                outline: none;
+                transition: background-color 0.3s;
+                font-weight: bold;
+            }
+            .tab-navigation button.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+            /* Sections */
+            .section {
+                display: none; /* Hidden by default */
+            }
+            .section.active {
+                display: block; /* Show when active */
+            }
+            .section h2 {
+                font-size: 18px;
+                margin-bottom: 10px;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 5px;
+                text-transform: uppercase;
+                text-align: center;
+            }
+            /* Subsections */
+            .subsection {
+                margin-bottom: 15px;
+            }
+            .subsection h3 {
+                font-size: 16px;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+                border-bottom: 1px dashed #ccc;
+                padding-bottom: 3px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            /* Form Layout */
+            .form-group {
+                display: flex;
+                flex-wrap: wrap;
+                margin-bottom: 15px;
+                align-items: flex-start;
+                justify-content: center; /* Center the form group items */
+            }
+            .form-group label {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-right: 20px;
+                margin-bottom: 10px;
+                width: calc(100% / 3 - 20px); /* Three inputs per row */
+            }
+            .form-group.three-items label {
+                width: calc(100% / 3 - 20px); /* Three inputs per row */
+            }
+            .form-group.two-items label {
+                width: calc(100% / 2 - 20px); /* Two inputs per row */
+            }
+            .form-group.four-items label {
+                width: calc(100% / 4 - 20px); /* Four inputs per row */
+            }
+            .form-group.label-full-width {
+                width: 100%; /* Single input spanning full width */
+                align-items: center; /* Centered */
+            }
+            /* Styled Color Inputs as Circles with Black Border */
+            .color-input-wrapper {
+                position: relative;
+                width: 40px;
+                height: 40px;
+                border: 1px solid #000; /* Black border */
+                border-radius: 50%;
+                overflow: hidden;
+                margin-top: 5px;
+            }
+            .color-input-wrapper input[type="color"] {
+                width: 100%;
+                height: 100%;
+                border: none;
+                padding: 0;
+                cursor: pointer;
+                border-radius: 50%;
+                appearance: none;
+                background: none;
+            }
+            /* Remove default appearance */
+            .color-input-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+                padding: 0;
+            }
+            .color-input-wrapper input[type="color"]::-webkit-color-swatch {
+                border: none;
+                border-radius: 50%;
+            }
+            .color-input-wrapper input[type="color"]::-moz-color-swatch {
+                border: none;
+                border-radius: 50%;
+            }
+            /* Set color picker to default to hex */
+            input[type="color"] {
+                --webkit-color-swatch: none;
+            }
+            /* Styled Checkboxes */
+            .styled-checkbox {
+                display: flex;
+                align-items: center;
+                margin-top: 5px;
+            }
+            .styled-checkbox input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                margin-right: 5px;
+                cursor: pointer;
+            }
+            /* Dropdown for Fonts */
+            .font-select-wrapper {
+                position: relative;
+                width: 100%;
+            }
+            .font-select-wrapper select {
+                width: 100%;
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                appearance: none;
+                background-color: #fff;
+                background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%23999"><polygon points="0,0 14,0 7,10" /></svg>');
+                background-repeat: no-repeat;
+                background-position: right 10px center;
+                background-size: 12px;
+            }
+            .font-select-wrapper input[type="text"] {
+                display: none;
+                margin-top: 5px;
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            /* Preview Area */
+            #preview {
+                width: 60%;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                background-color: #f1f1f1;
+            }
+            #buttonContainer {
+                width: 100%;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /* Checkered background */
+                background-image:
+                    linear-gradient(45deg, #ccc 25%, transparent 25%),
+                    linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #ccc 75%),
+                    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+                background-size: 20px 20px;
+                background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+                border: 2px dashed #ddd;
+                border-radius: 8px;
+                position: relative;
+            }
+            /* Text Button */
+            #textButton {
+                cursor: pointer;
+                transition: all 0.3s ease;
+                /* Text Button Styles will be applied dynamically */
+            }
+            /* Image Button */
+            #imageButton {
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: none; /* Hidden by default */
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                border: none; /* Remove default border for image-based buttons */
+                min-width: 100px; /* Ensure visibility */
+                min-height: 50px; /* Ensure visibility */
+                background-color: transparent; /* Ensure transparent background */
+                padding: 0; /* Remove default padding */
+                position: relative; /* For positioning the text */
+            }
+            /* Image inside Image Button */
+            #imageButtonImg {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                /* Box-shadow and transform will be applied dynamically */
+            }
+            /* Download Buttons */
+            #downloadButtons {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                padding-top: 10px;
+            }
+            #downloadButtons button {
+                padding: 10px 20px;
+                cursor: pointer;
+                border: none;
+                background-color: #4CAF50;
+                color: white;
+                border-radius: 4px;
+                font-size: 16px;
+                transition: background-color 0.3s;
+            }
+            #downloadButtons button:hover {
+                background-color: #45a049;
+            }
+            /* Hide scrollbar for sidebar */
+            #controls::-webkit-scrollbar {
+                display: none;
+            }
+            #controls {
+                -ms-overflow-style: none; /* IE and Edge */
+                scrollbar-width: none; /* Firefox */
+            }
+            /* Responsive adjustments */
+            @media (max-width: 800px) {
+                main {
+                    flex-direction: column;
+                }
+                #controls, #preview {
+                    width: 100%;
+                    height: 50%;
+                }
+                #buttonContainer {
+                    height: 60%;
+                }
+                .form-group label {
+                    width: calc(100% / 2 - 20px); /* Two inputs per row on smaller screens */
+                }
+                .form-group.three-items label {
+                    width: calc(100% / 2 - 20px); /* Adjust for smaller screens */
+                }
+            }
+            /* Enlarged Button Text Input */
+            #buttonText, #imageButtonText {
+                font-size: 14px;
+                padding: 8px;
+                height: 40px;
+                width: 100%;
+            }
+            /* Reduced Font Size Input */
+            #fontSize, #imageResizePercentage, #imageWidth, #imageHeight {
+                font-size: 14px;
+                padding: 5px;
+                height: 30px;
+                width: 100%;
+            }
+            /* Centered Labels */
+            .form-group label > span {
+                text-align: center;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            /* Auto Buttons */
+            .auto-button {
+                padding: 5px 10px;
+                font-size: 14px;
+                cursor: pointer;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                margin-left: 10px;
+                transition: background-color 0.3s;
+            }
+            .auto-button:hover {
+                background-color: #45a049;
+            }
+            /* Image Upload Section */
+            .image-upload-section {
+                margin-bottom: 20px;
+                width: 100%; /* Ensure it spans the full width */
+            }
+            .image-upload-section h2 {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .image-upload-section input[type="file"] {
+                display: none;
+            }
+            .image-upload-label {
+                display: block; /* Changed from inline-block to block */
+                width: 100%; /* Span the full width */
+                padding: 30px 0; /* Increased padding from 15px to 30px to double the height */
+                background-color: #2196F3;
+                color: white;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                text-align: center; /* Center the text */
+                font-size: 18px; /* Increased font size */
+                margin-bottom: 10px;
+            }
+            .image-upload-label:hover {
+                background-color: #0b7dda;
+            }
+            /* Image Text Styling */
+            .image-text {
+                position: absolute;
+                color: white;
+                font-size: 16px;
+                pointer-events: none;
+                text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+                transition: all 0.3s ease;
+                display: none; /* Hide by default */
+            }
+            /* Transformation Buttons */
+            .transform-button {
+                padding: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                border: none;
+                background-color: #4CAF50;
+                color: white;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            .transform-button:hover {
+                background-color: #45a049;
+            }
+            /* Style for Range Inputs (Sliders) */
+            input[type="range"] {
+                width: 100%;
+                margin-top: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Custom Button Generator</h1>
+            <!-- Added Credit Text -->
+            <div class="credit">Created by: Carson Morris</div>
+        </header>
+        <main>
+            <!-- Sidebar Controls -->
+            <div id="controls">
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <button id="textTab" class="active">Text Button</button>
+                    <button id="imageTab">Image Button</button>
+                </div>
+                <!-- Text Button Controls -->
+                <div class="section active" id="textControls">
+                    <h2>TEXT</h2>
+                    <!-- Button Text -->
+                    <div class="form-group">
+                        <label for="buttonText" class="form-group label-full-width">
+                            <span>Button Text:</span>
+                            <input type="text" id="buttonText" value="Click Me">
+                        </label>
+                    </div>
+                    <!-- Font Style, Font Size, Font Color -->
+                    <div class="form-group three-items">
+                        <label for="fontFamily">
+                            <span>Font Style:</span>
+                            <div class="font-select-wrapper">
+                                <select id="fontFamily">
+                                    <option value="Arial, sans-serif">Arial</option>
+                                    <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica Neue</option>
+                                    <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                                    <option value="'Courier New', Courier, monospace">Courier New</option>
+                                    <option value="'Georgia', serif">Georgia</option>
+                                    <option value="'Verdana', sans-serif">Verdana</option>
+                                    <option value="'Palatino Linotype', 'Book Antiqua', Palatino, serif">Palatino</option>
+                                    <option value="'Comic Sans MS', cursive, sans-serif">Comic Sans MS</option>
+                                    <option value="'Impact', sans-serif">Impact</option>
+                                    <option value="'Lucida Console', Monaco, monospace">Lucida Console</option>
+                                    <option value="'Lucida Sans Unicode', 'Lucida Grande', sans-serif">Lucida Sans</option>
+                                    <option value="'Tahoma', Geneva, sans-serif">Tahoma</option>
+                                    <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet MS</option>
+                                    <option value="'Arial Black', Gadget, sans-serif">Arial Black</option>
+                                    <option value="'Bookman Old Style', serif">Bookman Old Style</option>
+                                    <option value="'Century Gothic', sans-serif">Century Gothic</option>
+                                    <option value="'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Franklin Gothic Medium</option>
+                                    <option value="'Gill Sans', sans-serif">Gill Sans</option>
+                                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                                    <option value="'Roboto', sans-serif">Roboto</option>
+                                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                                    <option value="'Lato', sans-serif">Lato</option>
+                                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                                    <option value="'Oswald', sans-serif">Oswald</option>
+                                    <option value="'Raleway', sans-serif">Raleway</option>
+                                    <option value="'PT Sans', sans-serif">PT Sans</option>
+                                    <option value="'Merriweather', serif">Merriweather</option>
+                                    <option value="'Noto Sans', sans-serif">Noto Sans</option>
+                                    <option value="'Ubuntu', sans-serif">Ubuntu</option>
+                                    <option value="'Droid Sans', sans-serif">Droid Sans</option>
+                                    <option value="'Source Sans Pro', sans-serif">Source Sans Pro</option>
+                                    <option value="'Fira Sans', sans-serif">Fira Sans</option>
+                                    <option value="'Exo', sans-serif">Exo</option>
+                                    <option value="'Titillium Web', sans-serif">Titillium Web</option>
+                                    <option value="'Nunito', sans-serif">Nunito</option>
+                                    <option value="'Poppins', sans-serif">Poppins</option>
+                                    <option value="'Playfair Display', serif">Playfair Display</option>
+                                    <option value="'Bebas Neue', cursive">Bebas Neue</option>
+                                    <option value="'Cairo', sans-serif">Cairo</option>
+                                    <option value="'Karla', sans-serif">Karla</option>
+                                    <option value="'Inconsolata', monospace">Inconsolata</option>
+                                    <option value="'Cabin', sans-serif">Cabin</option>
+                                    <option value="custom">Custom...</option>
+                                </select>
+                                <input type="text" id="customFontFamily" placeholder="Enter custom font family">
+                            </div>
+                        </label>
+                        <label for="fontSize">
+                            <span>Font Size (px):</span>
+                            <input type="number" id="fontSize" value="16" min="1" max="200">
+                        </label>
+                        <label for="textColor">
+                            <span>Font Color:</span>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="textColor" value="#ffffff">
+                            </div>
+                        </label>
+                    </div>
+                    <!-- Bold, Italic, Text Outline Options -->
+                    <div class="form-group four-items">
+                        <label for="textBold">
+                            <span>Bold:</span>
+                            <div class="styled-checkbox">
+                                <input type="checkbox" id="textBold" checked>
+                            </div>
+                        </label>
+                        <label for="textItalic">
+                            <span>Italic:</span>
+                            <div class="styled-checkbox">
+                                <input type="checkbox" id="textItalic">
+                            </div>
+                        </label>
+                        <label for="textOutline">
+                            <span>Text Outline:</span>
+                            <div class="styled-checkbox">
+                                <input type="checkbox" id="textOutline" checked>
+                            </div>
+                        </label>
+                        <label for="textOutlineColor">
+                            <span>Outline Color:</span>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="textOutlineColor" value="#000000">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <!-- Image Button Controls -->
+                <div class="section" id="imageControls">
+                    <h2>IMAGE BUTTON</h2>
+                    <!-- Image Upload -->
+                    <div class="image-upload-section">
+                        <label for="imageUpload" class="image-upload-label">Upload Image</label>
+                        <input type="file" id="imageUpload" accept="image/*">
+                        <canvas id="imageCanvas" style="display: none;"></canvas>
+                    </div>
+                    <!-- Text Subcategory -->
+                    <div class="subsection">
+                        <h3>Text Settings</h3>
+                        <div class="form-group">
+                            <label for="imageButtonText" class="form-group label-full-width">
+                                <span>Button Text:</span>
+                                <input type="text" id="imageButtonText" value="Button Text">
+                            </label>
+                        </div>
+                        <div class="form-group three-items">
+                            <label for="showImageText">
+                                <span>Show Text</span>
+                                <input type="checkbox" id="showImageText" style="margin-top: 10px;">
+                            </label>
+                            <label for="textOffsetX">
+                                <span>Text Offset X (px):</span>
+                                <input type="number" id="textOffsetX" value="0" min="-100" max="100">
+                            </label>
+                            <label for="textOffsetY">
+                                <span>Text Offset Y (px):</span>
+                                <input type="number" id="textOffsetY" value="0" min="-100" max="100">
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Transform Subcategory -->
+                    <div class="subsection">
+                        <h3>Transform</h3>
+                        <!-- Existing Size Controls -->
+                        <div class="form-group">
+                            <label for="imageHeight">
+                                <span>Height (px):</span>
+                                <input type="number" id="imageHeight" placeholder="Auto" min="10">
+                            </label>
+                            <label for="imageWidth">
+                                <span>Width (px):</span>
+                                <input type="number" id="imageWidth" placeholder="Auto" min="10">
+                            </label>
+                            <label for="imageResizePercentage">
+                                <span>Resize Percentage (%):</span>
+                                <input type="number" id="imageResizePercentage" value="100" min="10" max="200">
+                            </label>
+                        </div>
+                        <!-- Flip and Rotate Controls on the Same Row -->
+                        <div class="form-group four-items">
+                            <label for="rotateLeft">
+                                <span>Rotate Left 90°:</span>
+                                <button type="button" id="rotateLeft" class="transform-button">⟲</button>
+                            </label>
+                            <label for="rotateRight">
+                                <span>Rotate Right 90°:</span>
+                                <button type="button" id="rotateRight" class="transform-button">⟳</button>
+                            </label>
+                            <label for="flipHorizontal">
+                                <span>Flip Horizontally:</span>
+                                <button type="button" id="flipHorizontal" class="transform-button">⇋</button>
+                            </label>
+                            <label for="flipVertical">
+                                <span>Flip Vertically:</span>
+                                <button type="button" id="flipVertical" class="transform-button">⇅</button>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Effects Controls -->
+                    <div class="subsection">
+                        <h3>
+                            Effects
+                            <button id="resetEffects" type="button" class="auto-button">Reset</button>
+                        </h3>
+                        <!-- Adjustments Subcategory -->
+                        <div class="subsection">
+                            <h3>Adjustments</h3>
+                            <div class="form-group">
+                                <label for="imageBrightness">
+                                    <span>Brightness (%):</span>
+                                    <input type="range" id="imageBrightness" min="0" max="200" value="100">
+                                </label>
+                                <label for="imageContrast">
+                                    <span>Contrast (%):</span>
+                                    <input type="range" id="imageContrast" min="0" max="200" value="100">
+                                </label>
+                                <label for="imageHue">
+                                    <span>Hue (°):</span>
+                                    <input type="range" id="imageHue" min="0" max="360" value="0">
+                                </label>
+                                <label for="imageSaturation">
+                                    <span>Saturation (%):</span>
+                                    <input type="range" id="imageSaturation" min="0" max="200" value="100">
+                                </label>
+                                <label for="imageOpacity">
+                                    <span>Opacity (%):</span>
+                                    <input type="range" id="imageOpacity" min="0" max="100" value="100">
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Shadow Subcategory -->
+                        <div class="subsection">
+                            <h3>Shadow</h3>
+                            <div class="form-group four-items">
+                                <label for="imageShadowEffect">
+                                    <span>Enable Shadow:</span>
+                                    <div class="styled-checkbox">
+                                        <input type="checkbox" id="imageShadowEffect" checked>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-group two-items">
+                                <label for="imageShadowColor">
+                                    <span>Shadow Color:</span>
+                                    <div class="color-input-wrapper">
+                                        <input type="color" id="imageShadowColor" value="#000000">
+                                    </div>
+                                </label>
+                                <label for="imageShadowBlur">
+                                    <span>Shadow Blur (px):</span>
+                                    <input type="number" id="imageShadowBlur" value="5" min="0">
+                                </label>
+                            </div>
+                            <div class="form-group two-items">
+                                <label for="imageShadowXOffset">
+                                    <span>Shadow X Offset (px):</span>
+                                    <input type="number" id="imageShadowXOffset" value="2" min="-50" max="50">
+                                </label>
+                                <label for="imageShadowYOffset">
+                                    <span>Shadow Y Offset (px):</span>
+                                    <input type="number" id="imageShadowYOffset" value="2" min="-50" max="50">
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Emboss Subcategory -->
+                        <div class="subsection">
+                            <h3>Emboss</h3>
+                            <div class="form-group four-items">
+                                <label for="embossEffect">
+                                    <span>Enable Emboss:</span>
+                                    <div class="styled-checkbox">
+                                        <input type="checkbox" id="embossEffect" checked>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="embossRadius">
+                                    <span>Emboss Radius (px):</span>
+                                    <input type="number" id="embossRadius" value="3" min="0" max="10">
+                                </label>
+                                <label for="embossIntensity">
+                                    <span>Emboss Intensity:</span>
+                                    <input type="number" id="embossIntensity" value="0.5" min="0" max="1" step="0.1">
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Filters Subcategory -->
+                        <div class="subsection">
+                            <h3>Filters</h3>
+                            <div class="form-group">
+                                <label for="imagePixelate">
+                                    <span>Pixelate (px):</span>
+                                    <input type="range" id="imagePixelate" min="1" max="20" value="1">
+                                </label>
+                                <label for="imageNoise">
+                                    <span>Noise (%):</span>
+                                    <input type="range" id="imageNoise" min="0" max="100" value="0">
+                                </label>
+                                <label for="imageBlur">
+                                    <span>Blur (px):</span>
+                                    <input type="range" id="imageBlur" min="0" max="10" value="0">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- COLOUR Section (Applies to Text Button Only) -->
+                <div class="section active" id="colorControls">
+                    <h2>COLOUR</h2>
+                    <!-- Background Style Dropdown -->
+                    <div class="form-group">
+                        <label for="backgroundStyle" class="form-group label-full-width">
+                            <span>Background Style:</span>
+                            <select id="backgroundStyle">
+                                <option value="solid">Solid</option>
+                                <option value="vertical-gradient" selected>Vertical Gradient</option>
+                                <option value="horizontal-gradient">Horizontal Gradient</option>
+                                <option value="diagonal-gradient">Diagonal Gradient</option>
+                                <option value="radial-gradient">Radial Gradient</option>
+                            </select>
+                        </label>
+                    </div>
+                    <!-- Original Colors Subsection -->
+                    <div class="subsection">
+                        <h3>Original</h3>
+                        <div class="form-group three-items">
+                            <label for="bgColor">
+                                <span>Main Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="bgColor" value="#4CAF50">
+                                </div>
+                            </label>
+                            <label for="gradientEndColor">
+                                <span>Secondary Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="gradientEndColor" value="#163C1D">
+                                </div>
+                            </label>
+                            <label for="borderColor">
+                                <span>Border Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="borderColor" value="#000000">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Hover Colors Subsection -->
+                    <div class="subsection">
+                        <h3>
+                            Hover
+                            <button id="autoHoverColors" type="button" class="auto-button">Auto</button>
+                        </h3>
+                        <div class="form-group three-items">
+                            <label for="bgColorHover">
+                                <span>Main Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="bgColorHover">
+                                </div>
+                            </label>
+                            <label for="gradientEndColorHover">
+                                <span>Secondary Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="gradientEndColorHover">
+                                </div>
+                            </label>
+                            <label for="borderColorHover">
+                                <span>Border Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="borderColorHover" value="#000000">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Active Colors Subsection -->
+                    <div class="subsection">
+                        <h3>
+                            Active
+                            <button id="autoActiveColors" type="button" class="auto-button">Auto</button>
+                        </h3>
+                        <div class="form-group three-items">
+                            <label for="bgColorActive">
+                                <span>Main Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="bgColorActive">
+                                </div>
+                            </label>
+                            <label for="gradientEndColorActive">
+                                <span>Secondary Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="gradientEndColorActive">
+                                </div>
+                            </label>
+                            <label for="borderColorActive">
+                                <span>Border Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="borderColorActive" value="#000000">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- BORDER Section (Applies to Text Button Only) -->
+                <div class="section active" id="borderControls">
+                    <h2>BORDER</h2>
+                    <!-- Border Style, Border Width, Corner Radius -->
+                    <div class="form-group">
+                        <label for="borderStyle">
+                            <span>Border Style:</span>
+                            <select id="borderStyle">
+                                <option value="solid">Solid</option>
+                                <option value="double">Double</option>
+                                <option value="groove">Groove</option>
+                                <option value="ridge">Ridge</option>
+                                <option value="inset">Inset</option>
+                                <option value="outset" selected>Outset</option>
+                                <option value="none">None</option>
+                            </select>
+                        </label>
+                        <label for="borderWidth">
+                            <span>Border Width (px):</span>
+                            <input type="number" id="borderWidth" value="3" min="0">
+                        </label>
+                        <label for="cornerRadius">
+                            <span>Corner Radius (px):</span>
+                            <input type="number" id="cornerRadius" value="5" min="0" max="40">
+                        </label>
+                    </div>
+                </div>
+                <!-- SIZE Section (Applies to Text Button Only) -->
+                <div class="section active" id="sizeControls">
+                    <h2>SIZE</h2>
+                    <!-- Width, Height -->
+                    <div class="form-group">
+                        <label for="width">
+                            <span>Width (px):</span>
+                            <input type="number" id="width" placeholder="Auto" min="-100">
+                        </label>
+                        <label for="height">
+                            <span>Height (px):</span>
+                            <input type="number" id="height" placeholder="Auto" min="-100">
+                        </label>
+                    </div>
+                    <!-- Padding Top/Bottom, Padding Left/Right -->
+                    <div class="form-group">
+                        <label for="paddingTB">
+                            <span>Padding Top & Bottom (px):</span>
+                            <input type="number" id="paddingTB" value="10" min="0">
+                        </label>
+                        <label for="paddingLR">
+                            <span>Padding Left & Right (px):</span>
+                            <input type="number" id="paddingLR" value="20" min="0">
+                        </label>
+                    </div>
+                </div>
+                <!-- EFFECTS Section (Applies to Text Button Only) -->
+                <div class="section active" id="effectsControls">
+                    <h2>EFFECTS</h2>
+                    <!-- Shadow Subcategory -->
+                    <div class="subsection">
+                        <h3>Shadow</h3>
+                        <div class="form-group four-items">
+                            <label for="shadowEffect">
+                                <span>Enable Shadow:</span>
+                                <div class="styled-checkbox">
+                                    <input type="checkbox" id="shadowEffect" checked>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="form-group two-items">
+                            <label for="shadowColor">
+                                <span>Shadow Color:</span>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="shadowColor" value="#000000">
+                                </div>
+                            </label>
+                            <label for="shadowBlur">
+                                <span>Shadow Blur (px):</span>
+                                <input type="number" id="shadowBlur" value="5" min="0">
+                            </label>
+                        </div>
+                        <div class="form-group two-items">
+                            <label for="shadowXOffset">
+                                <span>Shadow X Offset (px):</span>
+                                <input type="number" id="shadowXOffset" value="2" min="-50" max="50">
+                            </label>
+                            <label for="shadowYOffset">
+                                <span>Shadow Y Offset (px):</span>
+                                <input type="number" id="shadowYOffset" value="2" min="-50" max="50">
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Emboss Subcategory -->
+                    <div class="subsection">
+                        <h3>Emboss</h3>
+                        <div class="form-group four-items">
+                            <label for="embossEffect">
+                                <span>Enable Emboss:</span>
+                                <div class="styled-checkbox">
+                                    <input type="checkbox" id="embossEffect" checked>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="embossRadius">
+                                <span>Emboss Radius (px):</span>
+                                <input type="number" id="embossRadius" value="3" min="0" max="10">
+                            </label>
+                            <label for="embossIntensity">
+                                <span>Emboss Intensity:</span>
+                                <input type="number" id="embossIntensity" value="0.5" min="0" max="1" step="0.1">
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Removed Filters Subcategory -->
+                </div>
+            </div>
+            <!-- Preview Area -->
+            <div id="preview">
+                <div id="buttonContainer">
+                    <!-- Text Button -->
+                    <button id="textButton">Click Me</button>
+                    <!-- Image Button -->
+                    <button id="imageButton">
+                        <img id="imageButtonImg" src="" alt="Image Button">
+                    </button>
+                    <!-- Image Text -->
+                    <div id="imageText" class="image-text">Button Text</div>
+                </div>
+                <div id="downloadButtons">
+                    <button id="downloadNormal">Download Normal</button>
+                    <button id="downloadHover">Download Hover</button>
+                    <button id="downloadActive">Download Active</button>
+                </div>
+            </div>
+        </main>
+        <!-- Include html2canvas library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script>
+            window.addEventListener('DOMContentLoaded', function() {
+                // Tab Elements
+                const textTab = document.getElementById('textTab');
+                const imageTab = document.getElementById('imageTab');
+                const textControls = document.getElementById('textControls');
+                const imageControls = document.getElementById('imageControls');
+                const colorControls = document.getElementById('colorControls');
+                const borderControls = document.getElementById('borderControls');
+                const sizeControls = document.getElementById('sizeControls');
+                const effectsControls = document.getElementById('effectsControls');
+    
+                // Button Elements
+                const textButton = document.getElementById('textButton');
+                const imageButton = document.getElementById('imageButton');
+                const imageButtonImg = document.getElementById('imageButtonImg');
+    
+                // Image Text Element
+                const imageText = document.getElementById('imageText');
+    
+                // Download Buttons
+                const downloadNormal = document.getElementById('downloadNormal');
+                const downloadHover = document.getElementById('downloadHover');
+                const downloadActive = document.getElementById('downloadActive');
+    
+                // Common Elements
+                const dynamicStyles = document.getElementById('dynamicStyles');
+    
+                // Text Button Controls
+                const buttonText = document.getElementById('buttonText');
+                const fontSize = document.getElementById('fontSize');
+                const fontFamilySelect = document.getElementById('fontFamily');
+                const customFontFamilyInput = document.getElementById('customFontFamily');
+                const textColor = document.getElementById('textColor');
+                const textBold = document.getElementById('textBold');
+                const textItalic = document.getElementById('textItalic');
+                const textOutline = document.getElementById('textOutline');
+                const textOutlineColor = document.getElementById('textOutlineColor');
+    
+                // Color Controls
+                const backgroundStyle = document.getElementById('backgroundStyle');
+                const bgColor = document.getElementById('bgColor');
+                const gradientEndColor = document.getElementById('gradientEndColor');
+                const borderColor = document.getElementById('borderColor');
+                const bgColorHover = document.getElementById('bgColorHover');
+                const gradientEndColorHover = document.getElementById('gradientEndColorHover');
+                const borderColorHover = document.getElementById('borderColorHover');
+                const bgColorActive = document.getElementById('bgColorActive');
+                const gradientEndColorActive = document.getElementById('gradientEndColorActive');
+                const borderColorActive = document.getElementById('borderColorActive');
+    
+                // Auto Buttons
+                const autoHoverColors = document.getElementById('autoHoverColors');
+                const autoActiveColors = document.getElementById('autoActiveColors');
+    
+                // Border Controls
+                const borderStyleSelect = document.getElementById('borderStyle');
+                const borderWidth = document.getElementById('borderWidth');
+                const cornerRadius = document.getElementById('cornerRadius');
+    
+                // Size Controls
+                const widthInput = document.getElementById('width');
+                const heightInput = document.getElementById('height');
+                const paddingTB = document.getElementById('paddingTB');
+                const paddingLR = document.getElementById('paddingLR');
+    
+                // Effects Controls for Text Button
+                const shadowEffect = document.getElementById('shadowEffect');
+                const shadowXOffset = document.getElementById('shadowXOffset');
+                const shadowYOffset = document.getElementById('shadowYOffset');
+                const shadowBlur = document.getElementById('shadowBlur');
+                const shadowColor = document.getElementById('shadowColor');
+                const embossEffect = document.getElementById('embossEffect');
+                const embossRadius = document.getElementById('embossRadius');
+                const embossIntensity = document.getElementById('embossIntensity');
+    
+                // Image Button Controls
+                const imageUpload = document.getElementById('imageUpload');
+                const imageCanvas = document.getElementById('imageCanvas');
+                const imageCanvasCtx = imageCanvas.getContext('2d');
+    
+                // Image Text Controls
+                const imageButtonText = document.getElementById('imageButtonText');
+                const showImageText = document.getElementById('showImageText');
+                const textOffsetX = document.getElementById('textOffsetX');
+                const textOffsetY = document.getElementById('textOffsetY');
+    
+                // Image Size Controls
+                const imageResizePercentage = document.getElementById('imageResizePercentage');
+                const imageWidth = document.getElementById('imageWidth');
+                const imageHeight = document.getElementById('imageHeight');
+    
+                // Effects Controls for Image Button
+                // Adjustments Controls
+                const imageBrightness = document.getElementById('imageBrightness');
+                const imageContrast = document.getElementById('imageContrast');
+                const imageHue = document.getElementById('imageHue');
+                const imageSaturation = document.getElementById('imageSaturation');
+                const imageOpacity = document.getElementById('imageOpacity');
+    
+                // Filters Controls
+                const imagePixelate = document.getElementById('imagePixelate');
+                const imageNoise = document.getElementById('imageNoise');
+                const imageBlur = document.getElementById('imageBlur');
+    
+                // Shadow Controls
+                const imageShadowEffect = document.getElementById('imageShadowEffect');
+                const imageShadowXOffset = document.getElementById('imageShadowXOffset');
+                const imageShadowYOffset = document.getElementById('imageShadowYOffset');
+                const imageShadowBlur = document.getElementById('imageShadowBlur');
+                const imageShadowColor = document.getElementById('imageShadowColor');
+    
+                // Reset Button
+                const resetEffects = document.getElementById('resetEffects');
+    
+                // Transformation variables
+                let rotationAngle = 0; // in degrees
+                let flipHorizontal = 1; // 1 or -1
+                let flipVertical = 1; // 1 or -1
+    
+                // Variables to store images
+                let uploadedImage = null;
+                let originalImageData = null;
+    
+                // Function to switch tabs
+                function switchTab(activeTab) {
+                    if (activeTab === 'text') {
+                        // Activate Text Tab
+                        textTab.classList.add('active');
+                        imageTab.classList.remove('active');
+                        // Show Text Controls
+                        textControls.classList.add('active');
+                        colorControls.classList.add('active');
+                        borderControls.classList.add('active');
+                        sizeControls.classList.add('active');
+                        effectsControls.classList.add('active');
+                        // Hide Image Controls
+                        imageControls.classList.remove('active');
+                        // Show Text Button, Hide Image Button
+                        textButton.style.display = 'inline-block';
+                        imageButton.style.display = 'none';
+                        // Hide Image Text
+                        imageText.style.display = 'none';
+                        // Remove image button styles from dynamicStyles
+                        removeImageButtonStyles();
+                    } else if (activeTab === 'image') {
+                        // Activate Image Tab
+                        imageTab.classList.add('active');
+                        textTab.classList.remove('active');
+                        // Hide Text Controls
+                        textControls.classList.remove('active');
+                        colorControls.classList.remove('active');
+                        borderControls.classList.remove('active');
+                        sizeControls.classList.remove('active');
+                        effectsControls.classList.remove('active');
+                        // Show Image Controls
+                        imageControls.classList.add('active');
+                        // Show Image Button if image is uploaded, else hide
+                        if (uploadedImage) {
+                            imageButton.style.display = 'inline-block';
+                            updateImageButtonStyles();
+                            // Show Image Text if checkbox is checked
+                            imageText.style.display = showImageText.checked ? 'block' : 'none';
+                        } else {
+                            imageButton.style.display = 'none';
+                            // Hide Image Text
+                            imageText.style.display = 'none';
+                        }
+                        // Ensure Text Button is hidden
+                        textButton.style.display = 'none';
+                    }
+                }
+    
+                // Event listeners for tabs
+                textTab.addEventListener('click', () => switchTab('text'));
+                imageTab.addEventListener('click', () => switchTab('image'));
+    
+                // Function to generate background CSS based on state
+                function generateBackgroundCSS(mainColor, secondaryColor) {
+                    let backgroundCSS = '';
+                    switch (backgroundStyle.value) {
+                        case 'solid':
+                            backgroundCSS = `background-color: ${mainColor};`;
+                            break;
+                        case 'vertical-gradient':
+                            backgroundCSS = `background: linear-gradient(${mainColor}, ${secondaryColor});`;
+                            break;
+                        case 'horizontal-gradient':
+                            backgroundCSS = `background: linear-gradient(to right, ${mainColor}, ${secondaryColor});`;
+                            break;
+                        case 'diagonal-gradient':
+                            backgroundCSS = `background: linear-gradient(45deg, ${mainColor}, ${secondaryColor});`;
+                            break;
+                        case 'radial-gradient':
+                            backgroundCSS = `background: radial-gradient(circle, ${mainColor}, ${secondaryColor});`;
+                            break;
+                        default:
+                            backgroundCSS = `background-color: ${mainColor};`;
+                    }
+                    return backgroundCSS;
+                }
+    
+                // Function to generate box-shadow CSS
+                function generateBoxShadowCSS() {
+                    let boxShadowCSS = '';
+                    let boxShadows = [];
+                    if (shadowEffect.checked) {
+                        const xOffset = shadowXOffset.value;
+                        const yOffset = shadowYOffset.value;
+                        const blur = shadowBlur.value;
+                        const color = shadowColor.value;
+                        boxShadows.push(`${xOffset}px ${yOffset}px ${blur}px ${color}`);
+                    }
+                    if (embossEffect.checked) {
+                        const radius = embossRadius.value;
+                        const intensity = embossIntensity.value;
+                        const highlightColor = `rgba(255,255,255,${intensity})`;
+                        const shadowColorEmboss = `rgba(0,0,0,${intensity})`;
+                        boxShadows.push(`inset ${radius}px ${radius}px ${radius}px ${highlightColor}`);
+                        boxShadows.push(`inset -${radius}px -${radius}px ${radius}px ${shadowColorEmboss}`);
+                    }
+                    if (boxShadows.length > 0) {
+                        boxShadowCSS = `box-shadow: ${boxShadows.join(', ')};`;
+                    }
+                    return boxShadowCSS;
+                }
+    
+                // Function to adjust brightness using HSL
+                function adjustBrightnessHSL(hex, amount) {
+                    const [r, g, b] = hexToRgb(hex);
+                    let [h, s, l] = rgbToHsl(r, g, b);
+                    l += amount;
+                    l = Math.min(Math.max(l, 0), 1); // Clamp between 0 and 1
+                    const [newR, newG, newB] = hslToRgb(h, s, l);
+                    return rgbToHex(newR, newG, newB);
+                }
+    
+                // Helper functions to convert hex to RGB and back
+                function hexToRgb(hex) {
+                    hex = hex.replace(/^#/, '');
+                    if (hex.length === 3) {
+                        hex = hex.split('').map(x => x + x).join('');
+                    }
+                    const bigint = parseInt(hex, 16);
+                    const r = (bigint >> 16) & 255;
+                    const g = (bigint >> 8) & 255;
+                    const b = bigint & 255;
+                    return [r, g, b];
+                }
+    
+                function rgbToHex(r, g, b) {
+                    return '#' + [r, g, b].map(x => {
+                        const hex = x.toString(16);
+                        return hex.length === 1 ? '0' + hex : hex;
+                    }).join('');
+                }
+    
+                // Helper functions to convert RGB to HSL and back
+                function rgbToHsl(r, g, b) {
+                    r /= 255;
+                    g /= 255;
+                    b /= 255;
+                    const max = Math.max(r, g, b);
+                    const min = Math.min(r, g, b);
+                    let h, s, l = (max + min) / 2;
+    
+                    if (max === min) {
+                        h = s = 0; // achromatic
+                    } else {
+                        const d = max - min;
+                        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                        switch (max) {
+                            case r:
+                                h = (g - b) / d + (g < b ? 6 : 0);
+                                break;
+                            case g:
+                                h = (b - r) / d + 2;
+                                break;
+                            case b:
+                                h = (r - g) / d + 4;
+                                break;
+                        }
+                        h /= 6;
+                    }
+    
+                    return [h, s, l];
+                }
+    
+                function hslToRgb(h, s, l) {
+                    let r, g, b;
+    
+                    if (s === 0) {
+                        r = g = b = l; // achromatic
+                    } else {
+                        const hue2rgb = function hue2rgb(p, q, t) {
+                            if (t < 0) t += 1;
+                            if (t > 1) t -= 1;
+                            if (t < 1/6) return p + (q - p) * 6 * t;
+                            if (t < 1/2) return q;
+                            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                            return p;
+                        };
+    
+                        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                        const p = 2 * l - q;
+                        r = hue2rgb(p, q, h + 1/3);
+                        g = hue2rgb(p, q, h);
+                        b = hue2rgb(p, q, h - 1/3);
+                    }
+    
+                    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+                }
+    
+                // Auto color functions using HSL for better brightness adjustment
+                function setAutoHoverColors() {
+                    const brightenAmount = 0.1; // Increase lightness by 10%
+                    const mainColor = bgColor.value;
+                    const secondaryColor = gradientEndColor.value;
+    
+                    const newMainColor = adjustBrightnessHSL(mainColor, brightenAmount);
+                    const newSecondaryColor = adjustBrightnessHSL(secondaryColor, brightenAmount);
+    
+                    bgColorHover.value = newMainColor;
+                    gradientEndColorHover.value = newSecondaryColor;
+    
+                    updateDynamicStyles();
+                }
+    
+                function setAutoActiveColors() {
+                    const darkenAmount = -0.15; // Decrease lightness by 15%
+                    const mainColor = bgColor.value;
+                    const secondaryColor = gradientEndColor.value;
+    
+                    const newMainColor = adjustBrightnessHSL(mainColor, darkenAmount);
+                    const newSecondaryColor = adjustBrightnessHSL(secondaryColor, darkenAmount);
+    
+                    bgColorActive.value = newMainColor;
+                    gradientEndColorActive.value = newSecondaryColor;
+    
+                    updateDynamicStyles();
+                }
+    
+                // Function to update styles for Text Button
+                function updateTextButtonStyles() {
+                    // Input validation
+                    fontSize.value = Math.min(Math.max(fontSize.value, 1), 200);
+                    cornerRadius.value = Math.min(Math.max(cornerRadius.value, 0), 40);
+                    embossRadius.value = Math.min(Math.max(embossRadius.value, 0), 10);
+                    embossIntensity.value = Math.min(Math.max(embossIntensity.value, 0), 1);
+    
+                    // Update button text
+                    textButton.textContent = buttonText.value;
+    
+                    // Determine font family
+                    let selectedFont = fontFamilySelect.value;
+                    if (selectedFont === 'custom') {
+                        selectedFont = customFontFamilyInput.value.trim() !== '' ? customFontFamilyInput.value : 'Arial, sans-serif';
+                    }
+    
+                    // Original State Background and Border
+                    const originalBackgroundCSS = generateBackgroundCSS(bgColor.value, gradientEndColor.value);
+                    const originalBorderColor = borderColor.value;
+    
+                    // Hover State Background and Border
+                    const hoverBackgroundCSS = generateBackgroundCSS(bgColorHover.value, gradientEndColorHover.value);
+                    const hoverBorderColor = borderColorHover.value;
+    
+                    // Active State Background and Border
+                    const activeBackgroundCSS = generateBackgroundCSS(bgColorActive.value, gradientEndColorActive.value);
+                    const activeBorderColor = borderColorActive.value;
+    
+                    // Generate box-shadow CSS
+                    const boxShadowCSS = generateBoxShadowCSS();
+    
+                    // Determine font weight and style
+                    const fontWeight = textBold.checked ? 'bold' : 'normal';
+                    const fontStyle = textItalic.checked ? 'italic' : 'normal';
+    
+                    // Build CSS for Text Button
+                    let css = '';
+                    css += '#textButton {\n';
+                    css += `  font-size: ${fontSize.value}px;\n`;
+                    css += `  font-family: ${selectedFont};\n`;
+                    css += `  color: ${textColor.value};\n`;
+                    css += `  font-weight: ${fontWeight};\n`;
+                    css += `  font-style: ${fontStyle};\n`;
+                    css += `  ${textOutline.checked ? `text-shadow:
+                        -1px -1px 0 ${textOutlineColor.value},
+                        1px -1px 0 ${textOutlineColor.value},
+                        -1px 1px 0 ${textOutlineColor.value},
+                        1px 1px 0 ${textOutlineColor.value};` : ''}\n`;
+                    css += `  ${originalBackgroundCSS}\n`;
+                    css += `  border-width: ${borderWidth.value}px;\n`;
+                    css += `  border-style: ${borderStyleSelect.value};\n`;
+                    css += `  border-color: ${originalBorderColor};\n`;
+                    css += `  border-radius: ${cornerRadius.value}px;\n`;
+                    css += `  padding: ${paddingTB.value}px ${paddingLR.value}px;\n`;
+                    css += `  cursor: pointer;\n`;
+                    if (widthInput.value) {
+                        css += `  width: ${widthInput.value}px;\n`;
+                    } else {
+                        css += `  width: auto;\n`;
+                    }
+                    if (heightInput.value) {
+                        css += `  height: ${heightInput.value}px;\n`;
+                        css += `  line-height: ${heightInput.value}px;\n`;
+                    } else {
+                        css += `  height: auto;\n`;
+                    }
+                    css += `  ${boxShadowCSS}\n`;
+                    css += '  transition: all 0.3s ease;\n';
+                    css += '}\n';
+    
+                    // Hover State for Text Button
+                    css += '#textButton:hover {\n';
+                    css += `  ${hoverBackgroundCSS}\n`;
+                    css += `  border-color: ${hoverBorderColor};\n`;
+                    css += '}\n';
+    
+                    // Active State for Text Button
+                    css += '#textButton:active {\n';
+                    css += `  ${activeBackgroundCSS}\n`;
+                    css += `  border-color: ${activeBorderColor};\n`;
+                    css += '}\n';
+    
+                    // Apply CSS
+                    dynamicStyles.textContent = css;
+                }
+    
+                // Function to update styles for Image Button
+                function updateImageButtonStyles() {
+                    if (uploadedImage && originalImageData) {
+                        // Process the image with current filters
+                        const processedImageDataUrl = processImage();
+                        imageButtonImg.src = processedImageDataUrl;
+    
+                        imageButton.style.display = 'inline-block';
+    
+                        // Apply CSS Filters
+                        const brightness = imageBrightness.value;
+                        const contrast = imageContrast.value;
+                        const hue = imageHue.value;
+                        const saturation = imageSaturation.value;
+                        const opacity = imageOpacity.value;
+                        const blur = imageBlur.value;
+    
+                        let filterCSS = `
+                            brightness(${brightness}%)
+                            contrast(${contrast}%)
+                            hue-rotate(${hue}deg)
+                            saturate(${saturation}%)
+                            opacity(${opacity}%)
+                            blur(${blur}px)
+                        `;
+    
+                        // Apply Shadow Effect if enabled
+                        if (imageShadowEffect.checked) {
+                            const xOffset = imageShadowXOffset.value;
+                            const yOffset = imageShadowYOffset.value;
+                            const shadowBlur = imageShadowBlur.value;
+                            const color = imageShadowColor.value;
+                            filterCSS += ` drop-shadow(${xOffset}px ${yOffset}px ${shadowBlur}px ${color})`;
+                        }
+    
+                        imageButtonImg.style.filter = filterCSS;
+    
+                        // Apply Size Controls
+                        let resizePercentage = parseInt(imageResizePercentage.value);
+                        let resizeScale = isNaN(resizePercentage) ? 1 : resizePercentage / 100;
+    
+                        // Apply Manual Size if specified
+                        if (imageWidth.value) {
+                            imageButton.style.width = `${imageWidth.value}px`;
+                        } else {
+                            imageButton.style.width = 'auto';
+                        }
+                        if (imageHeight.value) {
+                            imageButton.style.height = `${imageHeight.value}px`;
+                        } else {
+                            imageButton.style.height = 'auto';
+                        }
+    
+                        // Apply Transformations
+                        const transform = `scale(${flipHorizontal * resizeScale}, ${flipVertical * resizeScale}) rotate(${rotationAngle}deg)`;
+                        imageButtonImg.style.transform = transform;
+    
+                        // Position Image Text
+                        const offsetX = parseInt(textOffsetX.value) || 0;
+                        const offsetY = parseInt(textOffsetY.value) || 0;
+                        imageText.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                        imageText.textContent = imageButtonText.value;
+    
+                        // Show or Hide Image Text based on checkbox
+                        imageText.style.display = showImageText.checked ? 'block' : 'none';
+                    }
+                }
+    
+                // Function to process the image with effects
+                function processImage() {
+                    if (!originalImageData) return uploadedImage.src;
+    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = originalImageData.width;
+                    canvas.height = originalImageData.height;
+                    const ctx = canvas.getContext('2d');
+    
+                    // Create a new ImageData object to hold the processed data
+                    let imageData = ctx.createImageData(originalImageData.width, originalImageData.height);
+    
+                    // Copy original image data
+                    imageData.data.set(originalImageData.data);
+    
+                    // Apply Pixelate effect
+                    const pixelateAmount = parseInt(imagePixelate.value);
+                    if (pixelateAmount > 1) {
+                        imageData = applyPixelate(imageData, pixelateAmount);
+                    }
+    
+                    // Apply Noise effect
+                    const noiseAmount = parseInt(imageNoise.value);
+                    if (noiseAmount > 0) {
+                        imageData = applyNoise(imageData, noiseAmount);
+                    }
+    
+                    // Put the processed image data back to the canvas
+                    ctx.putImageData(imageData, 0, 0);
+    
+                    // Return the data URL
+                    return canvas.toDataURL('image/png');
+                }
+    
+                // Function to apply noise effect
+                function applyNoise(imageData, noiseLevel) {
+                    const width = imageData.width;
+                    const height = imageData.height;
+                    const data = imageData.data;
+                    const noiseIntensity = noiseLevel / 100;
+    
+                    for (let i = 0; i < data.length; i += 4) {
+                        // Generate random noise between -noiseIntensity and +noiseIntensity
+                        const noise = (Math.random() * 2 - 1) * 255 * noiseIntensity;
+    
+                        data[i] = Math.min(Math.max(data[i] + noise, 0), 255);     // Red
+                        data[i + 1] = Math.min(Math.max(data[i + 1] + noise, 0), 255); // Green
+                        data[i + 2] = Math.min(Math.max(data[i + 2] + noise, 0), 255); // Blue
+                        // Alpha remains unchanged
+                    }
+    
+                    return imageData;
+                }
+    
+                // Function to apply pixelate effect
+                function applyPixelate(imageData, pixelSize) {
+                    const width = imageData.width;
+                    const height = imageData.height;
+                    const data = imageData.data;
+    
+                    for (let y = 0; y < height; y += pixelSize) {
+                        for (let x = 0; x < width; x += pixelSize) {
+                            const offset = ((y * width) + x) * 4;
+    
+                            // Get the color of the top-left pixel in the block
+                            const r = data[offset];
+                            const g = data[offset + 1];
+                            const b = data[offset + 2];
+                            const a = data[offset + 3];
+    
+                            // Fill the block with this color
+                            for (let dy = 0; dy < pixelSize; dy++) {
+                                for (let dx = 0; dx < pixelSize; dx++) {
+                                    const px = x + dx;
+                                    const py = y + dy;
+    
+                                    if (px < width && py < height) {
+                                        const dstOffset = ((py * width) + px) * 4;
+                                        data[dstOffset] = r;
+                                        data[dstOffset + 1] = g;
+                                        data[dstOffset + 2] = b;
+                                        data[dstOffset + 3] = a;
+                                    }
+                                }
+                            }
+                        }
+                    }
+    
+                    return imageData;
+                }
+    
+                // Function to copy computed styles to an element
+                function copyComputedStyles(sourceElement, targetElement) {
+                    const computedStyle = window.getComputedStyle(sourceElement);
+                    for (let property of computedStyle) {
+                        targetElement.style.setProperty(
+                            property,
+                            computedStyle.getPropertyValue(property),
+                            computedStyle.getPropertyPriority(property)
+                        );
+                    }
+                }
+    
+                // Function to remove image button specific styles from dynamicStyles
+                function removeImageButtonStyles() {
+                    // Remove all styles related to #imageButton from dynamicStyles
+                    const styles = dynamicStyles.textContent.split('\n');
+                    const filteredStyles = styles.filter(line => !line.includes('#imageButton') && !line.includes('#imageButtonImg'));
+                    dynamicStyles.textContent = filteredStyles.join('\n');
+                }
+    
+                // Function to download the button image
+                function downloadDataUrl(filename, dataUrl) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = dataUrl;
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+    
+                    // For Firefox, dispatch a click event
+                    if (document.createEvent) {
+                        const event = document.createEvent('MouseEvents');
+                        event.initEvent('click', true, true);
+                        link.dispatchEvent(event);
+                    } else {
+                        link.click();
+                    }
+    
+                    document.body.removeChild(link);
+                }
+    
+                function downloadButtonImage(state) {
+                    let buttonClone;
+                    let textClone;
+                    if (textTab.classList.contains('active')) {
+                        buttonClone = textButton.cloneNode(true);
+                    } else if (imageTab.classList.contains('active') && imageButton.style.display !== 'none') {
+                        buttonClone = imageButton.cloneNode(true);
+                        textClone = imageText.cloneNode(true);
+                    } else {
+                        return;
+                    }
+    
+                    // Create a container for the clone
+                    const cloneContainer = document.createElement('div');
+                    cloneContainer.style.position = 'relative';
+                    cloneContainer.style.display = 'inline-block';
+    
+                    // Append button clone
+                    cloneContainer.appendChild(buttonClone);
+    
+                    // If Image Button, append text clone
+                    if (textClone) {
+                        cloneContainer.appendChild(textClone);
+                    }
+    
+                    // Apply computed styles to clone
+                    if (textTab.classList.contains('active')) {
+                        copyComputedStyles(textButton, buttonClone);
+                    } else if (imageTab.classList.contains('active')) {
+                        copyComputedStyles(imageButton, buttonClone);
+                        copyComputedStyles(imageText, textClone);
+                    }
+    
+                    // Apply state styles
+                    if (state === 'hover') {
+                        if (textTab.classList.contains('active')) {
+                            buttonClone.style.borderColor = borderColorHover.value;
+                            const hoverBackgroundCSS = generateBackgroundCSS(
+                                bgColorHover.value,
+                                gradientEndColorHover.value
+                            );
+                            // Extract the background property from the generated CSS
+                            const hoverBackgroundMatch = hoverBackgroundCSS.match(/background[^;]+;/);
+                            if (hoverBackgroundMatch) {
+                                buttonClone.style.background = hoverBackgroundMatch[0].replace(';', '');
+                            }
+                        } else if (imageTab.classList.contains('active') && uploadedImage) {
+                            // Create a temporary canvas to apply hover brightness
+                            const hoverCanvas = document.createElement('canvas');
+                            hoverCanvas.width = originalImageData.width;
+                            hoverCanvas.height = originalImageData.height;
+                            const hoverCtx = hoverCanvas.getContext('2d');
+                            hoverCtx.putImageData(originalImageData, 0, 0);
+                            hoverCtx.filter = `brightness(${imageBrightness.value * 1.1}%) contrast(${imageContrast.value}%) hue-rotate(${imageHue.value}deg) saturate(${imageSaturation.value}%) opacity(${imageOpacity.value}%) blur(${imageBlur.value}px)`;
+                            hoverCtx.drawImage(uploadedImage, 0, 0);
+                            const hoverDataUrl = hoverCanvas.toDataURL('image/png');
+    
+                            const imgClone = buttonClone.querySelector('#imageButtonImg');
+                            if (imgClone) imgClone.src = hoverDataUrl;
+                        }
+                    } else if (state === 'active') {
+                        if (textTab.classList.contains('active')) {
+                            buttonClone.style.borderColor = borderColorActive.value;
+                            const activeBackgroundCSS = generateBackgroundCSS(
+                                bgColorActive.value,
+                                gradientEndColorActive.value
+                            );
+                            // Extract the background property from the generated CSS
+                            const activeBackgroundMatch = activeBackgroundCSS.match(/background[^;]+;/);
+                            if (activeBackgroundMatch) {
+                                buttonClone.style.background = activeBackgroundMatch[0].replace(';', '');
+                            }
+                        } else if (imageTab.classList.contains('active') && uploadedImage) {
+                            // Create a temporary canvas to apply active brightness
+                            const activeCanvas = document.createElement('canvas');
+                            activeCanvas.width = originalImageData.width;
+                            activeCanvas.height = originalImageData.height;
+                            const activeCtx = activeCanvas.getContext('2d');
+                            activeCtx.putImageData(originalImageData, 0, 0);
+                            activeCtx.filter = `brightness(${imageBrightness.value * 0.85}%) contrast(${imageContrast.value}%) hue-rotate(${imageHue.value}deg) saturate(${imageSaturation.value}%) opacity(${imageOpacity.value}%) blur(${imageBlur.value}px)`;
+                            activeCtx.drawImage(uploadedImage, 0, 0);
+                            const activeDataUrl = activeCanvas.toDataURL('image/png');
+    
+                            const imgClone = buttonClone.querySelector('#imageButtonImg');
+                            if (imgClone) imgClone.src = activeDataUrl;
+                        }
+                    }
+    
+                    // Position Image Text
+                    if (textClone) {
+                        textClone.style.position = 'absolute';
+                        const offsetX = parseInt(textOffsetX.value) || 0;
+                        const offsetY = parseInt(textOffsetY.value) || 0;
+                        textClone.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                    }
+    
+                    // Create a temporary container for capturing
+                    const tempContainer = document.createElement('div');
+                    tempContainer.style.display = 'inline-block';
+                    tempContainer.style.margin = '0';
+                    tempContainer.style.padding = '0';
+                    tempContainer.style.border = 'none';
+                    tempContainer.style.background = 'none';
+    
+                    // Position the container off-screen to avoid affecting layout
+                    tempContainer.style.position = 'fixed';
+                    tempContainer.style.top = '-10000px';
+                    tempContainer.style.left = '-10000px';
+    
+                    tempContainer.appendChild(cloneContainer);
+                    document.body.appendChild(tempContainer);
+    
+                    // Use html2canvas to capture the button as PNG with transparent background and increased scale
+                    html2canvas(cloneContainer, {
+                        useCORS: true,
+                        allowTaint: false,
+                        backgroundColor: null, // Make background transparent
+                        scale: 3 // Increase scale for better resolution
+                    })
+                        .then(function (canvas) {
+                            const dataUrl = canvas.toDataURL('image/png');
+                            downloadDataUrl(`button-${state}.png`, dataUrl);
+                            document.body.removeChild(tempContainer);
+                        })
+                        .catch(function (error) {
+                            console.error('An error occurred while capturing the button:', error);
+                            document.body.removeChild(tempContainer);
+                        });
+                }
+    
+                // Function to handle image upload
+                function handleImageUpload(event) {
+                    const file = event.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = new Image();
+                            img.crossOrigin = 'Anonymous'; // To avoid CORS issues
+                            img.onload = function() {
+                                // Draw the image onto the canvas
+                                imageCanvas.width = img.width;
+                                imageCanvas.height = img.height;
+                                imageCanvasCtx.clearRect(0, 0, img.width, img.height);
+                                imageCanvasCtx.drawImage(img, 0, 0);
+                                uploadedImage = img;
+                                // Store the original image data
+                                originalImageData = imageCanvasCtx.getImageData(0, 0, img.width, img.height);
+                                // Update styles
+                                if (imageTab.classList.contains('active')) {
+                                    imageButton.style.display = 'inline-block';
+                                    updateImageButtonStyles();
+                                    // Show Image Text if checkbox is checked
+                                    imageText.style.display = showImageText.checked ? 'block' : 'none';
+                                }
+                            }
+                            img.src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                }
+    
+                // Function to reset effects to default values
+                function resetEffectsToDefault() {
+                    // Reset all effect controls to default values
+                    imageBrightness.value = 100;
+                    imageContrast.value = 100;
+                    imageHue.value = 0;
+                    imageSaturation.value = 100;
+                    imageOpacity.value = 100;
+                    imageBlur.value = 0;
+                    imagePixelate.value = 1;
+                    imageNoise.value = 0;
+                    imageShadowEffect.checked = false;
+                    imageShadowXOffset.value = 2;
+                    imageShadowYOffset.value = 2;
+                    imageShadowBlur.value = 5;
+                    imageShadowColor.value = '#000000';
+    
+                    // Reset transformation variables
+                    rotationAngle = 0;
+                    flipHorizontal = 1;
+                    flipVertical = 1;
+    
+                    // Update the image
+                    updateImageButtonStyles();
+    
+                    // Reset text offset
+                    textOffsetX.value = 0;
+                    textOffsetY.value = 0;
+                    imageText.style.transform = `translate(0px, 0px)`;
+                    imageText.textContent = imageButtonText.value;
+                }
+    
+                // Function to update styles for both Text Button and Image Button
+                function updateDynamicStyles() {
+                    // Only proceed if on the Text Tab
+                    if (textTab.classList.contains('active')) {
+                        // Update Text Button Styles
+                        updateTextButtonStyles();
+                    } else if (imageTab.classList.contains('active')) {
+                        updateImageButtonStyles();
+                    }
+                }
+    
+                // Function to handle font family input visibility
+                function handleFontFamilyChange() {
+                    if (fontFamilySelect.value === 'custom') {
+                        customFontFamilyInput.style.display = 'block';
+                    } else {
+                        customFontFamilyInput.style.display = 'none';
+                    }
+                }
+    
+                // Event listeners for inputs on the Text Button controls
+                const textInputs = document.querySelectorAll('#textControls input, #textControls select, #colorControls input, #colorControls select, #borderControls input, #borderControls select, #sizeControls input, #sizeControls select, #effectsControls input, #effectsControls select');
+                textInputs.forEach(input => {
+                    input.addEventListener('input', updateDynamicStyles);
+                });
+    
+                // Event listeners for Image Button controls
+                const imageInputs = document.querySelectorAll('#imageControls input, #imageControls select');
+                imageInputs.forEach(input => {
+                    input.addEventListener('input', updateImageButtonStyles);
+                });
+    
+                // Event listener for font family select
+                fontFamilySelect.addEventListener('change', () => {
+                    handleFontFamilyChange();
+                    updateDynamicStyles();
+                });
+    
+                // Event listeners for auto buttons
+                autoHoverColors.addEventListener('click', setAutoHoverColors);
+                autoActiveColors.addEventListener('click', setAutoActiveColors);
+    
+                // Event listeners for download buttons
+                downloadNormal.addEventListener('click', () => downloadButtonImage('normal'));
+                downloadHover.addEventListener('click', () => downloadButtonImage('hover'));
+                downloadActive.addEventListener('click', () => downloadButtonImage('active'));
+    
+                // Event listener for image upload
+                imageUpload.addEventListener('change', handleImageUpload);
+    
+                // Event listener to update text button text
+                buttonText.addEventListener('input', () => {
+                    textButton.textContent = buttonText.value;
+                });
+    
+                // Event listener to update image button text
+                imageButtonText.addEventListener('input', () => {
+                    imageText.textContent = imageButtonText.value;
+                });
+    
+                // Event listener for Show Text checkbox
+                showImageText.addEventListener('change', () => {
+                    imageText.style.display = showImageText.checked ? 'block' : 'none';
+                });
+    
+                // Event listeners for transform buttons
+                const rotateLeftButton = document.getElementById('rotateLeft');
+                const rotateRightButton = document.getElementById('rotateRight');
+                const flipHorizontalButton = document.getElementById('flipHorizontal');
+                const flipVerticalButton = document.getElementById('flipVertical');
+    
+                rotateLeftButton.addEventListener('click', () => {
+                    rotationAngle = (rotationAngle - 90) % 360;
+                    updateImageButtonStyles();
+                });
+    
+                rotateRightButton.addEventListener('click', () => {
+                    rotationAngle = (rotationAngle + 90) % 360;
+                    updateImageButtonStyles();
+                });
+    
+                flipHorizontalButton.addEventListener('click', () => {
+                    flipHorizontal *= -1;
+                    updateImageButtonStyles();
+                });
+    
+                flipVerticalButton.addEventListener('click', () => {
+                    flipVertical *= -1;
+                    updateImageButtonStyles();
+                });
+    
+                // Event listeners for Adjustments and Filters
+                imageBrightness.addEventListener('input', updateImageButtonStyles);
+                imageContrast.addEventListener('input', updateImageButtonStyles);
+                imageHue.addEventListener('input', updateImageButtonStyles);
+                imageSaturation.addEventListener('input', updateImageButtonStyles);
+                imageOpacity.addEventListener('input', updateImageButtonStyles);
+                imageBlur.addEventListener('input', updateImageButtonStyles);
+                imagePixelate.addEventListener('input', updateImageButtonStyles);
+                imageNoise.addEventListener('input', updateImageButtonStyles);
+    
+                // Event listener for Reset button
+                resetEffects.addEventListener('click', resetEffectsToDefault);
+    
+                // Initial setup
+                imageText.style.display = 'none'; // Hide image text by default
+                setAutoHoverColors(); // Set default hover colors
+                setAutoActiveColors(); // Set default active colors
+                handleFontFamilyChange();
+                updateDynamicStyles();
+            });
+        </script>
+    </body>
+    </html>
+    
