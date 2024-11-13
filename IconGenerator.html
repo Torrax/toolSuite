@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Pixel Icon Creator</title>
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+        /* Reset default browser styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body styling */
+        body {
+            display: flex;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        /* Canvas Area */
+        #canvas-container {
+            position: relative; /* Ensure overlays are positioned relative to this container */
+            flex: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #34495e;
+            padding: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        /* Grid Styling */
+        #grid {
+            display: grid;
+            background-color: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            image-rendering: pixelated;
+            width: fit-content;
+            height: fit-content;
+            cursor: crosshair; /* Default cursor for drawing */
+            user-select: none; /* Prevent text selection */
+        }
+
+        .cell {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #bdc3c7;
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .cell:hover {
+            border-color: #7f8c8d;
+        }
+
+        /* Control Panel */
+        #controls {
+            flex: 1;
+            background-color: #34495e;
+            padding: 20px;
+            border-left: 2px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Color History Picker */
+        #color-history-container {
+            display: flex;
+            gap: 5px;
+            padding: 5px;
+            background-color: #2c3e50;
+            border-radius: 5px;
+            min-height: 36px;
+            align-items: center;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .color-history-swatch {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #ecf0f1;
+            cursor: pointer;
+            transition: transform 0.2s, border 0.2s;
+        }
+
+        .color-history-swatch:hover {
+            transform: scale(1.1);
+            border: 2px solid #e1c40f;
+        }
+
+        .color-history-swatch.selected {
+            border: 2px solid #e1c40f;
+        }
+
+        /* Full Color Picker */
+        #custom-color-picker {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            height: 40px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            transition: background-color 0.3s ease;
+        }
+
+        #custom-color-picker:hover {
+            background-color: #1c5980;
+        }
+
+        /* Brush Size Slider */
+        #brush-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #brush-size {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #bdc3c7;
+            outline: none;
+            border-radius: 5px;
+            opacity: 0.7;
+            transition: opacity .2s;
+            cursor: pointer;
+        }
+
+        #brush-size:hover {
+            opacity: 1;
+        }
+
+        #brush-size::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e1c40f; /* Yellow thumb */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #brush-size::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e1c40f; /* Yellow thumb */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Brush Size Display */
+        #brush-size-display {
+            font-size: 16px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Opacity Slider */
+        #opacity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #opacity {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #bdc3c7;
+            outline: none;
+            border-radius: 5px;
+            opacity: 0.7;
+            transition: opacity .2s;
+            cursor: pointer;
+        }
+
+        #opacity:hover {
+            opacity: 1;
+        }
+
+        #opacity::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e74c3c; /* Red thumb */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #opacity::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e74c3c; /* Red thumb */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Opacity Display */
+        #opacity-display {
+            font-size: 16px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Grid Size Selector */
+        #grid-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #grid-size {
+            width: 100%;
+            padding: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            transition: background-color 0.3s ease;
+        }
+
+        #grid-size:hover {
+            background-color: #1c5980;
+        }
+
+        /* Image Upload */
+        #image-upload-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Styled Upload Button */
+        #upload-button {
+            padding: 10px;
+            background-color: #2980b9; /* Blue background */
+            color: #ecf0f1;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #upload-button:hover {
+            background-color: #1c5980;
+        }
+
+        /* Hide the actual file input */
+        #image-upload {
+            display: none;
+        }
+
+        /* Export Buttons Container */
+        #export-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Subtitle for Download Image */
+        #export-subtitle {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* Export Buttons */
+        #export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Styled Export Buttons */
+        .export-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: #27ae60; /* Green background */
+            color: #ecf0f1;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .export-btn:hover {
+            background-color: #1e8449;
+        }
+
+        /* Tooltip Styling */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 150px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            top: 125%; /* Position below the button */
+            left: 50%;
+            margin-left: -75px; /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 14px;
+        }        
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Undo and Redo Buttons Inside the Sidebar */
+        #history-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .history-btn, .tool-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #3498db; /* Blue background */
+            color: #ecf0f1;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .history-btn:hover, .tool-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .history-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .tool-btn.selected {
+            border: 2px solid #e1c40f; /* Yellow border */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            #controls {
+                flex-direction: row;
+                flex-wrap: wrap;
+                border-left: none;
+                border-top: 2px solid #2c3e50;
+                position: relative;
+            }
+
+            .control-group {
+                flex: 1 1 45%;
+            }
+
+            /* Adjust export buttons to stack on smaller screens */
+            #export-buttons {
+                flex-direction: column;
+            }
+
+            /* Adjust history buttons position on smaller screens */
+            #history-buttons {
+                margin-bottom: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* Ensure color history fits in one row */
+            #color-history-container {
+                overflow-x: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas Area -->
+    <div id="canvas-container">
+        <div id="grid">
+            <!-- Removed Selected Area Overlay -->
+            <!-- Removed Preview Indicator -->
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div id="controls">
+        <!-- Undo and Redo Buttons -->
+        <div id="history-buttons">
+            <button class="history-btn tooltip" id="undo-btn" disabled>
+                <i class="fas fa-undo"></i>
+                <span class="tooltiptext">Undo (Ctrl+Z)</span>
+            </button>
+            <button class="history-btn tooltip" id="redo-btn" disabled>
+                <i class="fas fa-redo"></i>
+                <span class="tooltiptext">Redo (Ctrl+Y)</span>
+            </button>
+        </div>
+
+        <!-- Grid Size Selector -->
+        <div class="control-group" id="grid-size-group">
+            <label for="grid-size">Grid Size:</label>
+            <div id="grid-size-selector">
+                <select id="grid-size">
+                    <option value="8">8x8</option>
+                    <option value="16" selected>16x16</option>
+                    <option value="24">24x24</option>
+                    <option value="32">32x32</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tools Group (Draw, Eraser, Paint Can, Move) -->
+        <div class="control-group">
+            <label>Tools:</label>
+            <div id="tools-group" style="display: flex; gap: 10px;">
+                <button class="tool-btn tooltip selected" id="draw-btn">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span class="tooltiptext">Draw Tool</span>
+                </button>
+                <button class="tool-btn tooltip" id="eraser-btn">
+                    <i class="fas fa-eraser"></i>
+                    <span class="tooltiptext">Eraser Tool</span>
+                </button>
+                <button class="tool-btn tooltip" id="paint-can-btn">
+                    <i class="fas fa-fill-drip"></i>
+                    <span class="tooltiptext">Paint Can Tool</span>
+                </button>
+                <button class="tool-btn tooltip" id="move-btn">
+                    <i class="fas fa-arrows-alt"></i>
+                    <span class="tooltiptext">Move Tool</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Color Picker and History -->
+        <div class="control-group">
+            <label>Select Color:</label>
+            <!-- Custom Color Picker -->
+            <input type="color" id="custom-color-picker" class="tooltip" title="Choose a custom color">
+            <!-- History Label -->
+            <label for="color-history-container" style="margin-top:10px;">History:</label>
+            <div id="color-history-container">
+                <!-- Color History Swatches -->
+                <!-- These will be dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Brush Size Slider -->
+        <div class="control-group">
+            <label for="brush-size">Brush Size:</label>
+            <div id="brush-size-selector">
+                <input type="range" id="brush-size" min="1" max="5" step="2" value="1">
+                <div id="brush-size-display">1</div>
+            </div>
+        </div>
+
+        <!-- Opacity Slider -->
+        <div class="control-group">
+            <label for="opacity">Opacity:</label>
+            <div id="opacity-selector">
+                <input type="range" id="opacity" min="0" max="100" step="1" value="100">
+                <div id="opacity-display">100%</div>
+            </div>
+        </div>
+
+        <!-- Export and Upload Buttons at the Bottom -->
+        <div class="control-group" id="upload-export-group" style="margin-top: auto;">
+            <!-- Image Upload -->
+            <div id="image-upload-group">
+                <button id="upload-button" class="tooltip">
+                    <i class="fas fa-upload"></i> Upload Image
+                    <span class="tooltiptext">Upload and Pixelate Image</span>
+                </button>
+                <input type="file" id="image-upload" accept="image/*">
+            </div>
+
+            <!-- Export Buttons with Subtitle -->
+            <div class="control-group" id="export-buttons-container">
+                <div id="export-subtitle">Download Image:</div>
+                <div id="export-buttons">
+                    <button class="export-btn tooltip" id="export-ico">
+                        <i class="fas fa-file-download"></i> Save as ICO
+                        <span class="tooltiptext">Download as ICO</span>
+                    </button>
+                    <button class="export-btn tooltip" id="export-png">
+                        <i class="fas fa-file-download"></i> Save as PNG
+                        <span class="tooltiptext">Download as PNG</span>
+                    </button>
+                    <button class="export-btn tooltip" id="export-bmp">
+                        <i class="fas fa-file-download"></i> Save as BMP
+                        <span class="tooltiptext">Download as BMP</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Canvas for Image Processing -->
+    <canvas id="hidden-canvas" style="display: none;"></canvas>
+
+    <!-- External Libraries -->
+    <!-- Include FileSaver.js for saving files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        /****************************************************
+         * Enhanced Pixel Icon Creator
+         * - Brush Size Slider (1, 3, 5)
+         * - Full Color Picker with Color History
+         * - Tooltips for Download Buttons
+         * - Paint Can Tool to Fill Areas
+         * - Move Tool to Shift Painted Pixels
+         * - Undo and Redo Functionality
+         * - Responsive Design
+         * - Opacity Control
+         * - Export to ICO, PNG, BMP
+         ****************************************************/
+
+        // ====================
+        // DOM Element References
+        // ====================
+        const gridContainer = document.getElementById('grid');
+        const colorHistoryContainer = document.getElementById('color-history-container');
+        const customColorPicker = document.getElementById('custom-color-picker');
+        const brushSizeSlider = document.getElementById('brush-size');
+        const brushSizeDisplay = document.getElementById('brush-size-display');
+        const opacitySlider = document.getElementById('opacity');
+        const opacityDisplay = document.getElementById('opacity-display');
+        const gridSizeSelector = document.getElementById('grid-size');
+        const exportIcoBtn = document.getElementById('export-ico');
+        const exportPngBtn = document.getElementById('export-png');
+        const exportBmpBtn = document.getElementById('export-bmp');
+        const imageUpload = document.getElementById('image-upload');
+        const uploadButton = document.getElementById('upload-button');
+        const hiddenCanvas = document.getElementById('hidden-canvas');
+        const undoBtn = document.getElementById('undo-btn');
+        const redoBtn = document.getElementById('redo-btn');
+        const eraserBtn = document.getElementById('eraser-btn');
+        const drawBtn = document.getElementById('draw-btn');
+        const paintCanBtn = document.getElementById('paint-can-btn');
+        const moveBtn = document.getElementById('move-btn');
+
+        // ====================
+        // Application State Variables
+        // ====================
+        let currentColor = '#000000'; // Default color
+        let brushSize = 1; // Default brush size
+        let gridSize = 16; // Default grid size (fixed to 16x16)
+        let opacity = 1; // Default opacity (1 = fully visible)
+        let isDrawing = false; // Drawing state
+        let currentTool = 'draw'; // Current tool: 'draw', 'eraser', 'paintCan', 'move'
+        let colorHistory = []; // Array to store last 6 used colors
+
+        // ====================
+        // Undo and Redo Stacks
+        // ====================
+        const undoStack = [];
+        const redoStack = [];
+        const MAX_HISTORY = 100; // Maximum number of states to store
+
+        // ====================
+        // Initialize the Grid
+        // ====================
+        function createGrid(size) {
+            // Clear existing grid
+            gridContainer.innerHTML = '';
+
+            // Set grid template based on size
+            gridContainer.style.gridTemplateColumns = `repeat(${size}, 20px)`;
+            gridContainer.style.gridTemplateRows = `repeat(${size}, 20px)`;
+            gridContainer.style.transform = `translate(0px, 0px)`; // Reset any previous transforms
+
+            // Create grid cells
+            for (let i = 0; i < size * size; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.index = i;
+                gridContainer.appendChild(cell);
+            }
+
+            // Save initial state
+            saveState();
+            console.log('Grid created with size:', size);
+        }
+
+        // ====================
+        // Save Current State to Undo Stack
+        // ====================
+        function saveState() {
+            // Capture current state
+            const currentState = [];
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const cell = gridContainer.children[i];
+                const color = cell.style.backgroundColor || 'transparent';
+                currentState.push(color);
+            }
+
+            // Push to undo stack
+            undoStack.push(currentState);
+
+            // Limit undo stack size
+            if (undoStack.length > MAX_HISTORY) {
+                undoStack.shift();
+            }
+
+            // Clear redo stack
+            redoStack.length = 0;
+
+            // Update Undo/Redo button states
+            updateHistoryButtons();
+            console.log('State saved. Undo stack size:', undoStack.length);
+        }
+
+        // ====================
+        // Restore State from a Given Array
+        // ====================
+        function restoreState(state) {
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const cell = gridContainer.children[i];
+                cell.style.backgroundColor = state[i];
+            }
+            console.log('State restored.');
+        }
+
+        // ====================
+        // Undo Functionality
+        // ====================
+        function undo() {
+            if (undoStack.length > 1) {
+                const currentState = undoStack.pop();
+                redoStack.push(currentState);
+                const previousState = undoStack[undoStack.length - 1];
+                restoreState(previousState);
+                updateHistoryButtons();
+                console.log('Undo performed');
+            }
+        }
+
+        // ====================
+        // Redo Functionality
+        // ====================
+        function redo() {
+            if (redoStack.length > 0) {
+                const nextState = redoStack.pop();
+                undoStack.push(nextState);
+                restoreState(nextState);
+                updateHistoryButtons();
+                console.log('Redo performed');
+            }
+        }
+
+        // ====================
+        // Update Undo and Redo Button States
+        // ====================
+        function updateHistoryButtons() {
+            undoBtn.disabled = undoStack.length <= 1;
+            redoBtn.disabled = redoStack.length === 0;
+            console.log('Undo button:', undoBtn.disabled ? 'Disabled' : 'Enabled');
+            console.log('Redo button:', redoBtn.disabled ? 'Disabled' : 'Enabled');
+        }
+
+        // ====================
+        // Handle Color Selection
+        // ====================
+        function selectColor(color) {
+            currentColor = applyOpacityToColor(color, opacity);
+            if (currentTool !== 'paintCan') {
+                currentTool = 'draw';
+                updateToolSelection();
+            }
+            // Update custom color picker value
+            customColorPicker.value = color;
+            console.log('Color selected:', currentColor);
+        }
+
+        // Helper function to apply opacity to a color
+        function applyOpacityToColor(color, opacity) {
+            // Convert hex to RGB
+            const rgb = hexToRgb(color);
+            if (rgb) {
+                return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+            }
+            return color;
+        }
+
+        // Helper function to convert hex to RGB
+        function hexToRgb(hex) {
+            // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+            const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+
+            const regex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return regex ? {
+                r: parseInt(regex[1], 16),
+                g: parseInt(regex[2], 16),
+                b: parseInt(regex[3], 16)
+            } : null;
+        }
+
+        // Helper function to convert rgb/rgba to hex
+        function rgbToHexFromColor(color) {
+            const rgb = color.match(/\d+/g);
+            if (rgb && rgb.length >= 3) {
+                return rgbToHex(parseInt(rgb[0]), parseInt(rgb[1]), parseInt(rgb[2]));
+            }
+            return '#000000';
+        }
+
+        // ====================
+        // Update Color History
+        // ====================
+        function updateColorHistory(color) {
+            // Only add to history if the color is not transparent and has been used on the canvas
+            if (color !== 'transparent') {
+                let hexColor;
+                if (color.startsWith('#')) {
+                    hexColor = color;
+                } else {
+                    // Convert rgba to hex
+                    hexColor = rgbToHexFromColor(color);
+                }
+                if (!hexColor) return;
+
+                // Remove color if it already exists to prevent duplicates
+                colorHistory = colorHistory.filter(c => c.toLowerCase() !== hexColor.toLowerCase());
+                // Add the new color to the beginning
+                colorHistory.unshift(hexColor);
+                // Limit history to last 6 colors
+                if (colorHistory.length > 6) {
+                    colorHistory.pop();
+                }
+                renderColorHistory();
+                console.log('Color history updated:', colorHistory);
+            }
+        }
+
+        // ====================
+        // Render Color History
+        // ====================
+        function renderColorHistory() {
+            colorHistoryContainer.innerHTML = '';
+            colorHistory.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.classList.add('color-history-swatch');
+                swatch.style.backgroundColor = color;
+                swatch.dataset.color = color;
+                swatch.addEventListener('click', () => {
+                    selectColor(color);
+                });
+                colorHistoryContainer.appendChild(swatch);
+            });
+            console.log('Color history rendered');
+        }
+
+        // ====================
+        // Handle Custom Color Picker Change
+        // ====================
+        customColorPicker.addEventListener('input', (e) => {
+            const selectedColor = e.target.value;
+            selectColor(selectedColor);
+            // Do NOT add to color history here; only add when painted
+        });
+
+        // ====================
+        // Handle Brush Size Selection
+        // ====================
+        function selectBrushSize(size) {
+            brushSize = parseInt(size);
+            brushSizeDisplay.textContent = size;
+            console.log('Brush size selected:', brushSize);
+        }
+
+        // ====================
+        // Handle Opacity Selection
+        // ====================
+        function selectOpacity(value) {
+            opacity = parseInt(value) / 100;
+            opacityDisplay.textContent = `${value}%`;
+            // Update current color with new opacity
+            currentColor = applyOpacityToColor(rgbToHexFromColor(currentColor), opacity);
+            console.log('Opacity selected:', opacity);
+        }
+
+        // ====================
+        // Handle Tool Selection
+        // ====================
+        function selectTool(tool) {
+            currentTool = tool;
+            updateToolSelection();
+
+            console.log('Tool selected:', currentTool);
+        }
+
+        // ====================
+        // Update Tool Selection UI
+        // ====================
+        function updateToolSelection() {
+            // Remove 'selected' class from all tool buttons
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Add 'selected' class to the current tool button
+            if (currentTool === 'draw') {
+                drawBtn.classList.add('selected');
+                gridContainer.style.cursor = 'crosshair';
+            } else if (currentTool === 'eraser') {
+                eraserBtn.classList.add('selected');
+                gridContainer.style.cursor = 'cell';
+            } else if (currentTool === 'paintCan') {
+                paintCanBtn.classList.add('selected');
+                gridContainer.style.cursor = 'url("https://cdn-icons-png.flaticon.com/512/2171/2171678.png"), auto'; /* Custom cursor for paint can */
+            } else if (currentTool === 'move') {
+                moveBtn.classList.add('selected');
+                gridContainer.style.cursor = 'grab';
+            }
+        }
+
+        // ====================
+        // Paint Cell Function with Brush Size and Tool
+        // ====================
+        function paintCell(cell) {
+            const index = parseInt(cell.dataset.index);
+            const row = Math.floor(index / gridSize);
+            const col = index % gridSize;
+
+            const halfSize = Math.floor(brushSize / 2);
+
+            for (let r = row - halfSize; r <= row + halfSize; r++) {
+                for (let c = col - halfSize; c <= col + halfSize; c++) {
+                    if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
+                        const cellIndex = r * gridSize + c;
+                        const targetCell = gridContainer.children[cellIndex];
+                        if (currentTool === 'eraser') {
+                            targetCell.style.backgroundColor = 'transparent';
+                        } else if (currentTool === 'draw' || currentTool === 'paintCan') {
+                            targetCell.style.backgroundColor = currentColor;
+                            const hexColor = rgbToHexFromColor(currentColor);
+                            updateColorHistory(hexColor); // Add to history when painted
+                        }
+                    }
+                }
+            }
+            console.log(`Painted cell at index ${index} with color ${currentColor}`);
+        }
+
+        // ====================
+        // Handle Mouse Down Event on Grid
+        // ====================
+        let isMoving = false;
+        let initialDragPos = { x: 0, y: 0 };
+        let initialTransform = { x: 0, y: 0 };
+
+        gridContainer.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('cell')) {
+                if (currentTool === 'move') {
+                    isMoving = true;
+                    gridContainer.classList.add('dragging');
+                    initialDragPos = { 
+                        x: e.clientX, 
+                        y: e.clientY 
+                    };
+                    initialTransform = getCurrentTransform();
+                    console.log('Move started');
+                } else {
+                    isDrawing = true;
+                    paintCell(e.target);
+                    saveState();
+                    console.log('Drawing started');
+                }
+            }
+        });
+
+        // ====================
+        // Handle Mouse Move Event on Grid
+        // ====================
+        gridContainer.addEventListener('mousemove', (e) => {
+            if (isDrawing && currentTool !== 'move') {
+                if (e.target.classList.contains('cell')) {
+                    paintCell(e.target);
+                }
+            }
+
+            if (isMoving && currentTool === 'move') {
+                const deltaX = e.clientX - initialDragPos.x;
+                const deltaY = e.clientY - initialDragPos.y;
+
+                // Determine shift direction based on drag
+                const threshold = 10; // Minimum pixels to consider a shift
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > threshold) {
+                        shiftGrid('right');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Right');
+                    } else if (deltaX < -threshold) {
+                        shiftGrid('left');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Left');
+                    }
+                } else {
+                    if (deltaY > threshold) {
+                        shiftGrid('down');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Down');
+                    } else if (deltaY < -threshold) {
+                        shiftGrid('up');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Up');
+                    }
+                }
+            }
+        });
+
+        // ====================
+        // Handle Mouse Up Event to Stop Drawing/Moving
+        // ====================
+        document.addEventListener('mouseup', (e) => {
+            if (isDrawing) {
+                isDrawing = false;
+                saveState();
+                console.log('Drawing stopped');
+            }
+
+            if (isMoving) {
+                isMoving = false;
+                gridContainer.classList.remove('dragging');
+                saveState();
+                console.log('Move ended');
+            }
+        });
+
+        // ====================
+        // Shift Grid Function
+        // ====================
+        function shiftGrid(direction) {
+            const newState = [];
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                let targetIndex;
+                switch(direction) {
+                    case 'up':
+                        targetIndex = i + gridSize;
+                        break;
+                    case 'down':
+                        targetIndex = i - gridSize;
+                        break;
+                    case 'left':
+                        targetIndex = i + 1;
+                        break;
+                    case 'right':
+                        targetIndex = i - 1;
+                        break;
+                    default:
+                        targetIndex = i;
+                }
+
+                if (targetIndex >= 0 && targetIndex < gridSize * gridSize) {
+                    newState[i] = gridContainer.children[targetIndex].style.backgroundColor || 'transparent';
+                } else {
+                    newState[i] = 'transparent';
+                }
+            }
+
+            // Apply the new state
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                gridContainer.children[i].style.backgroundColor = newState[i];
+            }
+
+            // Save the shift as a new state
+            saveState();
+        }
+
+        // ====================
+        // Handle Paint Can Tool Click
+        // ====================
+        paintCanBtn.addEventListener('click', () => {
+            if (currentTool === 'paintCan') return;
+            selectTool('paintCan');
+        });
+
+        // ====================
+        // Implement Flood Fill Algorithm for Paint Can Tool
+        // ====================
+        gridContainer.addEventListener('click', (e) => {
+            if (currentTool === 'paintCan') {
+                if (e.target.classList.contains('cell')) {
+                    const index = parseInt(e.target.dataset.index);
+                    const targetColor = gridContainer.children[index].style.backgroundColor || 'transparent';
+                    const fillColor = currentColor;
+
+                    if (colorsMatch(targetColor, fillColor)) return; // Prevent infinite loop
+
+                    floodFill(index, targetColor, fillColor);
+                    saveState();
+                }
+            } else if (currentTool === 'draw' || currentTool === 'eraser') {
+                if (e.target.classList.contains('cell')) {
+                    paintCell(e.target);
+                    saveState();
+                }
+            }
+        });
+
+        // Helper function to compare colors
+        function colorsMatch(color1, color2) {
+            const rgba1 = parseRGBA(color1);
+            const rgba2 = parseRGBA(color2);
+            if (!rgba1 || !rgba2) return false;
+            return rgba1.r === rgba2.r && rgba1.g === rgba2.g && rgba1.b === rgba2.b && rgba1.a === rgba2.a;
+        }
+
+        // Helper function to parse RGBA color
+        function parseRGBA(color) {
+            const regex = /rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/;
+            const match = regex.exec(color);
+            if (match) {
+                return {
+                    r: parseInt(match[1]),
+                    g: parseInt(match[2]),
+                    b: parseInt(match[3]),
+                    a: match[4] !== undefined ? parseFloat(match[4]) : 1
+                };
+            }
+            return null;
+        }
+
+        // Flood Fill Algorithm
+        function floodFill(startIndex, targetColor, fillColor) {
+            const stack = [startIndex];
+            const visited = new Set();
+
+            while (stack.length > 0) {
+                const currentIndex = stack.pop();
+
+                if (visited.has(currentIndex)) continue;
+                visited.add(currentIndex);
+
+                const cell = gridContainer.children[currentIndex];
+                const cellColor = cell.style.backgroundColor || 'transparent';
+
+                if (!colorsMatch(cellColor, targetColor)) continue;
+
+                // Fill the cell
+                cell.style.backgroundColor = fillColor;
+
+                // Get neighboring indices
+                const neighbors = getNeighbors(currentIndex);
+                neighbors.forEach(neighbor => {
+                    if (!visited.has(neighbor)) {
+                        stack.push(neighbor);
+                    }
+                });
+            }
+            console.log('Flood fill completed.');
+        }
+
+        // Helper function to get neighboring indices (4-directional)
+        function getNeighbors(index) {
+            const neighbors = [];
+            const row = Math.floor(index / gridSize);
+            const col = index % gridSize;
+
+            // Up
+            if (row > 0) neighbors.push(index - gridSize);
+            // Down
+            if (row < gridSize - 1) neighbors.push(index + gridSize);
+            // Left
+            if (col > 0) neighbors.push(index - 1);
+            // Right
+            if (col < gridSize - 1) neighbors.push(index + 1);
+
+            return neighbors;
+        }
+
+        // ====================
+        // Handle Mouse Leave Grid
+        // ====================
+        gridContainer.addEventListener('mouseleave', () => {
+            if (isDrawing) {
+                isDrawing = false;
+                saveState();
+                console.log('Drawing stopped on mouse leave');
+            }
+
+            if (isMoving) {
+                isMoving = false;
+                gridContainer.classList.remove('dragging');
+                saveState();
+                console.log('Move stopped on mouse leave');
+            }
+        });
+
+        // ====================
+        // Shift Grid Function
+        // ====================
+        function shiftGrid(direction) {
+            const newState = [];
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                let targetIndex;
+                switch(direction) {
+                    case 'up':
+                        targetIndex = i + gridSize;
+                        break;
+                    case 'down':
+                        targetIndex = i - gridSize;
+                        break;
+                    case 'left':
+                        targetIndex = i + 1;
+                        break;
+                    case 'right':
+                        targetIndex = i - 1;
+                        break;
+                    default:
+                        targetIndex = i;
+                }
+
+                if (targetIndex >= 0 && targetIndex < gridSize * gridSize) {
+                    newState[i] = gridContainer.children[targetIndex].style.backgroundColor || 'transparent';
+                } else {
+                    newState[i] = 'transparent';
+                }
+            }
+
+            // Apply the new state
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                gridContainer.children[i].style.backgroundColor = newState[i];
+            }
+
+            // Save the shift as a new state
+            saveState();
+        }
+
+        // ====================
+        // Handle Brush Size Change
+        // ====================
+        brushSizeSlider.addEventListener('input', (e) => {
+            const size = e.target.value;
+            selectBrushSize(size);
+        });
+
+        // ====================
+        // Handle Opacity Change
+        // ====================
+        opacitySlider.addEventListener('input', (e) => {
+            const value = e.target.value;
+            selectOpacity(value);
+            // Update current color with new opacity
+            if (currentTool === 'draw' || currentTool === 'paintCan') {
+                currentColor = applyOpacityToColor(rgbToHexFromColor(currentColor), opacity);
+            }
+        });
+
+        // ====================
+        // Handle Grid Size Change
+        // ====================
+        gridSizeSelector.addEventListener('change', (e) => {
+            gridSize = parseInt(e.target.value);
+            createGrid(gridSize);
+            colorHistory = []; // Reset color history on grid size change
+            renderColorHistory();
+            console.log('Grid size changed to:', gridSize);
+        });
+
+        // ====================
+        // Handle Tool Button Clicks
+        // ====================
+        drawBtn.addEventListener('click', () => {
+            if (currentTool === 'draw') return;
+            selectTool('draw');
+        });
+
+        eraserBtn.addEventListener('click', () => {
+            if (currentTool === 'eraser') return;
+            selectTool('eraser');
+        });
+
+        paintCanBtn.addEventListener('click', () => {
+            if (currentTool === 'paintCan') return;
+            selectTool('paintCan');
+        });
+
+        moveBtn.addEventListener('click', () => {
+            if (currentTool === 'move') return;
+            selectTool('move');
+        });
+
+        // ====================
+        // Handle Undo and Redo Button Clicks
+        // ====================
+        undoBtn.addEventListener('click', () => {
+            undo();
+        });
+
+        redoBtn.addEventListener('click', () => {
+            redo();
+        });
+
+        // ====================
+        // Handle Upload Button Click
+        // ====================
+        uploadButton.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        // ====================
+        // Handle Image Upload and Pixelation
+        // ====================
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files.length === 0) {
+                return;
+            }
+
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    // Set hidden canvas dimensions to grid size
+                    hiddenCanvas.width = gridSize;
+                    hiddenCanvas.height = gridSize;
+                    const ctx = hiddenCanvas.getContext('2d');
+
+                    // Draw the image scaled to grid size
+                    ctx.clearRect(0, 0, gridSize, gridSize);
+                    ctx.drawImage(img, 0, 0, gridSize, gridSize);
+
+                    // Get pixel data
+                    const imageData = ctx.getImageData(0, 0, gridSize, gridSize).data;
+
+                    // Save state before making changes
+                    saveState();
+
+                    // Update grid cells based on image data
+                    for (let i = 0; i < gridSize * gridSize; i++) {
+                        const r = imageData[i * 4];
+                        const g = imageData[i * 4 + 1];
+                        const b = imageData[i * 4 + 2];
+                        const a = imageData[i * 4 + 3];
+                        const cellColor = a === 0 ? 'transparent' : rgbToHex(r, g, b);
+                        const cell = gridContainer.children[i];
+                        cell.style.backgroundColor = cellColor;
+                        if (cellColor !== 'transparent') {
+                            updateColorHistory(cellColor);
+                        }
+                    }
+
+                    // Save state after image load
+                    saveState();
+                    console.log('Image uploaded and pixelated');
+                }
+                img.onerror = function() {
+                    alert('Failed to load the image. Please try a different file.');
+                }
+                img.src = event.target.result;
+            }
+
+            reader.onerror = function() {
+                alert('Failed to read the file. Please try again.');
+            }
+
+            reader.readAsDataURL(file);
+        });
+
+        // ====================
+        // Utility function to convert RGB to Hex
+        // ====================
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        }
+
+        // ====================
+        // Handle Export as ICO
+        // ====================
+        exportIcoBtn.addEventListener('click', async () => {
+            try {
+                // Create a canvas to draw the grid
+                const canvas = document.createElement('canvas');
+                canvas.width = gridSize;
+                canvas.height = gridSize;
+                const ctx = canvas.getContext('2d');
+
+                // Draw each cell onto the canvas
+                for (let i = 0; i < gridSize * gridSize; i++) {
+                    const cell = gridContainer.children[i];
+                    const color = cell.style.backgroundColor || 'rgba(0,0,0,0)';
+                    ctx.fillStyle = color;
+                    const x = i % gridSize;
+                    const y = Math.floor(i / gridSize);
+                    ctx.fillRect(x, y, 1, 1);
+                }
+
+                // Determine the scale to ensure the image does not exceed 256x256
+                const maxIconSize = 256;
+                const scale = Math.floor(maxIconSize / gridSize);
+                const scaledWidth = gridSize * scale;
+                const scaledHeight = gridSize * scale;
+
+                // Create a scaled canvas
+                const scaledCanvas = document.createElement('canvas');
+                scaledCanvas.width = scaledWidth;
+                scaledCanvas.height = scaledHeight;
+                const scaledCtx = scaledCanvas.getContext('2d');
+                scaledCtx.imageSmoothingEnabled = false;
+                scaledCtx.drawImage(canvas, 0, 0, scaledWidth, scaledHeight);
+
+                // Convert the scaled canvas to PNG data URL
+                const pngDataUrl = scaledCanvas.toDataURL('image/png');
+                const pngBlob = await (await fetch(pngDataUrl)).blob();
+                const pngArrayBuffer = await pngBlob.arrayBuffer();
+
+                // Construct ICO file structure
+                const icoBuffer = new ArrayBuffer(6 + 16 + pngArrayBuffer.byteLength);
+                const view = new DataView(icoBuffer);
+
+                // ICONDIR structure
+                view.setUint16(0, 0, true); // Reserved
+                view.setUint16(2, 1, true); // Type: 1 for ICO
+                view.setUint16(4, 1, true); // Count: number of images
+
+                // ICONDIRENTRY structure
+                view.setUint8(6, scaledWidth >= 256 ? 0 : scaledWidth); // Width (0 for 256)
+                view.setUint8(7, scaledHeight >= 256 ? 0 : scaledHeight); // Height (0 for 256)
+                view.setUint8(8, 0); // Number of colors (0 for no palette)
+                view.setUint8(9, 0); // Reserved
+                view.setUint16(10, 1, true); // Color planes (set to 1)
+                view.setUint16(12, 32, true); // Bits per pixel
+                view.setUint32(14, pngArrayBuffer.byteLength, true); // Image size
+                view.setUint32(18, 22, true); // Offset to image data (6 + 16)
+
+                // Copy PNG data into the buffer
+                const pngBytes = new Uint8Array(pngArrayBuffer);
+                const icoBytes = new Uint8Array(icoBuffer);
+                icoBytes.set(pngBytes, 22); // Start copying at byte offset 22
+
+                // Create a Blob from the ICO buffer
+                const icoBlob = new Blob([icoBytes], { type: 'image/x-icon' });
+
+                // Trigger the download using FileSaver.js
+                saveAs(icoBlob, 'icon.ico');
+                console.log('ICO exported successfully');
+            } catch (error) {
+                console.error('Export as ICO failed:', error);
+                alert('Failed to export as ICO. Check the console for details.');
+            }
+        });
+
+        // ====================
+        // Handle Export as PNG
+        // ====================
+        exportPngBtn.addEventListener('click', () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = gridSize;
+                canvas.height = gridSize;
+                const ctx = canvas.getContext('2d');
+
+                // Set transparent background
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw each cell onto the canvas
+                for (let i = 0; i < gridSize * gridSize; i++) {
+                    const cell = gridContainer.children[i];
+                    const color = cell.style.backgroundColor || 'rgba(0,0,0,0)';
+                    ctx.fillStyle = color;
+                    const x = i % gridSize;
+                    const y = Math.floor(i / gridSize);
+                    ctx.fillRect(x, y, 1, 1);
+                }
+
+                // Scale up the image for better visibility
+                const scale = 32; // Each pixel becomes 32x32 in the final image
+                const scaledCanvas = document.createElement('canvas');
+                scaledCanvas.width = gridSize * scale;
+                scaledCanvas.height = gridSize * scale;
+                const scaledCtx = scaledCanvas.getContext('2d');
+                scaledCtx.imageSmoothingEnabled = false;
+                scaledCtx.drawImage(canvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
+
+                // Convert the scaled canvas to Blob and save as PNG
+                scaledCanvas.toBlob(function(blob) {
+                    if (blob) {
+                        saveAs(blob, 'icon.png');
+                        console.log('PNG exported successfully');
+                    } else {
+                        console.error('Failed to generate PNG blob.');
+                        alert('Failed to export as PNG.');
+                    }
+                }, 'image/png');
+            } catch (error) {
+                console.error('Export as PNG failed:', error);
+                alert('Failed to export as PNG. Check the console for details.');
+            }
+        });
+
+        // ====================
+        // Handle Export as BMP
+        // ====================
+        exportBmpBtn.addEventListener('click', () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = gridSize;
+                canvas.height = gridSize;
+                const ctx = canvas.getContext('2d');
+
+                // Set transparent background
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw each cell onto the canvas
+                for (let i = 0; i < gridSize * gridSize; i++) {
+                    const cell = gridContainer.children[i];
+                    const color = cell.style.backgroundColor || 'rgba(0,0,0,0)';
+                    ctx.fillStyle = color;
+                    const x = i % gridSize;
+                    const y = Math.floor(i / gridSize);
+                    ctx.fillRect(x, y, 1, 1);
+                }
+
+                // Scale up the image for better visibility
+                const scale = 32; // Each pixel becomes 32x32 in the final image
+                const scaledCanvas = document.createElement('canvas');
+                scaledCanvas.width = gridSize * scale;
+                scaledCanvas.height = gridSize * scale;
+                const scaledCtx = scaledCanvas.getContext('2d');
+                scaledCtx.imageSmoothingEnabled = false;
+                scaledCtx.drawImage(canvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
+
+                // Convert canvas to BMP
+                const bmpBlob = canvasToBmp(scaledCanvas);
+                if (bmpBlob) {
+                    saveAs(bmpBlob, 'icon.bmp');
+                    console.log('BMP exported successfully');
+                } else {
+                    console.error('Failed to generate BMP blob.');
+                    alert('Failed to export as BMP.');
+                }
+            } catch (error) {
+                console.error('Export as BMP failed:', error);
+                alert('Failed to export as BMP. Check the console for details.');
+            }
+        });
+
+        // ====================
+        // Function to Convert Canvas to BMP Format
+        // ====================
+        function canvasToBmp(canvas) {
+            try {
+                const ctx = canvas.getContext('2d');
+                const width = canvas.width;
+                const height = canvas.height;
+                const imageData = ctx.getImageData(0, 0, width, height).data;
+
+                // BMP file header
+                const fileSize = 54 + (width * height * 4);
+                const buffer = new ArrayBuffer(fileSize);
+                const view = new DataView(buffer);
+
+                // BITMAPFILEHEADER
+                view.setUint8(0, 0x42); // 'B'
+                view.setUint8(1, 0x4D); // 'M'
+                view.setUint32(2, fileSize, true); // File size
+                view.setUint16(6, 0, true); // Reserved
+                view.setUint16(8, 0, true); // Reserved
+                view.setUint32(10, 54, true); // Offset to pixel data
+
+                // BITMAPINFOHEADER
+                view.setUint32(14, 40, true); // Header size
+                view.setUint32(18, width, true); // Image width
+                view.setUint32(22, height, true); // Image height
+                view.setUint16(26, 1, true); // Planes
+                view.setUint16(28, 32, true); // Bits per pixel
+                view.setUint32(30, 0, true); // Compression
+                view.setUint32(34, width * height * 4, true); // Image size
+                view.setUint32(38, 0, true); // X pixels per meter
+                view.setUint32(42, 0, true); // Y pixels per meter
+                view.setUint32(46, 0, true); // Total colors
+                view.setUint32(50, 0, true); // Important colors
+
+                // Pixel data (BGRA format)
+                let offset = 54;
+                for (let y = height - 1; y >= 0; y--) { // BMP stores pixels bottom to top
+                    for (let x = 0; x < width; x++) {
+                        const i = (y * width + x) * 4;
+                        const r = imageData[i];
+                        const g = imageData[i + 1];
+                        const b = imageData[i + 2];
+                        const a = imageData[i + 3];
+                        view.setUint8(offset++, b);
+                        view.setUint8(offset++, g);
+                        view.setUint8(offset++, r);
+                        view.setUint8(offset++, a);
+                    }
+                }
+
+                return new Blob([buffer], { type: 'image/bmp' });
+            } catch (error) {
+                console.error('Canvas to BMP conversion failed:', error);
+                return null;
+            }
+        }
+
+        // ====================
+        // Handle Keyboard Shortcuts for Undo and Redo
+        // ====================
+        document.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            if (e.ctrlKey && key === 'z') {
+                e.preventDefault();
+                undo();
+            }
+            if (e.ctrlKey && key === 'y') {
+                e.preventDefault();
+                redo();
+            }
+        });
+
+        // ====================
+        // Initialize the Grid on Page Load
+        // ====================
+        window.onload = () => {
+            createGrid(gridSize);
+            // Initialize color history as empty; only add when painted
+            colorHistory = [];
+            renderColorHistory();
+            // Initialize brush size and opacity displays
+            brushSizeDisplay.textContent = brushSizeSlider.value;
+            opacityDisplay.textContent = `${opacitySlider.value}%`;
+            console.log('Grid initialized');
+        };
+
+        // ====================
+        // Prevent Text Selection While Moving
+        // ====================
+        document.body.addEventListener('mousedown', (e) => {
+            if (currentTool === 'move') {
+                e.preventDefault();
+            }
+        });
+
+        // ====================
+        // Touch Support for Mobile Devices
+        // ====================
+        let touchStartPos = { x: 0, y: 0 };
+        let initialTouchTransform = { x: 0, y: 0 };
+
+        gridContainer.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && target.classList.contains('cell')) {
+                if (currentTool === 'move') {
+                    isMoving = true;
+                    gridContainer.classList.add('dragging');
+                    touchStartPos = { 
+                        x: touch.clientX, 
+                        y: touch.clientY 
+                    };
+                    const transform = window.getComputedStyle(gridContainer).transform;
+                    if (transform !== 'none') {
+                        const matrix = new WebKitCSSMatrix(transform);
+                        initialTouchTransform = { x: matrix.m41, y: matrix.m42 };
+                    } else {
+                        initialTouchTransform = { x: 0, y: 0 };
+                    }
+                    console.log('Touch move started');
+                } else if (currentTool === 'paintCan') {
+                    // Handle touch for paint can
+                    const index = parseInt(target.dataset.index);
+                    const targetColor = gridContainer.children[index].style.backgroundColor || 'transparent';
+                    const fillColor = currentColor;
+
+                    if (colorsMatch(targetColor, fillColor)) return; // Prevent infinite loop
+
+                    floodFill(index, targetColor, fillColor);
+                    saveState();
+                } else {
+                    isDrawing = true;
+                    paintCell(target);
+                    saveState();
+                    console.log('Touch drawing started');
+                }
+            }
+        });
+
+        gridContainer.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            const x = Math.floor((touch.clientX - gridContainer.getBoundingClientRect().left) / 20);
+            const y = Math.floor((touch.clientY - gridContainer.getBoundingClientRect().top) / 20);
+
+            if (isDrawing && currentTool !== 'move' && currentTool !== 'paintCan') {
+                if (target && target.classList.contains('cell')) {
+                    paintCell(target);
+                }
+            }
+
+            if (isMoving && currentTool === 'move') {
+                const deltaX = touch.clientX - touchStartPos.x;
+                const deltaY = touch.clientY - touchStartPos.y;
+                const newX = initialTouchTransform.x + deltaX;
+                const newY = initialTouchTransform.y + deltaY;
+
+                // Determine shift direction based on drag
+                const threshold = 10; // Minimum pixels to consider a shift
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > threshold) {
+                        shiftGrid('right');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Right');
+                    } else if (deltaX < -threshold) {
+                        shiftGrid('left');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Left');
+                    }
+                } else {
+                    if (deltaY > threshold) {
+                        shiftGrid('down');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Down');
+                    } else if (deltaY < -threshold) {
+                        shiftGrid('up');
+                        isMoving = false;
+                        gridContainer.classList.remove('dragging');
+                        console.log('Shifted Up');
+                    }
+                }
+            }
+
+            e.preventDefault();
+        }, { passive: false });
+
+        gridContainer.addEventListener('touchend', (e) => {
+            if (isDrawing) {
+                isDrawing = false;
+                saveState();
+                console.log('Touch drawing stopped');
+            }
+
+            if (isMoving) {
+                isMoving = false;
+                gridContainer.classList.remove('dragging');
+                saveState();
+                console.log('Touch move ended');
+            }
+        });
+
+        // ====================
+        // Implement Flood Fill Algorithm for Paint Can Tool
+        // ====================
+        // Already implemented above in click event listener and helper functions
+
+    </script>
+</body>
+</html>
