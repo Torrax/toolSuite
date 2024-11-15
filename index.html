@@ -33,12 +33,23 @@
             font-weight: 700;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
         }
+        section {
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 50px;
+        }
+        section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-align: center;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
         .tool-container {
             display: flex;
             flex-wrap: wrap;
             gap: 30px;
             justify-content: center;
-            max-width: 1200px;
             width: 100%;
         }
         .tool-card {
@@ -57,7 +68,7 @@
             transform: translateY(-10px) scale(1.05);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
-        .tool-card h2 {
+        .tool-card h3 {
             font-size: 1.8rem;
             color: #f1c40f;
             margin-bottom: 15px;
@@ -81,6 +92,7 @@
             margin-top: 50px;
             color: #bdc3c7;
             font-size: 0.9rem;
+            text-align: center;
         }
         footer a {
             color: #f39c12;
@@ -90,22 +102,65 @@
         footer a:hover {
             color: #e67e22;
         }
+        @media (max-width: 1000px) {
+            .tool-card {
+                width: 45%;
+            }
+        }
+        @media (max-width: 700px) {
+            .tool-card {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>Interactive Tool Suite</h1>
-    <div class="tool-container">
-        <a href="iconGenerator.html" class="tool-card">
-            <i class="fas fa-paint-brush tool-icon"></i>
-            <h2>Pixel Icon Creator</h2>
-            <p>Create and customize pixel-perfect icons easily.</p>
-        </a>
-        <a href="buttonGenerator.html" class="tool-card">
-            <i class="fas fa-hand-pointer tool-icon"></i>
-            <h2>Button Generator</h2>
-            <p>Design and download beautiful button styles for your projects.</p>
-        </a>
-    </div>
+
+    <!-- Design Section -->
+    <section>
+        <h2>Design Tools</h2>
+        <div class="tool-container">
+            <a href="iconGenerator.html" class="tool-card">
+                <i class="fas fa-paint-brush tool-icon"></i>
+                <h3>Pixel Icon Creator</h3>
+                <p>Create and customize pixel-perfect icons easily.</p>
+            </a>
+            <a href="buttonGenerator.html" class="tool-card">
+                <i class="fas fa-hand-pointer tool-icon"></i>
+                <h3>Button Generator</h3>
+                <p>Design and download beautiful button styles for your projects.</p>
+            </a>
+            <a href="colorPalette.html" class="tool-card">
+                <i class="fas fa-palette tool-icon"></i>
+                <h3>Color Palette</h3>
+                <p>Generate and explore harmonious color palettes for your designs.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Utility Section -->
+    <section>
+        <h2>Utility Tools</h2>
+        <div class="tool-container">
+            <a href="regexTester.html" class="tool-card">
+                <i class="fas fa-search tool-icon"></i>
+                <h3>Regex Tester</h3>
+                <p>Test and debug your regular expressions with ease.</p>
+            </a>
+            <a href="fileConverter.html" class="tool-card">
+                <i class="fas fa-file tool-icon"></i>
+                <h3>File Converter</h3>
+                <p>Convert files between various formats quickly and efficiently.</p>
+            </a>
+            <a href="QRGenerator.html" class="tool-card">
+                <i class="fas fa-qrcode tool-icon"></i>
+                <h3>QR Generator</h3>
+                <p>Create custom QR codes for your links, texts, and more.</p>
+            </a>
+        </div>
+    </section>
+
     <footer>
         <p>Created by <a href="https://github.com/Torrax" target="_blank">Carson Morris</a> &copy; 2024</p>
     </footer>
