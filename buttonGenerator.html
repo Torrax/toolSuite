@@ -287,6 +287,7 @@
                 overflow-y: auto;
                 max-height: 80vh;
             }
+
             #buttonContainer {
                 width: 100%;
                 flex: 1;
@@ -299,11 +300,11 @@
                                     linear-gradient(-45deg, transparent 75%, #d8d8d8 75%);
                 background-size: 20px 20px;
                 background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-                border: 2px dashed #1abc9c;
+                border: 2px solid #000000;
                 border-radius: 12px;
                 position: relative;
                 padding: 20px;
-                overflow: auto;
+                overflow: hidden;
             }
             
             /* Text Button */
@@ -341,18 +342,20 @@
                 border: none;
                 min-width: 120px;
                 min-height: 60px;
-                background-color: #34495e;
+                background-color: transparent;
                 padding: 0;
                 position: relative;
                 border-radius: 8px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-                overflow: hidden;
+                box-shadow: none;
+                overflow: visible;
             }
+
             #imageButtonImg {
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: contain;
                 border-radius: 8px;
+                background-color: transparent;
                 transition: transform 0.3s ease, filter 0.3s ease;
             }
             #imageButton:hover {
@@ -1492,6 +1495,9 @@
                         const color = imageShadowColor.value;
                         filterCSS += ` drop-shadow(${xOffset}px ${yOffset}px ${shadowBlur}px ${color})`;
                     }
+
+                    imageButton.style.background = 'transparent';
+                    imageButton.style.border = 'none';
     
                     // Apply Transformations
                     const resizePercentage = parseInt(imageResizePercentage.value);
@@ -1686,11 +1692,11 @@
     
                 document.body.removeChild(link);
             }
-    
+
             function downloadButtonImage(state) {
                 let buttonClone;
                 let textClone;
-                
+            
                 if (textTab.classList.contains('active')) {
                     // Clone the Text Button
                     buttonClone = textButton.cloneNode(true);
@@ -1726,36 +1732,38 @@
                     applyImageButtonStyles(buttonClone, state);
                     if (textClone) {
                         applyImageTextStyles(textClone);
-                    }
-                }
             
-                // Position Image Text if applicable
-                if (textClone) {
-                    const offsetX = parseInt(textOffsetX.value) || 0;
-                    const offsetY = parseInt(textOffsetY.value) || 0;
-                    textClone.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                        // Hide text if the "Show Text" option is unchecked
+                        if (!showImageText.checked) {
+                            textClone.style.display = 'none';
+                        }
+                    }
                 }
             
                 // Create a temporary container for capturing
                 const tempContainer = document.createElement('div');
-                tempContainer.style.display = 'inline-block';
-                tempContainer.style.margin = '0';
-                tempContainer.style.padding = '0';
-                tempContainer.style.border = 'none';
-                tempContainer.style.background = 'none';
                 tempContainer.style.position = 'fixed';
-                tempContainer.style.top = '-10000px';
-                tempContainer.style.left = '-10000px';
-            
-                cloneContainer.style.background = 'none'; // Ensure transparent background
+                tempContainer.style.top = '0';
+                tempContainer.style.left = '0';
+                tempContainer.style.zIndex = '-1'; // Ensure it's out of view
+                tempContainer.style.overflow = 'visible'; // Ensure overflow is captured
+                tempContainer.style.width = 'auto';
+                tempContainer.style.height = 'auto';
+                tempContainer.style.padding = '0';
+                tempContainer.style.margin = '0';
+                tempContainer.style.border = 'none';
+                tempContainer.style.background = 'none'; // Remove any background
+
                 tempContainer.appendChild(cloneContainer);
                 document.body.appendChild(tempContainer);
             
-                // Use html2canvas to capture the button as PNG with transparent background and increased scale
+                // Use html2canvas to capture the button
                 html2canvas(cloneContainer, {
                     useCORS: true,
                     allowTaint: false,
                     backgroundColor: null, // Make background transparent
+                    scrollX: 0,
+                    scrollY: 0,
                     scale: 3 // Increase scale for better resolution
                 })
                     .then(function (canvas) {
@@ -1768,6 +1776,7 @@
                         document.body.removeChild(tempContainer);
                     });
             }
+
             
             // Helper function to apply styles to the cloned Text Button
             function applyTextButtonStyles(buttonClone, state) {
@@ -1832,12 +1841,13 @@
                 buttonClone.style.border = 'none';
                 buttonClone.style.minWidth = '120px';
                 buttonClone.style.minHeight = '60px';
-                buttonClone.style.backgroundColor = '#34495e';
+                buttonClone.style.backgroundColor = 'transparent';
                 buttonClone.style.padding = '0';
                 buttonClone.style.position = 'relative';
+                buttonClone.style.border = 'none';
                 buttonClone.style.borderRadius = '8px';
                 buttonClone.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
-                buttonClone.style.overflow = 'hidden';
+                buttonClone.style.overflow = 'visible';
             
                 // Apply background image if any
                 if (imageButtonImg.src) {
@@ -2008,7 +2018,7 @@
                 imageShadowXOffset.value = 2;
                 imageShadowYOffset.value = 2;
                 imageShadowBlur.value = 5;
-                imageShadowColor.value = '#1abc9c'; /* Updated to match border color */
+                imageShadowColor.value = '#000000'; /* Updated to match border color */
     
                 // Reset transformation variables
                 rotationAngle = 0;
