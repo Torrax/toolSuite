@@ -23,9 +23,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 50px 20px;
+            padding: 70px 20px 50px; /* Add top padding for space above the fixed header */
             animation: fadeIn 1.5s ease-in-out;
-        }
+            min-height: 100vh;
+        }   
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -40,9 +41,21 @@
             color: #ecf0f1;
         }
         header {
+            position: relative;
+            margin-top: 30px; /* Add margin above the header to move it down */
+            margin-bottom: 0px; /* Add margin below to create space between header and content */
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            color: #f1c40f;
+            padding: 20px 30px;
             text-align: center;
-            margin-bottom: 20px;
-        }
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }          
         header h1 {
             font-size: 2rem;
             color: #f1c40f;
@@ -264,11 +277,13 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>QR Code Generator</h1>
-        </header>
-
+    <header style="display: flex; align-items: center; justify-content: center; position: fixed; top: 0; width: 100%; z-index: 1000;">
+        <a href="index.html" style="position: absolute; left: 30px; text-decoration: none; color: #f1c40f;">
+            <i class="fas fa-home" style="font-size: 2rem;"></i>
+        </a>
+        <h1>QR Code Generator</h1>
+    </header>
+    <div class="container" style="margin-top: 80px;">
         <!-- QR Code Type Selection -->
         <div class="section-title">Select QR Code Type</div>
         <div class="qr-types">
