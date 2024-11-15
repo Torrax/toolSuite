@@ -1393,7 +1393,7 @@
                         canvas.width = gridSize;
                         canvas.height = gridSize;
                         const ctx = canvas.getContext('2d');
-    
+                
                         // Draw each cell onto the canvas
                         for (let i = 0; i < gridSize * gridSize; i++) {
                             const cell = gridContainer.children[i];
@@ -1403,13 +1403,13 @@
                             const y = Math.floor(i / gridSize);
                             ctx.fillRect(x, y, 1, 1);
                         }
-    
+                
                         // Determine the scale to ensure the image does not exceed 256x256
                         const maxIconSize = 256;
-                        const scale = Math.min(Math.floor(maxIconSize / gridSize), 64); // Limit scale to prevent oversized images
+                        const scale = Math.floor(maxIconSize / gridSize);
                         const scaledWidth = gridSize * scale;
                         const scaledHeight = gridSize * scale;
-    
+                
                         // Create a scaled canvas
                         const scaledCanvas = document.createElement('canvas');
                         scaledCanvas.width = scaledWidth;
@@ -1417,31 +1417,48 @@
                         const scaledCtx = scaledCanvas.getContext('2d');
                         scaledCtx.imageSmoothingEnabled = false;
                         scaledCtx.drawImage(canvas, 0, 0, scaledWidth, scaledHeight);
-    
-                        // Convert the scaled canvas to PNG Blob
-                        scaledCanvas.toBlob(async function(pngBlob) {
-                            if (!pngBlob) {
-                                alert('Failed to generate PNG for ICO.');
-                                return;
-                            }
-    
-                            // Use ICO.js to create ICO from PNG Blob
-                            const pngBuffer = await pngBlob.arrayBuffer();
-                            const icoBuffer = await icojs.encode([pngBuffer], { bitDepth: 32 });
-    
-                            // Create a Blob from the ICO buffer
-                            const icoBlob = new Blob([icoBuffer], { type: 'image/x-icon' });
-    
-                            // Trigger the download using FileSaver.js
-                            saveAs(icoBlob, 'icon.ico');
-                            console.log('ICO exported successfully');
-                        }, 'image/png');
+                
+                        // Convert the scaled canvas to PNG data URL
+                        const pngDataUrl = scaledCanvas.toDataURL('image/png');
+                        const pngBlob = await (await fetch(pngDataUrl)).blob();
+                        const pngArrayBuffer = await pngBlob.arrayBuffer();
+                
+                        // Construct ICO file structure
+                        const icoBuffer = new ArrayBuffer(6 + 16 + pngArrayBuffer.byteLength);
+                        const view = new DataView(icoBuffer);
+                
+                        // ICONDIR structure
+                        view.setUint16(0, 0, true); // Reserved
+                        view.setUint16(2, 1, true); // Type: 1 for ICO
+                        view.setUint16(4, 1, true); // Count: number of images
+                
+                        // ICONDIRENTRY structure
+                        view.setUint8(6, scaledWidth >= 256 ? 0 : scaledWidth); // Width (0 for 256)
+                        view.setUint8(7, scaledHeight >= 256 ? 0 : scaledHeight); // Height (0 for 256)
+                        view.setUint8(8, 0); // Number of colors (0 for no palette)
+                        view.setUint8(9, 0); // Reserved
+                        view.setUint16(10, 1, true); // Color planes (set to 1)
+                        view.setUint16(12, 32, true); // Bits per pixel
+                        view.setUint32(14, pngArrayBuffer.byteLength, true); // Image size
+                        view.setUint32(18, 22, true); // Offset to image data (6 + 16)
+                
+                        // Copy PNG data into the buffer
+                        const pngBytes = new Uint8Array(pngArrayBuffer);
+                        const icoBytes = new Uint8Array(icoBuffer);
+                        icoBytes.set(pngBytes, 22); // Start copying at byte offset 22
+                
+                        // Create a Blob from the ICO buffer
+                        const icoBlob = new Blob([icoBytes], { type: 'image/x-icon' });
+                
+                        // Trigger the download using FileSaver.js
+                        saveAs(icoBlob, 'icon.ico');
+                        console.log('ICO exported successfully');
                     } catch (error) {
                         console.error('Export as ICO failed:', error);
                         alert('Failed to export as ICO. Check the console for details.');
                     }
                 });
-    
+                    
                 // ====================
                 // Handle Export as PNG
                 // ====================
