@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desmos Graphing Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Base Styles */
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #2980b9, #6dd5ed);
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            color: #f1c40f;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-left: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header a {
+            color: #f1c40f;
+            text-decoration: none;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        header a:hover {
+            color: #f39c12;
+        }
+
+        header i {
+            margin-right: 10px;
+        }
+
+        /* Iframe Styles */
+        #iframe-container {
+            flex: 1;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: #34495e;
+            color: #ecf0f1;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #f1c40f;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Title Bar -->
+    <header>
+        <a href="../index.html">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>Desmos Graphing Calculator</h1>
+    </header>
+
+    <!-- Iframe Container -->
+    <div id="iframe-container">
+        <iframe src="https://www.desmos.com/calculator"></iframe>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Powered by <a href="https://www.desmos.com/" target="_blank">Desmos Graphing Calculator</a>. All rights reserved.</p>
+    </footer>
+</body>
+</html>
