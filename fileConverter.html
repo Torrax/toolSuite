@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Converter</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Include jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-VuGh8o0rPGYnz5WlUkG0jtHbMWKpFc9hZfNTT8EhKxC3VuvF4PXwOTCIReT2CjMsUR2T7nWPLl1W6UQwDClmXQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Include SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-ZVufXi9b+0DkD8GpB9A+9/Hgr8yog64EXiP6Dwy/9zNJnriTqYhMYsn5uQiX3p+Nssu0gUFGIQrhZa04fq1aBg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Include docx.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.2.0/docx.min.js" integrity="sha512-wxstgBvjqfMNXDDtKtFmgqM0EfxNZhBL5gOv3PTVOHH9gXuAQdy+syGkOHB3tKKfTiQDFjMDqBxXjdCc7izxFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Include PDF.js for PDF Processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js" integrity="sha512-RB9kHav8YugDy+eOTGhHiYkYfYrSxFPRB3ZHR5lwDZyGd5QTTgcUq/8cEoBoA5A/NWlqDkPUdDAIS8sFeLiVGA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Include ffmpeg.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #2980b9, #6dd5ed);
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            color: #f1c40f;
+            padding: 20px 30px;
+            text-align: center;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1200px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        header h1 {
+            font-size: 3rem;
+            color: #f39c12;
+        }
+        #converter-container {
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            color: #ecf0f1;
+            padding: 30px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #upload-section {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        #file-upload {
+            display: none;
+        }
+        #upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%; /* Make the button span the full width */
+            padding: 15px 0; /* Adjust padding for better appearance */
+            background-color: #3498db;
+            border-radius: 8px;
+            color: #ecf0f1;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        #upload-label:hover {
+            background-color: #1abc9c;
+            transform: translateY(-2px);
+        }
+        #upload-label i {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        #file-info {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #f1c40f;
+            word-break: break-all;
+        }
+        /* Maximum Video Size Message */
+        #max-video-size {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #e74c3c;
+        }
+        #output-format {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .format-category {
+            grid-column: span 2;
+            text-align: center;
+            font-weight: bold;
+            color: #f1c40f;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1c40f;
+        }
+        .format-option {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #34495e;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+            opacity: 0.3;
+            text-align: center;
+            color: #555;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .format-option.enabled {
+            opacity: 1;
+            background-color: #34495e;
+            color: #f1f1f1;
+        }
+        .format-option.enabled:hover {
+            background-color: #1abc9c;
+        }
+        .format-option.selected {
+            border-color: #f1c40f;
+            background-color: #1abc9c;
+            color: #fff;
+        }
+        .format-option i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        #convert-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 25px;
+            cursor: pointer;
+            background-color: #f1c40f;
+            color: #34495e;
+            border-radius: 8px;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: background-color 0.3s, transform 0.3s;
+            display: none;
+            width: 100%;
+        }
+        #convert-btn i {
+            font-size: 1.3rem;
+            margin-bottom: 3px;
+        }
+        #convert-btn:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+        /* Loader Styles */
+        #loader {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #f1c40f;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Progress Bar Styles */
+        #progress-container {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: #f1c40f;
+            border-radius: 5px;
+            text-align: center;
+            color: #34495e;
+            line-height: 20px;
+        }
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            #converter-container {
+                padding: 20px;
+                max-width: 100%;
+            }
+            .format-category {
+                font-size: 0.9rem;
+            }
+            .format-option {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+            #upload-label {
+                font-size: 1rem;
+                padding: 12px 0;
+            }
+            #convert-btn {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+            #max-video-size {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>File Converter</h1>
+    </header>
+    <div id="converter-container">
+        <div id="upload-section">
+            <label id="upload-label" for="file-upload"><i class="fa fa-upload"></i> Upload File</label>
+            <input type="file" id="file-upload" accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,video/*">
+            <p id="file-info"></p>
+            <!-- Maximum Video Size Message -->
+            <p id="max-video-size">Maximum video file size: 100MB</p>
+        </div>
+        <div id="output-format">
+            <div class="format-category">Image Formats</div>
+            <div class="format-option disabled" data-format="png"><i class="fa fa-file-image"></i> PNG</div>
+            <div class="format-option disabled" data-format="jpg"><i class="fa fa-file-image"></i> JPG</div>
+            <div class="format-option disabled" data-format="bmp"><i class="fa fa-file-image"></i> BMP</div>
+            <div class="format-option disabled" data-format="webp"><i class="fa fa-file-image"></i> WEBP</div>
+
+            <div class="format-category">Document Formats</div>
+            <div class="format-option disabled" data-format="pdf"><i class="fa fa-file-pdf"></i> PDF</div>
+            <div class="format-option disabled" data-format="docx"><i class="fa fa-file-word"></i> Word (DOCX)</div>
+            <div class="format-option disabled" data-format="xlsx"><i class="fa fa-file-excel"></i> Excel (XLSX)</div>
+            <div class="format-option disabled" data-format="pptx"><i class="fa fa-file-powerpoint"></i> PowerPoint (PPTX)</div>
+
+            <div class="format-category">Video Formats</div>
+            <div class="format-option disabled" data-format="mp4"><i class="fa fa-file-video"></i> MP4</div>
+            <div class="format-option disabled" data-format="avi"><i class="fa fa-file-video"></i> AVI</div>
+            <div class="format-option disabled" data-format="mov"><i class="fa fa-file-video"></i> MOV</div>
+            <div class="format-option disabled" data-format="mkv"><i class="fa fa-file-video"></i> MKV</div>
+        </div>
+        <button id="convert-btn"><i class="fa fa-exchange-alt"></i> Convert File</button>
+        <div id="loader"></div>
+        <div id="progress-container">
+            <div id="progress-bar">0%</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.getElementById("file-upload");
+            const fileInfoDisplay = document.getElementById("file-info");
+            const formatOptions = document.querySelectorAll(".format-option");
+            const convertBtn = document.getElementById("convert-btn");
+            const loader = document.getElementById("loader");
+            const progressContainer = document.getElementById("progress-container");
+            const progressBar = document.getElementById("progress-bar");
+            const maxVideoSizeDisplay = document.getElementById("max-video-size");
+
+            const MAX_VIDEO_SIZE_MB = 100; // Maximum video size in MB
+
+            let selectedFile = null;
+            let selectedFormat = null;
+            let fileName = "";
+
+            // Initialize FFmpeg
+            const { createFFmpeg, fetchFile } = FFmpeg;
+            const ffmpeg = createFFmpeg({ 
+                log: true, 
+                progress: p => {
+                    if (p.percent) {
+                        updateProgress(Math.round(p.percent));
+                    }
+                }
+            });
+
+            // Enable or disable format options based on file type
+            function updateFormatOptions(fileType) {
+                formatOptions.forEach(option => {
+                    option.classList.remove("enabled", "selected");
+                    option.classList.add("disabled");
+                });
+                
+                if (fileType.startsWith("image/")) {
+                    ["png", "jpg", "bmp", "webp"].forEach(format => {
+                        const option = document.querySelector(`.format-option[data-format="${format}"]`);
+                        option.classList.remove("disabled");
+                        option.classList.add("enabled");
+                    });
+                } else if (
+                    fileType === "application/pdf" ||
+                    fileType === "application/msword" ||
+                    fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                    fileType === "application/vnd.ms-excel" ||
+                    fileType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                    fileType === "application/vnd.ms-powerpoint" ||
+                    fileType === "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                ) {
+                    // Enable document formats
+                    ["pdf", "docx", "xlsx", "pptx"].forEach(format => {
+                        const option = document.querySelector(`.format-option[data-format="${format}"]`);
+                        option.classList.remove("disabled");
+                        option.classList.add("enabled");
+                    });
+                } else if (fileType.startsWith("video/")) {
+                    // Enable video formats
+                    ["mp4", "avi", "mov", "mkv"].forEach(format => {
+                        const option = document.querySelector(`.format-option[data-format="${format}"]`);
+                        option.classList.remove("disabled");
+                        option.classList.add("enabled");
+                    });
+                }
+            }
+
+            // Handle file upload
+            fileInput.addEventListener("change", function () {
+                const file = fileInput.files[0];
+                if (file) {
+                    // Check for video file size
+                    if (file.type.startsWith("video/")) {
+                        const fileSizeMB = file.size / (1024 * 1024);
+                        if (fileSizeMB > MAX_VIDEO_SIZE_MB) {
+                            alert(`The selected video file exceeds the maximum allowed size of ${MAX_VIDEO_SIZE_MB}MB.`);
+                            fileInput.value = ""; // Reset file input
+                            fileInfoDisplay.textContent = "";
+                            formatOptions.forEach(option => {
+                                option.classList.remove("enabled", "selected");
+                                option.classList.add("disabled");
+                            });
+                            convertBtn.style.display = "none";
+                            selectedFile = null;
+                            selectedFormat = null;
+                            return;
+                        }
+                    }
+
+                    selectedFile = file;
+                    fileName = file.name.split('.').slice(0, -1).join('.') || file.name;
+                    const fileType = file.type;
+                    fileInfoDisplay.textContent = `File: ${file.name} (${fileType.split("/")[1].toUpperCase()})`;
+                    updateFormatOptions(fileType);
+                    convertBtn.style.display = "none";
+                    selectedFormat = null;
+                    
+                    // Reset selected format
+                    formatOptions.forEach(option => {
+                        option.classList.remove("selected");
+                    });
+                }
+            });
+
+            // Select output format
+            formatOptions.forEach(option => {
+                option.addEventListener("click", function () {
+                    if (this.classList.contains("enabled")) {
+                        formatOptions.forEach(opt => opt.classList.remove("selected"));
+                        this.classList.add("selected");
+                        selectedFormat = this.getAttribute("data-format");
+                        if (selectedFile) {
+                            convertBtn.style.display = "flex";
+                        }
+                    }
+                });
+            });
+
+            // Show loader and progress
+            function showLoader() {
+                loader.style.display = "block";
+                progressContainer.style.display = "block";
+                progressBar.style.width = "0%";
+                progressBar.textContent = "0%";
+            }
+
+            function updateProgress(percent) {
+                if (percent > 100) percent = 100;
+                progressBar.style.width = `${percent}%`;
+                progressBar.textContent = `${percent}%`;
+            }
+
+            function hideLoader() {
+                loader.style.display = "none";
+                progressContainer.style.display = "none";
+            }
+
+            // Convert and auto-download file
+            convertBtn.addEventListener("click", async function () {
+                if (selectedFile && selectedFormat) {
+                    const originalType = selectedFile.type;
+                    const newFileName = `${fileName}.${selectedFormat}`;
+
+                    showLoader();
+
+                    if (originalType.startsWith("image/")) {
+                        // Image conversion
+                        try {
+                            const canvas = document.createElement("canvas");
+                            const context = canvas.getContext("2d");
+                            const img = new Image();
+                            img.crossOrigin = "anonymous";
+                            img.onload = function () {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                context.drawImage(img, 0, 0);
+                                canvas.toBlob(function(blob) {
+                                    const downloadLink = document.createElement("a");
+                                    downloadLink.href = URL.createObjectURL(blob);
+                                    downloadLink.download = newFileName;
+                                    downloadLink.click();
+                                    hideLoader();
+                                    alert("Image converted successfully!");
+                                }, `image/${selectedFormat}`);
+                            };
+                            img.onerror = function () {
+                                hideLoader();
+                                alert("Error loading image for conversion.");
+                            };
+                            img.src = URL.createObjectURL(selectedFile);
+                        } catch (error) {
+                            console.error(error);
+                            hideLoader();
+                            alert("Error converting image.");
+                        }
+                    } else if (originalType.startsWith("application/")) {
+                        // Document conversion
+                        try {
+                            if (originalType === "application/pdf") {
+                                if (selectedFormat === "docx") {
+                                    // PDF to DOCX conversion
+                                    const arrayBuffer = await selectedFile.arrayBuffer();
+                                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                                    let extractedText = "";
+                                    for (let i = 1; i <= pdf.numPages; i++) {
+                                        const page = await pdf.getPage(i);
+                                        const textContent = await page.getTextContent();
+                                        const pageText = textContent.items.map(item => item.str).join(' ');
+                                        extractedText += pageText + "\n\n";
+                                    }
+
+                                    const doc = new docx.Document({
+                                        sections: [{
+                                            properties: {},
+                                            children: [
+                                                new docx.Paragraph(extractedText)
+                                            ],
+                                        }],
+                                    });
+
+                                    docx.Packer.toBlob(doc).then(blob => {
+                                        const downloadLink = document.createElement("a");
+                                        downloadLink.href = URL.createObjectURL(blob);
+                                        downloadLink.download = newFileName;
+                                        downloadLink.click();
+                                        hideLoader();
+                                        alert("PDF converted to DOCX successfully!");
+                                    }).catch(error => {
+                                        console.error(error);
+                                        hideLoader();
+                                        alert("Error converting PDF to DOCX.");
+                                    });
+                                } else {
+                                    // PDF to XLSX or PPTX
+                                    hideLoader();
+                                    alert(`PDF to ${capitalize(selectedFormat)} conversion is not supported client-side.`);
+                                }
+                            } else if (originalType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                                if (selectedFormat === "pdf") {
+                                    // DOCX to PDF conversion
+                                    // Note: Full DOCX to PDF conversion client-side is not feasible.
+                                    // Here, we'll create a simple PDF with placeholder text.
+                                    const { jsPDF } = window.jspdf;
+                                    const pdfDoc = new jsPDF();
+                                    pdfDoc.text("Converted DOCX to PDF (Placeholder)", 10, 10);
+                                    pdfDoc.save(newFileName);
+                                    hideLoader();
+                                    alert("DOCX converted to PDF successfully (Placeholder)!");
+                                } else {
+                                    // DOCX to other formats
+                                    hideLoader();
+                                    alert(`DOCX to ${capitalize(selectedFormat)} conversion is not supported client-side.`);
+                                }
+                            } else if (originalType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                                if (selectedFormat === "xlsx") {
+                                    // No conversion needed
+                                    hideLoader();
+                                    alert("The file is already in XLSX format.");
+                                } else {
+                                    // XLSX to other formats
+                                    hideLoader();
+                                    alert(`XLSX to ${capitalize(selectedFormat)} conversion is not supported client-side.`);
+                                }
+                            } else if (originalType === "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+                                if (selectedFormat === "pptx") {
+                                    // No conversion needed
+                                    hideLoader();
+                                    alert("The file is already in PPTX format.");
+                                } else {
+                                    // PPTX to other formats
+                                    hideLoader();
+                                    alert(`PPTX to ${capitalize(selectedFormat)} conversion is not supported client-side.`);
+                                }
+                            } else {
+                                hideLoader();
+                                alert("Unsupported document format.");
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            hideLoader();
+                            alert("Error converting document.");
+                        }
+                    } else if (originalType.startsWith("video/")) {
+                        // Video conversion using ffmpeg.js
+                        try {
+                            if (!ffmpeg.isLoaded()) {
+                                await ffmpeg.load();
+                            }
+
+                            ffmpeg.FS('writeFile', selectedFile.name, await fetchFile(selectedFile));
+
+                            // Determine codec based on selected format
+                            let codec = '';
+                            switch (selectedFormat) {
+                                case 'mp4':
+                                    codec = 'libx264';
+                                    break;
+                                case 'avi':
+                                    codec = 'mpeg4';
+                                    break;
+                                case 'mov':
+                                    codec = 'libx264';
+                                    break;
+                                case 'mkv':
+                                    codec = 'libx264';
+                                    break;
+                                default:
+                                    codec = 'libx264';
+                            }
+
+                            // Run FFmpeg command with codec settings
+                            await ffmpeg.run('-i', selectedFile.name, '-c:v', codec, newFileName);
+
+                            // Read the result
+                            const data = ffmpeg.FS('readFile', newFileName);
+
+                            // Create a Blob and download
+                            const videoBlob = new Blob([data.buffer], { type: `video/${selectedFormat}` });
+                            const downloadLink = document.createElement("a");
+                            downloadLink.href = URL.createObjectURL(videoBlob);
+                            downloadLink.download = newFileName;
+                            downloadLink.click();
+
+                            // Clean up
+                            ffmpeg.FS('unlink', selectedFile.name);
+                            ffmpeg.FS('unlink', newFileName);
+
+                            hideLoader();
+                            alert("Video converted successfully!");
+                        } catch (error) {
+                            console.error(error);
+                            hideLoader();
+                            alert("Error converting video. Ensure the format is supported and the file is not too large.");
+                        }
+                    } else {
+                        hideLoader();
+                        alert("Unsupported file type.");
+                    }
+                }
+            });
+
+            // Helper function to get file extension from MIME type
+            function selectedTypeExtension(mimeType) {
+                const mimeMap = {
+                    "image/png": "png",
+                    "image/jpeg": "jpg",
+                    "image/bmp": "bmp",
+                    "image/webp": "webp",
+                    "application/pdf": "pdf",
+                    "application/msword": "doc",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+                    "application/vnd.ms-excel": "xls",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+                    "application/vnd.ms-powerpoint": "ppt",
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+                    "video/mp4": "mp4",
+                    "video/x-msvideo": "avi",
+                    "video/quicktime": "mov",
+                    "video/x-matroska": "mkv"
+                };
+                return mimeMap[mimeType] || "";
+            }
+
+            // Helper function to capitalize first letter
+            function capitalize(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+        });
+    </script>
+</body>
+</html>
