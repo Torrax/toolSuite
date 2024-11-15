@@ -2,7 +2,7 @@
     ║                                Name: buttonGenerator                                     ║
     ║                                Author: Carson Morris                                     ║
     ║                                   Date: 11/12/2024                                       ║
-    ║                                      Rev: 10.0                                           ║
+    ║                                      Rev: 2.0                                            ║
     ╚══════════════════════════════════════════════════════════════════════════════════════════╝-->
 
 <!DOCTYPE html>
@@ -10,35 +10,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Custom Button Generator</title>
-    <style id="dynamicStyles">
-        /* Dynamic styles will be inserted here */
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Base Styles -->
     <style>
-        /* Reset and base styles */
+        /* Reset and Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            font-family: Arial, sans-serif;
-            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #2980b9, #6dd5ed);
+            color: #ecf0f1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            align-items: center;
+            padding: 50px 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         /* Header */
         header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            color: #f1c40f;
+            padding: 20px 30px;
             text-align: center;
             flex: 0 0 auto;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: relative; /* To position the credit text */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1200px;
         }
         header h1 {
-            font-size: 24px;
+            font-size: 3rem;
+            color: #f39c12;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
         }
         /* Credit Text */
         .credit {
@@ -53,101 +65,137 @@
         main {
             flex: 1 1 auto;
             display: flex;
-            height: calc(100vh - 60px); /* Adjust based on header height */
+            width: 100%;
+            max-width: 1200px;
+            gap: 30px;
+            margin-top: 30px;
+            min-height: 0;
         }
-        /* Sidebar */
+        /* Sidebar Controls */
         #controls {
             width: 40%;
-            background-color: #f9f9f9;
-            padding: 20px;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            color: #ecf0f1;
+            padding: 30px;
             overflow-y: auto;
-            border-right: 1px solid #ddd;
+            border-right: 1px solid #2c3e50;
             display: flex;
             flex-direction: column;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            max-height: 80vh;
+            position: relative;
         }
         /* Tab Navigation */
         .tab-navigation {
             display: flex;
             margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            z-index: 1;
+            padding: 10px 0;
+            border-bottom: 1px solid #2c3e50;
         }
         .tab-navigation button {
             flex: 1;
-            padding: 10px;
+            padding: 15px;
             cursor: pointer;
-            background-color: #e0e0e0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
             border: none;
             outline: none;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, color 0.3s;
             font-weight: bold;
+            border-radius: 8px;
+            margin: 0 5px;
         }
         .tab-navigation button.active {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #f1c40f;
+            color: #34495e;
+        }
+        .tab-navigation button:hover {
+            background-color: #1abc9c;
+            color: #ffffff;
         }
         /* Sections */
         .section {
-            display: none; /* Hidden by default */
+            display: none;
         }
         .section.active {
-            display: block; /* Show when active */
+            display: block;
         }
         .section h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #ccc;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #bdc3c7;
             padding-bottom: 5px;
             text-transform: uppercase;
             text-align: center;
+            color: #f1c40f;
         }
         /* Subsections */
         .subsection {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .subsection h3 {
-            font-size: 16px;
-            margin-bottom: 5px;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            border-bottom: 1px dashed #ccc;
-            padding-bottom: 3px;
+            border-bottom: 1px dashed #bdc3c7;
+            padding-bottom: 5px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            color: #f1c40f;
         }
         /* Form Layout */
         .form-group {
             display: flex;
             flex-wrap: wrap;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             align-items: flex-start;
-            justify-content: center; /* Center the form group items */
+            justify-content: flex-start;
         }
         .form-group label {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             margin-right: 20px;
             margin-bottom: 10px;
-            width: calc(100% / 3 - 20px); /* Three inputs per row */
+            width: calc(100% / 3 - 20px);
+            color: #ecf0f1;
         }
         .form-group.three-items label {
-            width: calc(100% / 3 - 20px); /* Three inputs per row */
+            width: calc(100% / 3 - 20px);
         }
         .form-group.two-items label {
-            width: calc(100% / 2 - 20px); /* Two inputs per row */
+            width: calc(100% / 2 - 20px);
         }
         .form-group.four-items label {
-            width: calc(100% / 4 - 20px); /* Four inputs per row */
+            width: calc(100% / 4 - 20px);
         }
         .form-group.label-full-width {
-            width: 100%; /* Single input spanning full width */
-            align-items: center; /* Centered */
+            width: 100%;
+            align-items: flex-start;
         }
-        /* Styled Color Inputs as Circles with Black Border */
+        /* Center "Background Style" Title and Dropdown */
+        #backgroundStyleContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        #backgroundStyleContainer label {
+            width: 100%;
+            align-items: center;
+        }
+        /* Styled Color Inputs as Circles with Light Border */
         .color-input-wrapper {
             position: relative;
             width: 40px;
             height: 40px;
-            border: 1px solid #000; /* Black border */
+            border: 1px solid #ecf0f1;
             border-radius: 50%;
             overflow: hidden;
             margin-top: 5px;
@@ -174,7 +222,6 @@
             border: none;
             border-radius: 50%;
         }
-        /* Set color picker to default to hex */
         input[type="color"] {
             --webkit-color-swatch: none;
         }
@@ -189,6 +236,7 @@
             height: 18px;
             margin-right: 5px;
             cursor: pointer;
+            accent-color: #f1c40f;
         }
         /* Dropdown for Fonts */
         .font-select-wrapper {
@@ -197,32 +245,47 @@
         }
         .font-select-wrapper select {
             width: 100%;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 8px;
+            border: 1px solid #1abc9c;
+            border-radius: 6px;
             appearance: none;
-            background-color: #fff;
+            background-color: #34495e;
+            color: #ecf0f1;
             background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%23999"><polygon points="0,0 14,0 7,10" /></svg>');
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 12px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .font-select-wrapper select:focus {
+            border-color: #f39c12;
+            box-shadow: 0 0 5px #f39c12;
+            outline: none;
         }
         .font-select-wrapper input[type="text"] {
             display: none;
             margin-top: 5px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 8px;
+            border: 1px solid #1abc9c;
+            border-radius: 6px;
+            background-color: #34495e;
+            color: #ecf0f1;
+            font-size: 16px;
+            width: 100%;
         }
         /* Preview Area */
         #preview {
             width: 60%;
-            padding: 20px;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            color: #ecf0f1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            background-color: #f1f1f1;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
         }
         #buttonContainer {
             width: 100%;
@@ -230,45 +293,93 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Checkered background */
-            background-image:
-                linear-gradient(45deg, #ccc 25%, transparent 25%),
-                linear-gradient(-45deg, #ccc 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, #ccc 75%),
-                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-image: linear-gradient(45deg, #d8d8d8 25%, transparent 25%), 
+                                linear-gradient(-45deg, #d8d8d8 25%, transparent 25%), 
+                                linear-gradient(45deg, transparent 75%, #d8d8d8 75%), 
+                                linear-gradient(-45deg, transparent 75%, #d8d8d8 75%);
             background-size: 20px 20px;
             background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
+            border: 2px dashed #1abc9c;
+            border-radius: 12px;
             position: relative;
+            padding: 20px;
+            overflow: auto;
         }
+        
         /* Text Button */
         #textButton {
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            background: linear-gradient(#4CAF50, #163C1D);
+            border: 3px solid #000000;
+            border-radius: 5px;
+            padding: 10px 20px;
+            box-shadow: 2px 2px 5px #000000;
             cursor: pointer;
             transition: all 0.3s ease;
-            /* Text Button Styles will be applied dynamically */
         }
+        
+        #textButton:hover {
+            background: linear-gradient(#56d860, #1c4723);
+            border-color: #333333;
+        }
+        
+        #textButton:active {
+            background: linear-gradient(#3a9f40, #122915);
+            border-color: #222222;
+        }
+        
         /* Image Button */
         #imageButton {
             cursor: pointer;
             transition: all 0.3s ease;
-            display: none; /* Hidden by default */
-            background-size: contain;
+            display: none;
+            background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            border: none; /* Remove default border for image-based buttons */
-            min-width: 100px; /* Ensure visibility */
-            min-height: 50px; /* Ensure visibility */
-            background-color: transparent; /* Ensure transparent background */
-            padding: 0; /* Remove default padding */
-            position: relative; /* For positioning the text */
+            border: none;
+            min-width: 120px;
+            min-height: 60px;
+            background-color: #34495e;
+            padding: 0;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
-        /* Image inside Image Button */
         #imageButtonImg {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            /* Box-shadow and transform will be applied dynamically */
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        #imageButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        #imageButton:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        /* Image Text */
+        .image-text {
+            position: absolute;
+            color: #ecf0f1;
+            font-size: 18px;
+            pointer-events: none;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+            transition: all 0.3s ease;
+            display: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
         }
         /* Download Buttons */
         #downloadButtons {
@@ -276,28 +387,31 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            padding-top: 10px;
+            padding-top: 20px;
         }
         #downloadButtons button {
-            padding: 10px 20px;
+            padding: 15px 25px;
             cursor: pointer;
             border: none;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            background-color: #f1c40f;
+            color: #34495e;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
         #downloadButtons button:hover {
-            background-color: #45a049;
+            background-color: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
         }
         /* Hide scrollbar for sidebar */
         #controls::-webkit-scrollbar {
             display: none;
         }
         #controls {
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         /* Responsive adjustments */
         @media (max-width: 800px) {
@@ -306,118 +420,129 @@
             }
             #controls, #preview {
                 width: 100%;
-                height: 50%;
+                max-height: none;
+                height: auto;
             }
             #buttonContainer {
-                height: 60%;
+                height: auto;
             }
             .form-group label {
-                width: calc(100% / 2 - 20px); /* Two inputs per row on smaller screens */
+                width: calc(100% / 2 - 20px);
             }
             .form-group.three-items label {
-                width: calc(100% / 2 - 20px); /* Adjust for smaller screens */
+                width: calc(100% / 2 - 20px);
             }
         }
         /* Enlarged Button Text Input */
         #buttonText, #imageButtonText {
-            font-size: 14px;
-            padding: 8px;
-            height: 40px;
+            font-size: 16px;
+            padding: 10px;
+            height: 50px;
             width: 100%;
+            border-radius: 6px;
+            border: 1px solid #1abc9c;
+            background-color: #34495e;
+            color: #ecf0f1;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         /* Reduced Font Size Input */
         #fontSize, #imageResizePercentage, #imageWidth, #imageHeight {
-            font-size: 14px;
-            padding: 5px;
-            height: 30px;
+            font-size: 16px;
+            padding: 8px;
+            height: 35px;
             width: 100%;
+            border-radius: 6px;
+            border: 1px solid #1abc9c;
+            background-color: #34495e;
+            color: #ecf0f1;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         /* Centered Labels */
         .form-group label > span {
             text-align: center;
             margin-bottom: 5px;
             font-weight: bold;
+            color: #f1c40f;
         }
         /* Auto Buttons */
-        .auto-button {
-            padding: 5px 10px;
-            font-size: 14px;
+        .auto-button, .transform-button {
+            padding: 10px 15px;
+            font-size: 16px;
             cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #f1c40f;
+            color: #34495e;
             border: none;
-            border-radius: 4px;
-            margin-left: 10px;
-            transition: background-color 0.3s;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .auto-button:hover {
-            background-color: #45a049;
+        .auto-button:hover, .transform-button:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
         /* Image Upload Section */
         .image-upload-section {
             margin-bottom: 20px;
-            width: 100%; /* Ensure it spans the full width */
+            width: 100%;
         }
         .image-upload-section h2 {
             text-align: center;
             margin-bottom: 10px;
+            color: #f1c40f;
         }
         .image-upload-section input[type="file"] {
             display: none;
         }
         .image-upload-label {
-            display: block; /* Changed from inline-block to block */
-            width: 100%; /* Span the full width */
-            padding: 30px 0; /* Increased padding from 15px to 30px to double the height */
-            background-color: #2196F3;
-            color: white;
-            border-radius: 4px;
+            display: block;
+            width: 100%;
+            padding: 20px 0;
+            background-color: #3498db;
+            color: #ecf0f1;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center; /* Center the text */
-            font-size: 18px; /* Increased font size */
-            margin-bottom: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
         .image-upload-label:hover {
-            background-color: #0b7dda;
-        }
-        /* Image Text Styling */
-        .image-text {
-            position: absolute;
-            color: white;
-            font-size: 16px;
-            pointer-events: none;
-            text-shadow:
-                -1px -1px 0 #000,
-                1px -1px 0 #000,
-                -1px 1px 0 #000,
-                1px 1px 0 #000;
-            transition: all 0.3s ease;
-            display: none; /* Hide by default */
-        }
-        /* Transformation Buttons */
-        .transform-button {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        .transform-button:hover {
-            background-color: #45a049;
+            background-color: #1abc9c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
         }
         /* Style for Range Inputs (Sliders) */
         input[type="range"] {
             width: 100%;
             margin-top: 5px;
+            accent-color: #f1c40f;
+        }
+        /* Adjust Shadow Blur Entry Field */
+        .shadow-blur-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .shadow-blur-group label {
+            width: 100%;
+            text-align: center;
         }
     </style>
+    
+    <!-- Dynamic Styles -->
+    <style id="dynamicStyles">
+        /* Dynamic styles will be inserted here */
+    </style>
 </head>
+
 <body>
     <header>
+        <a href="index.html" style="position: absolute; left: 30px; top: 50%; transform: translateY(-50%); text-decoration: none; color: #f1c40f; display: flex; align-items: center;">
+            <i class="fas fa-home" style="font-size: 2rem;"></i>
+        </a>        
         <h1>Custom Button Generator</h1>
         <!-- Added Credit Text -->
         <div class="credit">Created by: Carson Morris</div>
@@ -472,7 +597,7 @@
                                 <option value="'PT Serif', serif">PT Serif</option>                                
                                 <option value="custom">Custom...</option>
                             </select>
-                            <input type="text" id="customFontFamily" placeholder="Enter custom font family">
+                            <input type="text" id="customFontFamily" placeholder="Enter custom font family" style="display: none;">
                         </div>
                     </label>
                     <label for="fontSize">
@@ -637,7 +762,7 @@
                             </label>
                             <label for="imageShadowBlur">
                                 <span>Shadow Blur (px):</span>
-                                <input type="number" id="imageShadowBlur" value="5" min="0">
+                                <input type="number" id="imageShadowBlur" value="5" min="0" style="width: 80px;">
                             </label>
                         </div>
                         <div class="form-group two-items">
@@ -675,8 +800,8 @@
             <div class="section active" id="colorControls">
                 <h2>COLOUR</h2>
                 <!-- Background Style Dropdown -->
-                <div class="form-group">
-                    <label for="backgroundStyle" class="form-group label-full-width">
+                <div id="backgroundStyleContainer">
+                    <label for="backgroundStyle">
                         <span>Background Style:</span>
                         <select id="backgroundStyle">
                             <option value="solid">Solid</option>
@@ -694,19 +819,19 @@
                         <label for="bgColor">
                             <span>Main Color:</span>
                             <div class="color-input-wrapper">
-                                <input type="color" id="bgColor" value="#4CAF50">
+                                <input type="color" id="bgColor" value="#4CAF50"> <!-- Changed to green -->
                             </div>
                         </label>
                         <label for="gradientEndColor">
                             <span>Secondary Color:</span>
                             <div class="color-input-wrapper">
-                                <input type="color" id="gradientEndColor" value="#163C1D">
+                                <input type="color" id="gradientEndColor" value="#163C1D"> <!-- Dark green -->
                             </div>
                         </label>
                         <label for="borderColor">
                             <span>Border Color:</span>
                             <div class="color-input-wrapper">
-                                <input type="color" id="borderColor" value="#000000">
+                                <input type="color" id="borderColor" value="#000000"> <!-- Turquoise border -->
                             </div>
                         </label>
                     </div>
@@ -721,13 +846,13 @@
                         <label for="bgColorHover">
                             <span>Main Color:</span>
                             <div class="color-input-wrapper">
-                                <input type="color" id="bgColorHover">
+                                <input type="color" id="bgColorHover" value="#56d860"> <!-- Bright green -->
                             </div>
                         </label>
                         <label for="gradientEndColorHover">
                             <span>Secondary Color:</span>
                             <div class="color-input-wrapper">
-                                <input type="color" id="gradientEndColorHover">
+                                <input type="color" id="gradientEndColorHover" value="#1c4723"> <!-- Darker green -->
                             </div>
                         </label>
                         <label for="borderColorHover">
@@ -748,13 +873,13 @@
                         <label for="bgColorActive">
                             <span>Main Color:</span>
                             <div class="color-input-wrapper">
-                                <input type="color" id="bgColorActive">
+                                <input type="color" id="bgColorActive" value="#3a9f40"> <!-- Darker green -->
                             </div>
                         </label>
                         <label for="gradientEndColorActive">
                             <span>Secondary Color:</span>
                             <div class="color-input-wrapper">
-                                <input type="color" id="gradientEndColorActive">
+                                <input type="color" id="gradientEndColorActive" value="#122915"> <!-- Even darker green -->
                             </div>
                         </label>
                         <label for="borderColorActive">
@@ -785,11 +910,11 @@
                     </label>
                     <label for="borderWidth">
                         <span>Border Width (px):</span>
-                        <input type="number" id="borderWidth" value="3" min="0">
+                        <input type="number" id="borderWidth" value="3" min="0" style="width: 80px;">
                     </label>
                     <label for="cornerRadius">
                         <span>Corner Radius (px):</span>
-                        <input type="number" id="cornerRadius" value="5" min="0" max="40">
+                        <input type="number" id="cornerRadius" value="8" min="0" max="40">
                     </label>
                 </div>
             </div>
@@ -797,18 +922,18 @@
             <div class="section active" id="sizeControls">
                 <h2>SIZE</h2>
                 <!-- Width, Height -->
-                <div class="form-group">
+                <div class="form-group two-items">
                     <label for="width">
                         <span>Width (px):</span>
-                        <input type="number" id="width" placeholder="Auto" min="-100">
+                        <input type="number" id="width" placeholder="Auto" min="10">
                     </label>
                     <label for="height">
                         <span>Height (px):</span>
-                        <input type="number" id="height" placeholder="Auto" min="-100">
+                        <input type="number" id="height" placeholder="Auto" min="10">
                     </label>
                 </div>
                 <!-- Padding Top/Bottom, Padding Left/Right -->
-                <div class="form-group">
+                <div class="form-group two-items">
                     <label for="paddingTB">
                         <span>Padding Top & Bottom (px):</span>
                         <input type="number" id="paddingTB" value="10" min="0">
@@ -842,7 +967,7 @@
                         </label>
                         <label for="shadowBlur">
                             <span>Shadow Blur (px):</span>
-                            <input type="number" id="shadowBlur" value="5" min="0">
+                            <input type="number" id="shadowBlur" value="5" min="0" style="width: 80px;">
                         </label>
                     </div>
                     <div class="form-group two-items">
@@ -863,7 +988,7 @@
                         <label for="embossEffect">
                             <span>Enable Emboss:</span>
                             <div class="styled-checkbox">
-                                <input type="checkbox" id="embossEffect" checked>
+                                <input type="checkbox" id="embossEffect" unchecked>
                             </div>
                         </label>
                     </div>
@@ -1031,7 +1156,7 @@
                 // Activate Text Tab
                 textTab.classList.add('active');
                 imageTab.classList.remove('active');
-                // Show Text Controls
+                // Show Text Controls and related sections
                 textControls.classList.add('active');
                 colorControls.classList.add('active');
                 borderControls.classList.add('active');
@@ -1050,7 +1175,7 @@
                 // Activate Image Tab
                 imageTab.classList.add('active');
                 textTab.classList.remove('active');
-                // Hide Text Controls
+                // Hide Text Controls and related sections
                 textControls.classList.remove('active');
                 colorControls.classList.remove('active');
                 borderControls.classList.remove('active');
@@ -1071,6 +1196,8 @@
                 }
                 // Ensure Text Button is hidden
                 textButton.style.display = 'none';
+                // Remove text button styles from dynamicStyles
+                dynamicStyles.textContent = '';
             }
         }
 
@@ -1080,41 +1207,41 @@
 
         // Function to generate background CSS based on state
         function generateBackgroundCSS(mainColor, secondaryColor) {
-            let backgroundCSS = '';
+            let backgroundValue = '';
             switch (backgroundStyle.value) {
                 case 'solid':
-                    backgroundCSS = `background-color: ${mainColor};`;
+                    backgroundValue = mainColor;
                     break;
                 case 'vertical-gradient':
-                    backgroundCSS = `background: linear-gradient(${mainColor}, ${secondaryColor});`;
+                    backgroundValue = `linear-gradient(${mainColor}, ${secondaryColor})`;
                     break;
                 case 'horizontal-gradient':
-                    backgroundCSS = `background: linear-gradient(to right, ${mainColor}, ${secondaryColor});`;
+                    backgroundValue = `linear-gradient(to right, ${mainColor}, ${secondaryColor})`;
                     break;
                 case 'diagonal-gradient':
-                    backgroundCSS = `background: linear-gradient(45deg, ${mainColor}, ${secondaryColor});`;
+                    backgroundValue = `linear-gradient(45deg, ${mainColor}, ${secondaryColor})`;
                     break;
                 case 'radial-gradient':
-                    backgroundCSS = `background: radial-gradient(circle, ${mainColor}, ${secondaryColor});`;
+                    backgroundValue = `radial-gradient(circle, ${mainColor}, ${secondaryColor})`;
                     break;
                 default:
-                    backgroundCSS = `background-color: ${mainColor};`;
+                    backgroundValue = mainColor;
             }
-            return backgroundCSS;
+            return backgroundValue;
         }
 
         // Function to generate box-shadow CSS
         function generateBoxShadowCSS() {
             let boxShadowCSS = '';
             let boxShadows = [];
-            if (shadowEffect.checked) {
+            if (shadowEffect && shadowEffect.checked) {
                 const xOffset = shadowXOffset.value;
                 const yOffset = shadowYOffset.value;
                 const blur = shadowBlur.value;
                 const color = shadowColor.value;
                 boxShadows.push(`${xOffset}px ${yOffset}px ${blur}px ${color}`);
             }
-            if (embossEffect.checked) {
+            if (embossEffect && embossEffect.checked) {
                 const radius = embossRadius.value;
                 let intensity = parseFloat(embossIntensity.value);
                 // Cap intensity at 0.3 to prevent overpowering the background
@@ -1291,11 +1418,7 @@
             css += `  color: ${textColor.value};\n`;
             css += `  font-weight: ${fontWeight};\n`;
             css += `  font-style: ${fontStyle};\n`;
-            css += `  ${textOutline.checked ? `text-shadow:
-                -1px -1px 0 ${textOutlineColor.value},
-                1px -1px 0 ${textOutlineColor.value},
-                -1px 1px 0 ${textOutlineColor.value},
-                1px 1px 0 ${textOutlineColor.value};` : ''}\n`;
+            css += `  ${textOutline.checked ? `text-shadow: -1px -1px 0 ${textOutlineColor.value}, 1px -1px 0 ${textOutlineColor.value}, -1px 1px 0 ${textOutlineColor.value}, 1px 1px 0 ${textOutlineColor.value};` : ''}\n`;
             css += `  ${originalBackgroundCSS}\n`;
             css += `  border-width: ${borderWidth.value}px;\n`;
             css += `  border-style: ${borderStyleSelect.value};\n`;
@@ -1340,9 +1463,9 @@
                 // Process the image with current filters
                 const processedImageDataUrl = processImage();
                 imageButtonImg.src = processedImageDataUrl;
-        
+
                 imageButton.style.display = 'inline-block';
-        
+
                 // Apply CSS Filters
                 const brightness = imageBrightness.value;
                 const contrast = imageContrast.value;
@@ -1350,7 +1473,7 @@
                 const saturation = imageSaturation.value;
                 const opacity = imageOpacity.value;
                 const blur = imageBlur.value;
-        
+
                 let filterCSS = `
                     brightness(${brightness}%)
                     contrast(${contrast}%)
@@ -1359,21 +1482,21 @@
                     opacity(${opacity}%)
                     blur(${blur}px)
                 `;
-        
+
                 // Apply Shadow Effect if enabled
-                if (imageShadowEffect.checked) {
+                if (imageShadowEffect && imageShadowEffect.checked) {
                     const xOffset = imageShadowXOffset.value;
                     const yOffset = imageShadowYOffset.value;
                     const shadowBlur = imageShadowBlur.value;
                     const color = imageShadowColor.value;
                     filterCSS += ` drop-shadow(${xOffset}px ${yOffset}px ${shadowBlur}px ${color})`;
                 }
-        
+
                 // Apply Transformations
                 const resizePercentage = parseInt(imageResizePercentage.value);
                 const resizeScale = isNaN(resizePercentage) ? 1 : resizePercentage / 100;
                 const transform = `scale(${flipHorizontal * resizeScale}, ${flipVertical * resizeScale}) rotate(${rotationAngle}deg)`;
-        
+
                 // Apply Manual Size if specified
                 if (imageWidth.value) {
                     imageButton.style.width = `${imageWidth.value}px`;
@@ -1385,24 +1508,24 @@
                 } else {
                     imageButton.style.height = 'auto';
                 }
-        
+
                 // Position Image Text
                 const offsetX = parseInt(textOffsetX.value) || 0;
                 const offsetY = parseInt(textOffsetY.value) || 0;
                 imageText.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
                 imageText.textContent = imageButtonText.value;
-        
+
                 // Show or Hide Image Text based on checkbox
                 imageText.style.display = showImageText.checked ? 'block' : 'none';
-        
+
                 // Generate CSS for imageButtonImg and its hover/active states
                 let css = '';
                 css += '#imageButtonImg {\n';
                 css += `  filter: ${filterCSS};\n`;
                 css += `  transform: ${transform};\n`;
-                css += '  transition: filter 0.3s ease;\n';
+                css += '  transition: filter 0.3s ease, transform 0.3s ease;\n';
                 css += '}\n';
-        
+
                 // Hover State (Increase Brightness by 10%)
                 css += '#imageButton:hover #imageButtonImg {\n';
                 css += `  filter: brightness(${brightness * 1.1}%)
@@ -1411,10 +1534,10 @@
                     saturate(${saturation}%)
                     opacity(${opacity}%)
                     blur(${blur}px)
-                    ${imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
+                    ${imageShadowEffect && imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
                 ;\n`;
                 css += '}\n';
-        
+
                 // Active State (Decrease Brightness by 15%)
                 css += '#imageButton:active #imageButtonImg {\n';
                 css += `  filter: brightness(${brightness * 0.85}%)
@@ -1423,17 +1546,17 @@
                     saturate(${saturation}%)
                     opacity(${opacity}%)
                     blur(${blur}px)
-                    ${imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
+                    ${imageShadowEffect && imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
                 ;\n`;
                 css += '}\n';
-        
+
                 // Apply CSS
                 dynamicStyles.textContent = css;
             }
         }
             
         // Function to process the image with effects
-        function processImage() {
+        function processImage(brightnessMultiplier = 1) {
             if (!originalImageData) return uploadedImage.src;
 
             const canvas = document.createElement('canvas');
@@ -1537,9 +1660,9 @@
 
         // Function to remove image button specific styles from dynamicStyles
         function removeImageButtonStyles() {
-            // Remove all styles related to #imageButton from dynamicStyles
+            // Remove all styles related to #imageButtonImg and #imageButton from dynamicStyles
             const styles = dynamicStyles.textContent.split('\n');
-            const filteredStyles = styles.filter(line => !line.includes('#imageButtonImg'));
+            const filteredStyles = styles.filter(line => !line.includes('#imageButtonImg') && !line.includes('#imageButton'));
             dynamicStyles.textContent = filteredStyles.join('\n');
         }
 
@@ -1566,9 +1689,12 @@
         function downloadButtonImage(state) {
             let buttonClone;
             let textClone;
+            
             if (textTab.classList.contains('active')) {
+                // Clone the Text Button
                 buttonClone = textButton.cloneNode(true);
             } else if (imageTab.classList.contains('active') && imageButton.style.display !== 'none') {
+                // Clone the Image Button and its Text
                 buttonClone = imageButton.cloneNode(true);
                 textClone = imageText.cloneNode(true);
             } else {
@@ -1579,6 +1705,10 @@
             const cloneContainer = document.createElement('div');
             cloneContainer.style.position = 'relative';
             cloneContainer.style.display = 'inline-block';
+            cloneContainer.style.margin = '0';
+            cloneContainer.style.padding = '0';
+            cloneContainer.style.border = 'none';
+            cloneContainer.style.background = 'none';
         
             // Append button clone
             cloneContainer.appendChild(buttonClone);
@@ -1590,74 +1720,16 @@
         
             // Apply computed styles to clone
             if (textTab.classList.contains('active')) {
-                copyComputedStyles(textButton, buttonClone);
+                applyTextButtonStyles(buttonClone, state);
             } else if (imageTab.classList.contains('active')) {
-                copyComputedStyles(imageButton, buttonClone);
-                copyComputedStyles(imageText, textClone);
-            }
-        
-            // Apply state styles
-            if (state === 'hover') {
-                if (textTab.classList.contains('active')) {
-                    buttonClone.style.borderColor = borderColorHover.value;
-                    const hoverBackgroundCSS = generateBackgroundCSS(
-                        bgColorHover.value,
-                        gradientEndColorHover.value
-                    );
-                    // Extract the background property from the generated CSS
-                    const hoverBackgroundMatch = hoverBackgroundCSS.match(/background[^;]+;/);
-                    if (hoverBackgroundMatch) {
-                        buttonClone.style.background = hoverBackgroundMatch[0].replace(';', '');
-                    }
-                } else if (imageTab.classList.contains('active') && uploadedImage) {
-                    // Adjust brightness for hover state
-                    const brightnessMultiplier = 1.1; // Increase by 10%
-                    const processedImageDataUrl = processImage(brightnessMultiplier);
-                    const imgClone = buttonClone.querySelector('#imageButtonImg');
-                    if (imgClone) {
-                        imgClone.src = processedImageDataUrl;
-                        imgClone.style.filter = 'none'; // Remove CSS filters
-                        imgClone.style.transform = imageButtonImg.style.transform;
-                    }
-                }
-            } else if (state === 'active') {
-                if (textTab.classList.contains('active')) {
-                    buttonClone.style.borderColor = borderColorActive.value;
-                    const activeBackgroundCSS = generateBackgroundCSS(
-                        bgColorActive.value,
-                        gradientEndColorActive.value
-                    );
-                    // Extract the background property from the generated CSS
-                    const activeBackgroundMatch = activeBackgroundCSS.match(/background[^;]+;/);
-                    if (activeBackgroundMatch) {
-                        buttonClone.style.background = activeBackgroundMatch[0].replace(';', '');
-                    }
-                } else if (imageTab.classList.contains('active') && uploadedImage) {
-                    // Adjust brightness for active state
-                    const brightnessMultiplier = 0.85; // Decrease by 15%
-                    const processedImageDataUrl = processImage(brightnessMultiplier);
-                    const imgClone = buttonClone.querySelector('#imageButtonImg');
-                    if (imgClone) {
-                        imgClone.src = processedImageDataUrl;
-                        imgClone.style.filter = 'none'; // Remove CSS filters
-                        imgClone.style.transform = imageButtonImg.style.transform;
-                    }
-                }
-            } else {
-                if (imageTab.classList.contains('active') && uploadedImage) {
-                    const processedImageDataUrl = processImage();
-                    const imgClone = buttonClone.querySelector('#imageButtonImg');
-                    if (imgClone) {
-                        imgClone.src = processedImageDataUrl;
-                        imgClone.style.filter = 'none'; // Remove CSS filters
-                        imgClone.style.transform = imageButtonImg.style.transform;
-                    }
+                applyImageButtonStyles(buttonClone, state);
+                if (textClone) {
+                    applyImageTextStyles(textClone);
                 }
             }
         
-            // Position Image Text
+            // Position Image Text if applicable
             if (textClone) {
-                textClone.style.position = 'absolute';
                 const offsetX = parseInt(textOffsetX.value) || 0;
                 const offsetY = parseInt(textOffsetY.value) || 0;
                 textClone.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
@@ -1670,12 +1742,11 @@
             tempContainer.style.padding = '0';
             tempContainer.style.border = 'none';
             tempContainer.style.background = 'none';
-        
-            // Position the container off-screen to avoid affecting layout
             tempContainer.style.position = 'fixed';
             tempContainer.style.top = '-10000px';
             tempContainer.style.left = '-10000px';
         
+            cloneContainer.style.background = 'none'; // Ensure transparent background
             tempContainer.appendChild(cloneContainer);
             document.body.appendChild(tempContainer);
         
@@ -1697,6 +1768,199 @@
                 });
         }
         
+        // Helper function to apply styles to the cloned Text Button
+        function applyTextButtonStyles(buttonClone, state) {
+            // Reset any existing inline styles
+            buttonClone.style = '';
+        
+            // Apply common styles
+            buttonClone.style.fontSize = `${fontSize.value}px`;
+            buttonClone.style.fontFamily = fontFamilySelect.value === 'custom' ? (customFontFamilyInput.value.trim() !== '' ? customFontFamilyInput.value : 'Arial, sans-serif') : fontFamilySelect.value;
+            buttonClone.style.color = textColor.value;
+            buttonClone.style.fontWeight = textBold.checked ? 'bold' : 'normal';
+            buttonClone.style.fontStyle = textItalic.checked ? 'italic' : 'normal';
+            buttonClone.style.textShadow = textOutline.checked ? `-1px -1px 0 ${textOutlineColor.value}, 1px -1px 0 ${textOutlineColor.value}, -1px 1px 0 ${textOutlineColor.value}, 1px 1px 0 ${textOutlineColor.value}` : 'none';
+            buttonClone.style.borderWidth = `${borderWidth.value}px`;
+            buttonClone.style.borderStyle = borderStyleSelect.value;
+            buttonClone.style.borderColor = '#000000'; // Set to black as per requirements
+            buttonClone.style.borderRadius = `${cornerRadius.value}px`;
+            buttonClone.style.padding = `${paddingTB.value}px ${paddingLR.value}px`;
+            buttonClone.style.cursor = 'pointer';
+            buttonClone.style.boxShadow = generateBoxShadowCSS();
+            buttonClone.style.transition = 'all 0.3s ease';
+        
+            // Width and Height
+            if (widthInput.value) {
+                buttonClone.style.width = `${widthInput.value}px`;
+            } else {
+                buttonClone.style.width = 'auto';
+            }
+            if (heightInput.value) {
+                buttonClone.style.height = `${heightInput.value}px`;
+                buttonClone.style.lineHeight = `${heightInput.value}px`;
+            } else {
+                buttonClone.style.height = 'auto';
+            }
+        
+            // Apply background based on state
+            switch(state) {
+                case 'normal':
+                    buttonClone.style.background = generateBackgroundCSS(bgColor.value, gradientEndColor.value);
+                    break;
+                case 'hover':
+                    buttonClone.style.background = generateBackgroundCSS(bgColorHover.value, gradientEndColorHover.value);
+                    break;
+                case 'active':
+                    buttonClone.style.background = generateBackgroundCSS(bgColorActive.value, gradientEndColorActive.value);
+                    break;
+            }
+        }
+        
+        // Helper function to apply styles to the cloned Image Button
+        function applyImageButtonStyles(buttonClone, state) {
+            // Reset any existing inline styles
+            buttonClone.style = '';
+        
+            // Apply common styles
+            buttonClone.style.cursor = 'pointer';
+            buttonClone.style.transition = 'all 0.3s ease';
+            buttonClone.style.display = 'inline-block';
+            buttonClone.style.backgroundSize = 'cover';
+            buttonClone.style.backgroundRepeat = 'no-repeat';
+            buttonClone.style.backgroundPosition = 'center';
+            buttonClone.style.border = 'none';
+            buttonClone.style.minWidth = '120px';
+            buttonClone.style.minHeight = '60px';
+            buttonClone.style.backgroundColor = '#34495e';
+            buttonClone.style.padding = '0';
+            buttonClone.style.position = 'relative';
+            buttonClone.style.borderRadius = '8px';
+            buttonClone.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
+            buttonClone.style.overflow = 'hidden';
+        
+            // Apply background image if any
+            if (imageButtonImg.src) {
+                buttonClone.style.backgroundImage = `url(${imageButtonImg.src})`;
+            }
+        
+            // Apply styles based on state
+            const brightness = imageBrightness.value;
+            const contrast = imageContrast.value;
+            const hue = imageHue.value;
+            const saturation = imageSaturation.value;
+            const opacity = imageOpacity.value;
+            const blur = imageBlur.value;
+        
+            let filterCSS = `
+                brightness(${brightness}%)
+                contrast(${contrast}%)
+                hue-rotate(${hue}deg)
+                saturate(${saturation}%)
+                opacity(${opacity}%)
+                blur(${blur}px)
+            `;
+        
+            // Apply Shadow Effect if enabled
+            if (imageShadowEffect && imageShadowEffect.checked) {
+                const xOffset = imageShadowXOffset.value;
+                const yOffset = imageShadowYOffset.value;
+                const shadowBlurVal = imageShadowBlur.value;
+                const color = imageShadowColor.value;
+                filterCSS += ` drop-shadow(${xOffset}px ${yOffset}px ${shadowBlurVal}px ${color})`;
+            }
+        
+            // Apply Transformations
+            const resizePercentage = parseInt(imageResizePercentage.value);
+            const resizeScale = isNaN(resizePercentage) ? 1 : resizePercentage / 100;
+            const transform = `scale(${flipHorizontal * resizeScale}, ${flipVertical * resizeScale}) rotate(${rotationAngle}deg)`;
+        
+            // Apply Manual Size if specified
+            if (imageWidth.value) {
+                buttonClone.style.width = `${imageWidth.value}px`;
+            } else {
+                buttonClone.style.width = 'auto';
+            }
+            if (imageHeight.value) {
+                buttonClone.style.height = `${imageHeight.value}px`;
+            } else {
+                buttonClone.style.height = 'auto';
+            }
+        
+            // Apply filter and transform
+            buttonClone.style.filter = filterCSS;
+            buttonClone.style.transform = transform;
+        
+            // Apply background based on state
+            switch(state) {
+                case 'normal':
+                    buttonClone.style.filter = filterCSS;
+                    buttonClone.style.transform = transform;
+                    break;
+                case 'hover':
+                    // Increase brightness by 10%
+                    const hoverBrightness = Math.min(parseFloat(brightness) * 1.1, 200); // Cap at 200%
+                    buttonClone.style.filter = `
+                        brightness(${hoverBrightness}%)
+                        contrast(${contrast}%)
+                        hue-rotate(${hue}deg)
+                        saturate(${saturation}%)
+                        opacity(${opacity}%)
+                        blur(${blur}px)
+                        ${imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
+                    `;
+                    break;
+                case 'active':
+                    // Decrease brightness by 15%
+                    const activeBrightness = Math.max(parseFloat(brightness) * 0.85, 0); // Floor at 0%
+                    buttonClone.style.filter = `
+                        brightness(${activeBrightness}%)
+                        contrast(${contrast}%)
+                        hue-rotate(${hue}deg)
+                        saturate(${saturation}%)
+                        opacity(${opacity}%)
+                        blur(${blur}px)
+                        ${imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
+                    `;
+                    break;
+            }
+        
+            // Append the image inside the button
+            const img = document.createElement('img');
+            img.src = imageButtonImg.src;
+            img.alt = 'Image Button';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            img.style.transition = 'transform 0.3s ease, filter 0.3s ease';
+            buttonClone.innerHTML = ''; // Clear existing content
+            buttonClone.appendChild(img);
+        }
+        
+        // Helper function to apply styles to the cloned Image Text
+        function applyImageTextStyles(textClone) {
+            // Reset any existing inline styles
+            textClone.style = '';
+        
+            // Apply common styles
+            textClone.style.position = 'absolute';
+            textClone.style.color = '#ecf0f1';
+            textClone.style.fontSize = '18px';
+            textClone.style.pointerEvents = 'none';
+            textClone.style.textShadow = `
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000
+            `;
+            textClone.style.transition = 'all 0.3s ease';
+            textClone.style.display = 'block';
+            textClone.style.top = '50%';
+            textClone.style.left = '50%';
+            textClone.style.transform = 'translate(-50%, -50%)';
+            textClone.style.whiteSpace = 'nowrap';
+        }
+                                
         // Function to handle image upload
         function handleImageUpload(event) {
             const file = event.target.files[0];
@@ -1743,7 +2007,7 @@
             imageShadowXOffset.value = 2;
             imageShadowYOffset.value = 2;
             imageShadowBlur.value = 5;
-            imageShadowColor.value = '#000000';
+            imageShadowColor.value = '#1abc9c'; /* Updated to match border color */
 
             // Reset transformation variables
             rotationAngle = 0;
