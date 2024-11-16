@@ -1,53 +1,49 @@
-<!--╔══════════════════════════════════════════════════════════════════════════════════════════╗
-    ║                                Name: UnitConverter Pro                                   ║
-    ║                                Author: Carson Morris                                    ║
-    ║                                   Date: 11/20/2024                                      ║
-    ║                                      Rev: 3.1                                           ║
-    ╚══════════════════════════════════════════════════════════════════════════════════════════╝-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Unit Converter Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          integrity="sha512-pf1QYhZBRU4Caxljw2E1KaQe7bVz+E6B9uC2r5VDTP6zTyrZkW9F+19KTpoTpPpVfAPjz7hH5cBqyk4PU8s5cQ==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- QR Code Styling Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <style>
-        /* Base Styles */
+        /* Reset and Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #1e3c72, #2a5298, #2980b9, #6dd5ed);
             color: #ecf0f1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 50px 20px;
+            padding: 70px 20px 50px; /* Add top padding for space above the fixed header */
             animation: fadeIn 1.5s ease-in-out;
             min-height: 100vh;
-            position: relative;
-            transition: background 0.5s ease;
-        }
+        }   
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        /* Dark Mode Styles */
-        body.dark-mode {
-            background: linear-gradient(135deg, #2c3e50, #34495e, #4a69bd, #55aefc);
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            padding: 25px;
             color: #ecf0f1;
         }
-
         header {
+            position: relative;
+            margin-top: 30px; /* Add margin above the header to move it down */
+            margin-bottom: 0px; /* Add margin below to create space between header and content */
             background: linear-gradient(145deg, #34495e, #2c3e50);
             color: #f1c40f;
             padding: 20px 30px;
@@ -55,967 +51,754 @@
             border-radius: 12px;
             width: 100%;
             max-width: 1200px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-        }
+        }          
         header h1 {
-            font-size: 2.5rem;
-            color: #f39c12;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-            margin: 0;
-        }
-        .credit {
-            position: absolute;
-            bottom: 10px;
-            right: 20px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-            font-style: italic;
-        }
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            cursor: pointer;
+            font-size: 2rem;
             color: #f1c40f;
-            font-size: 1.5rem;
-            transition: color 0.3s;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
         }
-        .theme-toggle:hover {
-            color: #e67e22;
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f1c40f;
+            margin-bottom: 15px;
+            text-align: center;
         }
-
-        /* Main Layout */
-        main {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 30px;
-            background: linear-gradient(145deg, #34495e, #2c3e50);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            padding: 30px;
-            transition: background 0.5s ease;
-        }
-
-        /* Measurement Categories Grid */
-        .categories-grid {
+        /* QR Types Grid */
+        .qr-types {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             justify-items: center;
             margin-bottom: 20px;
         }
-        .categories-grid button {
+        .qr-types button {
             background: #2c3e50;
             border: 1px solid #34495e;
             color: #ecf0f1;
             padding: 15px;
             border-radius: 12px;
             width: 100%;
+            height: 100px;
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s, color 0.3s;
-            font-weight: 500;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: bold;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            height: 120px;
         }
-        .categories-grid button.active, .categories-grid button:hover {
+        .qr-types button.active, .qr-types button:hover {
             background: #f1c40f;
             color: #34495e;
             transform: translateY(-2px);
         }
-        .categories-grid button i {
-            margin-bottom: 8px;
-            font-size: 1.5rem;
+        .qr-types button i {
+            margin-bottom: 5px;
         }
-
-        /* Form & Input Styling */
-        .form-group {
+        /* Color Selection */
+        .color-selection {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        label {
-            font-size: 1.1rem;
-            color: #f1c40f;
-            font-weight: 500;
-        }
-        input[type="number"], select {
-            width: 100%;
-            padding: 12px 15px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 8px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        input[type="number"]:focus, select:focus {
-            background-color: #34495e;
-            box-shadow: inset 0 0 5px #f39c12;
-            outline: none;
-        }
-        .converter {
-            display: flex;
+            justify-content: center;
             gap: 20px;
-            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
-        .converter > div {
-            flex: 1;
-            min-width: 220px;
-        }
-        .input-group {
-            position: relative;
-        }
-        .input-group .unit-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #f1c40f;
-            pointer-events: none;
-        }
-
-        /* Action Buttons */
-        .buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 12px 25px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 120px;
-            justify-content: center;
-        }
-        .btn-primary {
-            background-color: #f1c40f;
-            color: #34495e;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-        .btn-primary:hover {
-            background-color: #e67e22;
-            transform: translateY(-2px);
-        }
-        .btn-clear {
-            background-color: #e74c3c;
-            color: #ecf0f1;
-        }
-        .btn-clear:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
-        }
-        .btn-save-favorite {
-            background-color: #f39c12;
-            color: #ecf0f1;
-        }
-        .btn-save-favorite:hover {
-            background-color: #d35400;
-            transform: translateY(-2px);
-        }
-
-        /* Result Area */
-        #result {
-            padding: 20px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 8px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            min-height: 80px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-            overflow-y: auto;
-            transition: background-color 0.3s;
-        }
-        #result .converted-value {
-            background-color: rgba(46, 204, 113, 0.3);
-            padding: 4px 6px;
-            border-radius: 4px;
-        }
-
-        /* Explanation Area */
-        #explanation {
-            padding: 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 8px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            min-height: 80px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-            overflow-y: auto;
-            transition: background-color 0.3s;
-        }
-
-        /* Pattern Library */
-        #patternLibrary {
-            padding: 20px;
-            border: none;
-            border-radius: 8px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            max-height: 350px;
-            overflow-y: auto;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s;
-        }
-        #patternLibrary ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        #patternLibrary li {
-            padding: 10px;
-            border-bottom: 1px solid #34495e;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        #patternLibrary li:hover {
-            background-color: #34495e;
-            transform: translateX(5px);
-        }
-        #patternLibrary li:last-child {
-            border-bottom: none;
-        }
-        #patternLibrary li .pattern-info {
+        .color-picker {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
         }
-        #patternLibrary li .pattern-info span {
-            font-size: 0.9rem;
-            color: #bdc3c7;
+        .color-picker label {
+            margin-bottom: 8px;
+            font-weight: bold;
         }
-
-        /* History Log */
-        #historyLog {
-            padding: 20px;
+        .color-picker input[type="color"] {
+            width: 40px;
+            height: 40px;
             border: none;
-            border-radius: 8px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            max-height: 300px;
-            overflow-y: auto;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            appearance: none;
+            background-color: transparent;
+            box-shadow: 0 0 0 1px #ccc;
         }
-        #historyLog ul {
-            list-style: none;
-            padding-left: 0;
+        .color-picker input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
         }
-        #historyLog li {
-            padding: 8px 0;
-            border-bottom: 1px solid #34495e;
-            font-size: 0.95rem;
-        }
-        #historyLog li:last-child {
-            border-bottom: none;
-        }
-
-        /* Favorites */
-        #favorites {
-            padding: 20px;
+        .color-picker input[type="color"]::-webkit-color-swatch {
             border: none;
-            border-radius: 8px;
-            background-color: #2c3e50;
+            border-radius: 50%;
+        }
+        /* QR Code Styles */
+        .qr-styles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .qr-styles button {
+            background: #2c3e50;
+            border: 1px solid #34495e;
             color: #ecf0f1;
-            max-height: 300px;
-            overflow-y: auto;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s;
-        }
-        #favorites ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        #favorites li {
-            padding: 8px 0;
-            border-bottom: 1px solid #34495e;
-            font-size: 0.95rem;
+            padding: 10px;
+            border-radius: 12px;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
         }
-        #favorites li:last-child {
-            border-bottom: none;
+        .qr-styles button.active, .qr-styles button:hover {
+            background: #f1c40f;
+            color: #34495e;
+            transform: translateY(-2px);
         }
-        #favorites li .favorite-actions {
+        /* Inline SVGs for Styles */
+        .qr-styles button svg {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+        }
+        /* Logo Upload */
+        .logo-upload {
             display: flex;
+            align-items: center;
             gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
         }
-        #favorites li .favorite-actions i {
+        .logo-upload label {
+            background-color: #1abc9c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        #favorites li .favorite-actions i:hover {
-            color: #e67e22;
+        .logo-upload label:hover {
+            background-color: #16a085;
+            transform: translateY(-2px);
         }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            main {
-                max-width: 1000px;
-            }
+        .logo-upload input[type="file"] {
+            display: none;
         }
+        /* Download Buttons */
+        .options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .options button {
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .options button:hover {
+            background-color: #16a085;
+            transform: translateY(-2px);
+        }
+        /* QR Code Preview */
+        .preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+        .qr-code-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 15px;
+        }
+        .preview canvas {
+            width: 100%;
+            height: 100%;
+        }
+        /* Dynamic Input Fields */
+        .input-field {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .input-field label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .input-field input, .input-field textarea, .input-field select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            color: #34495e;
+            background-color: #ecf0f1;
+        }
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .converter {
+            .qr-types {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .qr-types button, .qr-styles button {
+                height: 80px;
+            }
+            .qr-styles button {
+                width: 80px;
+                height: 80px;
+            }
+            .color-selection {
                 flex-direction: column;
-                align-items: stretch;
-            }
-            .buttons {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            #patternLibrary, #historyLog, #favorites {
-                max-height: 250px;
-            }
-            .categories-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            }
-        }
-        @media (max-width: 480px) {
-            header h1 {
-                font-size: 2rem;
-            }
-            .pattern-info span {
-                display: none;
-            }
-            .categories-grid button {
-                height: 100px;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <header>
+    <header style="display: flex; align-items: center; justify-content: center; position: fixed; top: 0; width: 100%; z-index: 1000;">
         <a href="../index.html" style="position: absolute; left: 30px; text-decoration: none; color: #f1c40f;">
-            <i class="fas fa-home" style="font-size: 1.8rem;"></i>
+            <i class="fas fa-home" style="font-size: 2rem;"></i>
         </a>
-        <h1>Unit Converter Pro</h1>
-        <div class="credit">Created by: Carson Morris</div>
-        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
-            <i class="fas fa-moon"></i>
-        </div>
+        <h1>QR Code Generator</h1>
     </header>
-
-    <main>
-        <!-- Measurement Categories Grid -->
-        <div class="section-title">Select Measurement Category</div>
-        <div class="categories-grid">
-            <button data-category="length" class="active" title="Length">
-                <i class="fas fa-ruler-horizontal"></i>
-                Length
+    <div class="container" style="margin-top: 80px;">
+        <!-- QR Code Type Selection -->
+        <div class="section-title">Select QR Code Type</div>
+        <div class="qr-types">
+            <!-- Using icons and labels for better UX -->
+            <button data-type="url" class="active" title="Link">
+                <i class="fas fa-link fa-2x"></i>
+                Link
             </button>
-            <button data-category="mass" title="Mass">
-                <i class="fas fa-weight-hanging"></i>
-                Mass
+            <button data-type="text" title="Text">
+                <i class="fas fa-font fa-2x"></i>
+                Text
             </button>
-            <button data-category="time" title="Time">
-                <i class="fas fa-clock"></i>
-                Time
+            <button data-type="email" title="Email">
+                <i class="fas fa-envelope fa-2x"></i>
+                Email
             </button>
-            <button data-category="temperature" title="Temperature">
-                <i class="fas fa-temperature-high"></i>
-                Temperature
+            <button data-type="phone" title="Call">
+                <i class="fas fa-phone fa-2x"></i>
+                Call
             </button>
-            <button data-category="volume" title="Volume">
-                <i class="fas fa-water"></i>
-                Volume
+            <button data-type="sms" title="SMS">
+                <i class="fas fa-sms fa-2x"></i>
+                SMS
             </button>
-            <button data-category="area" title="Area">
-                <i class="fas fa-vector-square"></i>
-                Area
+            <button data-type="vcard" title="V-Card">
+                <i class="fas fa-address-card fa-2x"></i>
+                V-Card
             </button>
-            <button data-category="speed" title="Speed">
-                <i class="fas fa-tachometer-alt"></i>
-                Speed
+            <button data-type="wifi" title="Wi-Fi">
+                <i class="fas fa-wifi fa-2x"></i>
+                Wi-Fi
             </button>
-            <button data-category="energy" title="Energy">
-                <i class="fas fa-bolt"></i>
-                Energy
+            <button data-type="paypal" title="PayPal">
+                <i class="fab fa-paypal fa-2x"></i>
+                PayPal
             </button>
-            <button data-category="power" title="Power">
-                <i class="fas fa-fire"></i>
-                Power
+            <button data-type="event" title="Event">
+                <i class="fas fa-calendar-alt fa-2x"></i>
+                Event
             </button>
-            <button data-category="pressure" title="Pressure">
-                <i class="fas fa-tachometer-alt"></i>
-                Pressure
+            <button data-type="app" title="App">
+                <i class="fas fa-mobile-alt fa-2x"></i>
+                App
             </button>
-            <button data-category="data" title="Data Storage">
-                <i class="fas fa-database"></i>
-                Data
+            <button data-type="social" title="Social Media">
+                <i class="fas fa-share-alt fa-2x"></i>
+                Social
             </button>
-            <button data-category="finance" title="Finance">
-                <i class="fas fa-dollar-sign"></i>
-                Finance
+            <button data-type="geo" title="Geo">
+                <i class="fas fa-map-marker-alt fa-2x"></i>
+                Geo
             </button>
-            <button data-category="cryptocurrency" title="Cryptocurrency">
-                <i class="fab fa-bitcoin"></i>
-                Crypto
-            </button>
-            <button data-category="astronomy" title="Astronomy">
-                <i class="fas fa-meteor"></i>
-                Astronomy
-            </button>
-            <!-- Add more categories as needed -->
         </div>
 
-        <!-- Converter Section -->
-        <div class="converter">
-            <div class="form-group">
-                <label for="inputValue">Input Value:</label>
-                <div class="input-group">
-                    <input type="number" id="inputValue" placeholder="Enter value to convert" oninput="runConversion()" aria-label="Input Value">
-                    <i class="fas fa-calculator unit-icon"></i>
-                </div>
+        <!-- Dynamic Input Fields -->
+        <div class="input-field" id="url-field">
+            <label for="url-input">Enter URL</label>
+            <input type="url" id="url-input" placeholder="https://example.com">
+        </div>
+        <div class="input-field" id="text-field">
+            <label for="text-input">Enter Text</label>
+            <textarea id="text-input" rows="3" placeholder="Your text here..."></textarea>
+        </div>
+        <div class="input-field" id="email-field">
+            <label for="email-input">Enter Email</label>
+            <input type="email" id="email-input" placeholder="example@example.com">
+        </div>
+        <div class="input-field" id="phone-field">
+            <label for="phone-input">Enter Phone Number</label>
+            <input type="tel" id="phone-input" placeholder="+1234567890">
+        </div>
+        <div class="input-field" id="sms-field">
+            <label for="sms-number">SMS Number</label>
+            <input type="tel" id="sms-number" placeholder="+1234567890">
+            <label for="sms-message">Message</label>
+            <textarea id="sms-message" rows="2" placeholder="Your message..."></textarea>
+        </div>
+        <div class="input-field" id="vcard-field">
+            <label for="vcard-name">Name</label>
+            <input type="text" id="vcard-name" placeholder="John Doe">
+            <label for="vcard-phone">Phone</label>
+            <input type="tel" id="vcard-phone" placeholder="+1234567890">
+            <label for="vcard-email">Email</label>
+            <input type="email" id="vcard-email" placeholder="example@example.com">
+            <label for="vcard-address">Address</label>
+            <input type="text" id="vcard-address" placeholder="123 Main St, City, Country">
+            <label for="vcard-website">Website</label>
+            <input type="url" id="vcard-website" placeholder="https://example.com">
+        </div>
+        <div class="input-field" id="wifi-field">
+            <label for="wifi-ssid">Wi-Fi SSID</label>
+            <input type="text" id="wifi-ssid" placeholder="SSID">
+            <label for="wifi-password">Password</label>
+            <input type="password" id="wifi-password" placeholder="Password">
+            <label for="wifi-encryption">Encryption</label>
+            <select id="wifi-encryption">
+                <option value="WPA">WPA/WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">None</option>
+            </select>
+        </div>
+        <div class="input-field" id="paypal-field">
+            <label for="paypal-email">PayPal Email</label>
+            <input type="email" id="paypal-email" placeholder="example@paypal.com">
+            <label for="paypal-amount">Amount (Optional)</label>
+            <input type="number" id="paypal-amount" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="input-field" id="event-field">
+            <label for="event-title">Event Title</label>
+            <input type="text" id="event-title" placeholder="Event Name">
+            <label for="event-location">Location</label>
+            <input type="text" id="event-location" placeholder="Location">
+            <label for="event-start">Start Time</label>
+            <input type="datetime-local" id="event-start">
+            <label for="event-end">End Time</label>
+            <input type="datetime-local" id="event-end">
+        </div>
+        <div class="input-field" id="app-field">
+            <label for="app-url">App URL</label>
+            <input type="url" id="app-url" placeholder="https://example.com/app">
+            <label for="app-store">App Store Link (Optional)</label>
+            <input type="url" id="app-store" placeholder="https://appstore.com/app">
+            <label for="google-play">Google Play Link (Optional)</label>
+            <input type="url" id="google-play" placeholder="https://play.google.com/store/apps/details?id=com.example">
+        </div>
+        <div class="input-field" id="social-field">
+            <label for="social-platform">Social Media Platform</label>
+            <select id="social-platform">
+                <option value="facebook">Facebook</option>
+                <option value="twitter">Twitter</option>
+                <option value="instagram">Instagram</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="youtube">YouTube</option>
+                <option value="tiktok">TikTok</option>
+                <!-- Add more platforms as needed -->
+            </select>
+            <label for="social-url">Profile/Page URL</label>
+            <input type="url" id="social-url" placeholder="https://example.com/profile">
+        </div>
+        <div class="input-field" id="geo-field">
+            <label for="geo-latitude">Latitude</label>
+            <input type="number" step="any" id="geo-latitude" placeholder="e.g., 37.7749">
+            <label for="geo-longitude">Longitude</label>
+            <input type="number" step="any" id="geo-longitude" placeholder="e.g., -122.4194">
+        </div>
+
+        <!-- Color Selection -->
+        <div class="section-title">Select QR Code Colors</div>
+        <div class="color-selection">
+            <div class="color-picker">
+                <label for="foreground-color">Foreground</label>
+                <input type="color" id="foreground-color" value="#000000">
             </div>
-            
-            <div class="form-group">
-                <label for="fromUnit">From:</label>
-                <select id="fromUnit" onchange="runConversion()" aria-label="From Unit">
-                    <!-- Units will be populated dynamically -->
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="toUnit">To:</label>
-                <select id="toUnit" onchange="runConversion()" aria-label="To Unit">
-                    <!-- Units will be populated dynamically -->
-                </select>
+            <div class="color-picker">
+                <label for="background-color">Background</label>
+                <input type="color" id="background-color" value="#ffffff">
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="buttons">
-            <button class="btn btn-primary" onclick="runConversion()"><i class="fas fa-play"></i> Convert</button>
-            <button class="btn btn-clear" onclick="clearFields()"><i class="fas fa-times"></i> Clear</button>
-            <button class="btn btn-save-favorite" onclick="saveFavorite()"><i class="fas fa-star"></i> Save Favorite</button>
+        <!-- QR Code Styles Selection -->
+        <div class="section-title">Select QR Code Style</div>
+        <div class="qr-styles">
+            <button data-style="dots">
+                <!-- Inline SVG representing Dots style -->
+                <svg viewBox="0 0 100 100">
+                    <circle cx="30" cy="30" r="5" fill="#000"/>
+                    <circle cx="70" cy="30" r="5" fill="#000"/>
+                    <circle cx="50" cy="50" r="5" fill="#000"/>
+                    <circle cx="30" cy="70" r="5" fill="#000"/>
+                    <circle cx="70" cy="70" r="5" fill="#000"/>
+                </svg>
+                Dots
+            </button>
+            <button data-style="rounded">
+                <!-- Inline SVG representing Rounded style -->
+                <svg viewBox="0 0 100 100">
+                    <rect x="25" y="25" width="10" height="10" rx="5" ry="5" fill="#000"/>
+                    <rect x="65" y="25" width="10" height="10" rx="5" ry="5" fill="#000"/>
+                    <rect x="45" y="45" width="10" height="10" rx="5" ry="5" fill="#000"/>
+                    <rect x="25" y="65" width="10" height="10" rx="5" ry="5" fill="#000"/>
+                    <rect x="65" y="65" width="10" height="10" rx="5" ry="5" fill="#000"/>
+                </svg>
+                Rounded
+            </button>
+            <button data-style="squares">
+                <!-- Inline SVG representing Squares style -->
+                <svg viewBox="0 0 100 100">
+                    <rect x="25" y="25" width="10" height="10" fill="#000"/>
+                    <rect x="65" y="25" width="10" height="10" fill="#000"/>
+                    <rect x="45" y="45" width="10" height="10" fill="#000"/>
+                    <rect x="25" y="65" width="10" height="10" fill="#000"/>
+                    <rect x="65" y="65" width="10" height="10" fill="#000"/>
+                </svg>
+                Squares
+            </button>
+            <button data-style="extra-rounded">
+                <!-- Inline SVG representing Extra Rounded style -->
+                <svg viewBox="0 0 100 100">
+                    <rect x="25" y="25" width="10" height="10" rx="8" ry="8" fill="#000"/>
+                    <rect x="65" y="25" width="10" height="10" rx="8" ry="8" fill="#000"/>
+                    <rect x="45" y="45" width="10" height="10" rx="8" ry="8" fill="#000"/>
+                    <rect x="25" y="65" width="10" height="10" rx="8" ry="8" fill="#000"/>
+                    <rect x="65" y="65" width="10" height="10" rx="8" ry="8" fill="#000"/>
+                </svg>
+                Extra Rounded
+            </button>
+            <button data-style="classy">
+                <!-- Inline SVG representing Classy style -->
+                <svg viewBox="0 0 100 100">
+                    <circle cx="30" cy="30" r="5" fill="#000"/>
+                    <circle cx="70" cy="30" r="5" fill="#000"/>
+                    <circle cx="50" cy="50" r="5" fill="#000"/>
+                    <circle cx="30" cy="70" r="5" fill="#000"/>
+                    <circle cx="70" cy="70" r="5" fill="#000"/>
+                    <path d="M45,45 L55,55 M55,45 L45,55" stroke="#000" stroke-width="1"/>
+                </svg>
+                Classy
+            </button>
+            <button data-style="classy-rounded">
+                <!-- Inline SVG representing Classy Rounded style -->
+                <svg viewBox="0 0 100 100">
+                    <circle cx="30" cy="30" r="5" fill="#000"/>
+                    <circle cx="70" cy="30" r="5" fill="#000"/>
+                    <circle cx="50" cy="50" r="5" fill="#000"/>
+                    <circle cx="30" cy="70" r="5" fill="#000"/>
+                    <circle cx="70" cy="70" r="5" fill="#000"/>
+                    <path d="M45,45 L55,55 M55,45 L45,55" stroke="#000" stroke-width="1" stroke-linecap="round"/>
+                </svg>
+                Classy Rounded
+            </button>
         </div>
 
-        <!-- Result Area -->
-        <div id="result">
-            <strong>Result:</strong>
-            <p id="output">No conversion yet. Enter a value and select units.</p>
+        <!-- Logo Upload -->
+        <div class="logo-upload">
+            <label for="logo-upload"><i class="fas fa-upload"></i> Upload Logo</label>
+            <input type="file" id="logo-upload" accept="image/*">
         </div>
 
-        <!-- Explanation Area -->
-        <div id="explanation">
-            <strong>Conversion Explanation:</strong>
-            <p>Enter a value and select units to see the conversion details.</p>
+        <!-- QR Code Preview -->
+        <div class="section-title">QR Code Preview</div>
+        <div class="preview">
+            <div class="qr-code-container" id="qr-code"></div>
+            <!-- Download Buttons -->
+            <div class="options">
+                <button id="download-png-btn">Download PNG</button>
+                <button id="download-svg-btn">Download SVG</button>
+            </div>
         </div>
-
-        <!-- Pattern Library -->
-        <div id="patternLibrary">
-            <strong>Common Conversions:</strong>
-            <ul id="patternsList">
-                <li onclick="selectConversion('length', 'meter', 'kilometer')">
-                    <span>Meter to Kilometer</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('mass', 'kilogram', 'pound')">
-                    <span>Kilogram to Pound</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('time', 'hour', 'minute')">
-                    <span>Hour to Minute</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('temperature', 'celsius', 'fahrenheit')">
-                    <span>Celsius to Fahrenheit</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('volume', 'liter', 'gallon')">
-                    <span>Liter to Gallon</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('speed', 'meter_per_second', 'kilometer_per_hour')">
-                    <span>m/s to km/h</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('data', 'gigabyte', 'terabyte')">
-                    <span>Gigabyte to Terabyte</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('finance', 'usd', 'eur')">
-                    <span>USD to EUR</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('cryptocurrency', 'bitcoin', 'ethereum')">
-                    <span>Bitcoin to Ethereum</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <li onclick="selectConversion('astronomy', 'light_year', 'astronomical_unit')">
-                    <span>Light Year to AU</span>
-                    <i class="fas fa-exchange-alt"></i>
-                </li>
-                <!-- Add more patterns as needed -->
-            </ul>
-        </div>
-
-        <!-- Conversion History -->
-        <div id="historyLog">
-            <strong>Conversion History:</strong>
-            <ul id="historyList">
-                <!-- History items will appear here -->
-            </ul>
-        </div>
-
-        <!-- Favorites -->
-        <div id="favorites">
-            <strong>Favorites:</strong>
-            <ul id="favoritesList">
-                <!-- Favorite conversions will appear here -->
-            </ul>
-        </div>
-    </main>
+    </div>
 
     <script>
-        // Unit definitions
-        const units = {
-            length: {
-                meter: 1,
-                kilometer: 1000,
-                centimeter: 0.01,
-                millimeter: 0.001,
-                mile: 1609.34,
-                yard: 0.9144,
-                foot: 0.3048,
-                inch: 0.0254,
-                nautical_mile: 1852
-            },
-            mass: {
-                kilogram: 1,
-                gram: 0.001,
-                milligram: 0.000001,
-                pound: 0.453592,
-                ounce: 0.0283495,
-                ton: 907.185
-            },
-            time: {
-                second: 1,
-                minute: 60,
-                hour: 3600,
-                day: 86400,
-                week: 604800,
-                month: 2629800, // Approximate
-                year: 31557600 // Approximate
-            },
-            temperature: {
-                celsius: 'celsius',
-                fahrenheit: 'fahrenheit',
-                kelvin: 'kelvin'
-            },
-            volume: {
-                liter: 1,
-                milliliter: 0.001,
-                cubic_meter: 1000,
-                gallon: 3.78541,
-                quart: 0.946353,
-                pint: 0.473176,
-                cup: 0.24,
-                ounce_fluid: 0.0295735
-            },
-            area: {
-                square_meter: 1,
-                square_kilometer: 1e6,
-                square_centimeter: 0.0001,
-                hectare: 10000,
-                acre: 4046.86,
-                square_mile: 2589988.11,
-                square_yard: 0.836127,
-                square_foot: 0.092903,
-                square_inch: 0.00064516
-            },
-            speed: {
-                meter_per_second: 1,
-                kilometer_per_hour: 0.277778,
-                mile_per_hour: 0.44704,
-                knot: 0.514444,
-                foot_per_second: 0.3048
-            },
-            energy: {
-                joule: 1,
-                kilojoule: 1000,
-                calorie: 4.184,
-                kilocalorie: 4184,
-                watt_hour: 3600,
-                kilowatt_hour: 3.6e6,
-                british_thermal_unit: 1055.06
-            },
-            power: {
-                watt: 1,
-                kilowatt: 1000,
-                horsepower: 745.7,
-                megawatt: 1e6
-            },
-            pressure: {
-                pascal: 1,
-                kilopascal: 1000,
-                bar: 100000,
-                atmosphere: 101325,
-                psi: 6894.76,
-                torr: 133.322
-            },
-            data: {
-                bit: 1,
-                byte: 8,
-                kilobit: 1000,
-                kilobyte: 8000,
-                megabit: 1e6,
-                megabyte: 8e6,
-                gigabit: 1e9,
-                gigabyte: 8e9,
-                terabit: 1e12,
-                terabyte: 8e12
-            },
-            finance: {
-                usd: 1,
-                eur: 0.85,
-                gbp: 0.75,
-                jpy: 110.0,
-                aud: 1.35,
-                cad: 1.25,
-                chf: 0.92,
-                cny: 6.47,
-                inr: 74.0,
-                rub: 73.0
-            },
-            cryptocurrency: {
-                bitcoin: 1,
-                ethereum: 15, // Example ratio: 1 BTC = 15 ETH
-                litecoin: 200,
-                ripple: 5000,
-                dogecoin: 30000,
-                cardano: 45000,
-                polkadot: 150,
-                solana: 200
-            },
-            astronomy: {
-                light_year: 9.461e+15, // meters
-                astronomical_unit: 1.496e+11, // meters
-                parsec: 3.086e+16, // meters
-                lunar_distance: 3.844e+8, // meters
-                gigalight_year: 9.461e+24, // meters
-                megaparsec: 3.086e+22 // meters
-            }
-            // Add more categories and units as needed
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            const typeButtons = document.querySelectorAll('.qr-types button');
+            const inputFields = document.querySelectorAll('.input-field');
+            const downloadPngBtn = document.getElementById('download-png-btn');
+            const downloadSvgBtn = document.getElementById('download-svg-btn');
+            const logoUpload = document.getElementById('logo-upload');
+            const qrStylesButtons = document.querySelectorAll('.qr-styles button');
+            const foregroundColorInput = document.getElementById('foreground-color');
+            const backgroundColorInput = document.getElementById('background-color');
 
-        // History and Favorites
-        let history = [];
-        let favorites = [];
+            let logoImage = null; // To store the uploaded logo
+            let selectedStyle = 'dots'; // Default style
 
-        // Temperature conversion functions
-        function convertTemperature(value, from, to) {
-            let tempInCelsius;
+            // Initialize QRCodeStyling with enhanced error correction and adjusted logo size
+            const qrCode = new QRCodeStyling({
+                width: 300,
+                height: 300,
+                data: "https://example.com",
+                image: "", // Logo will be set upon upload
+                errorCorrectionLevel: "H", // High error correction level
+                dotsOptions: {
+                    color: foregroundColorInput.value,
+                    type: "dots", // Default dots type
+                },
+                backgroundOptions: {
+                    color: backgroundColorInput.value,
+                },
+                imageOptions: {
+                    crossOrigin: "anonymous",
+                    margin: 10, // Reduced margin to allow larger logo
+                    imageSize: 0.3 // Increased logo size to 30%
+                },
+                type: "svg", // Use SVG for better quality
+            });
 
-            // Convert from the source unit to Celsius
-            if (from === 'celsius') {
-                tempInCelsius = value;
-            } else if (from === 'fahrenheit') {
-                tempInCelsius = (value - 32) * 5/9;
-            } else if (from === 'kelvin') {
-                tempInCelsius = value - 273.15;
+            qrCode.append(document.getElementById("qr-code"));
+
+            // Function to show the relevant input field based on selected type
+            function showInputField(type) {
+                inputFields.forEach(field => field.style.display = 'none');
+                const field = document.getElementById(`${type}-field`);
+                if (field) {
+                    field.style.display = 'block';
+                }
             }
 
-            // Convert from Celsius to the target unit
-            if (to === 'celsius') {
-                return tempInCelsius;
-            } else if (to === 'fahrenheit') {
-                return (tempInCelsius * 9/5) + 32;
-            } else if (to === 'kelvin') {
-                return tempInCelsius + 273.15;
+            // Function to get QR data based on selected type
+            function getQRData() {
+                const activeButton = document.querySelector('.qr-types button.active');
+                if (!activeButton) return "https://example.com"; // Fallback
+                const type = activeButton.getAttribute('data-type');
+                switch (type) {
+                    case 'url': 
+                        return document.getElementById('url-input').value || "https://example.com";
+                    case 'text': 
+                        return document.getElementById('text-input').value || "Sample Text";
+                    case 'email': {
+                        const email = document.getElementById('email-input').value || "example@example.com";
+                        return `mailto:${email}`;
+                    }
+                    case 'phone': {
+                        const phone = document.getElementById('phone-input').value || "+1234567890";
+                        return `tel:${phone}`;
+                    }
+                    case 'sms': {
+                        const number = document.getElementById('sms-number').value || "+1234567890";
+                        const message = document.getElementById('sms-message').value || "";
+                        return `SMSTO:${number}:${message}`;
+                    }
+                    case 'vcard': {
+                        const name = document.getElementById('vcard-name').value || "John Doe";
+                        const phone = document.getElementById('vcard-phone').value || "+1234567890";
+                        const email = document.getElementById('vcard-email').value || "example@example.com";
+                        const address = document.getElementById('vcard-address').value || "123 Main St, City, Country";
+                        const website = document.getElementById('vcard-website').value || "https://example.com";
+                        return `BEGIN:VCARD
+VERSION:3.0
+FN:${name}
+TEL:${phone}
+EMAIL:${email}
+ADR:${address}
+URL:${website}
+END:VCARD`;
+                    }
+                    case 'wifi': {
+                        const ssid = document.getElementById('wifi-ssid').value || "SSID";
+                        const password = document.getElementById('wifi-password').value || "";
+                        const encryption = document.getElementById('wifi-encryption').value;
+                        return `WIFI:S:${ssid};T:${encryption};P:${password};;`;
+                    }
+                    case 'paypal': {
+                        const email = document.getElementById('paypal-email').value || "example@paypal.com";
+                        const amount = document.getElementById('paypal-amount').value;
+                        return amount ? `https://www.paypal.com/paypalme/${email}/${amount}` : `https://www.paypal.com/paypalme/${email}`;
+                    }
+                    case 'event': {
+                        const title = document.getElementById('event-title').value || "Event Title";
+                        const location = document.getElementById('event-location').value || "Location";
+                        const start = document.getElementById('event-start').value || new Date().toISOString();
+                        const end = document.getElementById('event-end').value || new Date().toISOString();
+                        return `BEGIN:VEVENT
+SUMMARY:${title}
+LOCATION:${location}
+DTSTART:${formatDate(start)}
+DTEND:${formatDate(end)}
+END:VEVENT`;
+                    }
+                    case 'app': {
+                        const appUrl = document.getElementById('app-url').value || "https://example.com/app";
+                        const appStore = document.getElementById('app-store').value || "";
+                        const googlePlay = document.getElementById('google-play').value || "";
+                        return `${appUrl}\nApp Store: ${appStore}\nGoogle Play: ${googlePlay}`;
+                    }
+                    case 'social': {
+                        const platform = document.getElementById('social-platform').value;
+                        const url = document.getElementById('social-url').value || "https://example.com/profile";
+                        return url;
+                    }
+                    case 'geo': {
+                        const latitude = document.getElementById('geo-latitude').value || "0.0000";
+                        const longitude = document.getElementById('geo-longitude').value || "0.0000";
+                        return `geo:${latitude},${longitude}`;
+                    }
+                    default:
+                        return "https://example.com";
+                }
             }
-        }
 
-        // Currency conversion using predefined rates (placeholder implementation)
-        async function convertCurrency(value, from, to) {
-            // For a real implementation, integrate with a currency conversion API
-            // Here, we'll use predefined rates from the units.finance object
-            if (!units.finance[from] || !units.finance[to]) return null;
-            const rate = units.finance[to] / units.finance[from];
-            return value * rate;
-        }
-
-        // Cryptocurrency conversion (placeholder implementation)
-        function convertCryptocurrency(value, from, to) {
-            if (!units.cryptocurrency[from] || !units.cryptocurrency[to]) return null;
-            const rate = units.cryptocurrency[to] / units.cryptocurrency[from];
-            return value * rate;
-        }
-
-        // Initialize units on page load
-        window.onload = function() {
-            updateUnits('length'); // Default category
-            loadHistory();
-            loadFavorites();
-        };
-
-        // Function to update unit options based on selected category
-        function updateUnits(category) {
-            const fromUnit = document.getElementById('fromUnit');
-            const toUnit = document.getElementById('toUnit');
-
-            // Clear existing options
-            fromUnit.innerHTML = '';
-            toUnit.innerHTML = '';
-
-            const categoryUnits = units[category];
-            for (let unit in categoryUnits) {
-                let option = document.createElement('option');
-                option.value = unit;
-                option.text = capitalizeFirstLetter(unit.replace('_', ' '));
-                fromUnit.appendChild(option.cloneNode(true));
-                toUnit.appendChild(option.cloneNode(true));
+            // Function to format date for VCARD and EVENT
+            function formatDate(dateStr) {
+                const date = new Date(dateStr);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${year}${month}${day}T${hours}${minutes}00Z`;
             }
 
-            runConversion();
-        }
+            // Function to generate/update QR Code
+            function updateQRCode() {
+                const qrData = getQRData();
 
-        // Function to capitalize first letter
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
-        }
-
-        // Function to run the conversion
-        async function runConversion() {
-            const activeButton = document.querySelector('.categories-grid button.active');
-            if (!activeButton) return; // No active category selected
-            const category = activeButton.getAttribute('data-category');
-            const inputValue = parseFloat(document.getElementById('inputValue').value);
-            const from = document.getElementById('fromUnit').value;
-            const to = document.getElementById('toUnit').value;
-            const output = document.getElementById('output');
-            const explanation = document.getElementById('explanation');
-
-            if (isNaN(inputValue)) {
-                output.innerHTML = `<span style="color: #e74c3c; font-weight: bold;">Please enter a valid number.</span>`;
-                explanation.innerHTML = 'Enter a numeric value to perform the conversion.';
-                return;
-            }
-
-            let result;
-            let details = '';
-
-            try {
-                if (category === 'temperature') {
-                    result = convertTemperature(inputValue, from, to);
-                    details = `${inputValue}°${capitalizeFirstLetter(from)} is equal to ${result.toFixed(2)}°${capitalizeFirstLetter(to)}.`;
-                } else if (category === 'finance') {
-                    result = await convertCurrency(inputValue, from, to);
-                    if (result === null) throw new Error('Unsupported currency.');
-                    details = `${inputValue} ${from.toUpperCase()} is equal to ${result.toFixed(2)} ${to.toUpperCase()}.`;
-                } else if (category === 'cryptocurrency') {
-                    result = convertCryptocurrency(inputValue, from, to);
-                    if (result === null) throw new Error('Unsupported cryptocurrency.');
-                    details = `${inputValue} ${capitalizeFirstLetter(from)} is equal to ${result.toFixed(6)} ${capitalizeFirstLetter(to)}.`;
-                } else if (category === 'astronomy') {
-                    // Convert astronomy units to meters first
-                    const fromFactor = units[category][from];
-                    const toFactor = units[category][to];
-                    result = (inputValue * fromFactor) / toFactor;
-                    details = `${inputValue} ${capitalizeFirstLetter(from.replace('_', ' '))} is equal to ${result.toExponential(3)} ${capitalizeFirstLetter(to.replace('_', ' '))}.`;
-                } else {
-                    const fromFactor = units[category][from];
-                    const toFactor = units[category][to];
-                    result = (inputValue * fromFactor) / toFactor;
-                    details = `${inputValue} ${from.replace('_', ' ')} is equal to ${result.toFixed(6)} ${to.replace('_', ' ')}.`;
+                // Define QR Code Styles
+                let dotsType = "dots";
+                switch (selectedStyle) {
+                    case 'dots':
+                        dotsType = "dots";
+                        break;
+                    case 'rounded':
+                        dotsType = "rounded";
+                        break;
+                    case 'squares':
+                        dotsType = "squares";
+                        break;
+                    case 'extra-rounded':
+                        dotsType = "extra-rounded";
+                        break;
+                    case 'classy':
+                        dotsType = "classy";
+                        break;
+                    case 'classy-rounded':
+                        dotsType = "classy-rounded";
+                        break;
+                    default:
+                        dotsType = "dots";
                 }
 
-                output.innerHTML = `<span class="converted-value">${result.toLocaleString()}</span>`;
-                explanation.innerHTML = details;
-                addToHistory(`${inputValue} ${from} → ${result.toLocaleString()} ${to}`);
-            } catch (e) {
-                output.innerHTML = `<span style="color: #e74c3c; font-weight: bold;">${e.message}</span>`;
-                explanation.innerHTML = 'An error occurred during conversion.';
+                // Update QR Code options
+                qrCode.update({
+                    data: qrData,
+                    dotsOptions: {
+                        color: foregroundColorInput.value,
+                        type: dotsType,
+                    },
+                    backgroundOptions: {
+                        color: backgroundColorInput.value,
+                    },
+                    image: logoImage || "",
+                    imageOptions: {
+                        crossOrigin: "anonymous",
+                        margin: 10, // Reduced margin to allow larger logo
+                        imageSize: 0.3, // Increased logo size to 30%
+                    },
+                });
             }
-        }
 
-        // Function to clear all fields
-        function clearFields() {
-            document.getElementById('inputValue').value = '';
-            document.getElementById('output').innerHTML = 'No conversion yet. Enter a value and select units.';
-            document.getElementById('explanation').innerHTML = 'Enter a value and select units to see the conversion details.';
-            runConversion();
-        }
+            // Initial QR Code Generation and Display of Default Input Field
+            showInputField('url');
+            updateQRCode();
 
-        // Function to select a common conversion pattern
-        function selectConversion(category, from, to) {
-            // Deactivate all category buttons
-            document.querySelectorAll('.categories-grid button').forEach(btn => btn.classList.remove('active'));
-            // Activate the selected category button
-            const selectedButton = document.querySelector(`.categories-grid button[data-category="${category}"]`);
-            if (selectedButton) selectedButton.classList.add('active');
-            // Update units
-            updateUnits(category);
-            // Set from and to units
-            document.getElementById('fromUnit').value = from;
-            document.getElementById('toUnit').value = to;
-            // Run conversion
-            runConversion();
-        }
-
-        // Function to capitalize and format unit names
-        function formatUnitName(unit) {
-            return capitalizeFirstLetter(unit.replace('_', ' '));
-        }
-
-        // Function to save a favorite conversion
-        function saveFavorite() {
-            const activeButton = document.querySelector('.categories-grid button.active');
-            if (!activeButton) return;
-            const category = activeButton.getAttribute('data-category');
-            const from = document.getElementById('fromUnit').value;
-            const to = document.getElementById('toUnit').value;
-
-            const favorite = { category, from, to };
-            // Check for duplicates
-            if (!favorites.some(fav => fav.category === category && fav.from === from && fav.to === to)) {
-                favorites.push(favorite);
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-                loadFavorites();
-                alert('Favorite conversion saved!');
-            } else {
-                alert('This conversion is already in your favorites.');
-            }
-        }
-
-        // Function to load history from localStorage
-        function loadHistory() {
-            const storedHistory = JSON.parse(localStorage.getItem('history')) || [];
-            history = storedHistory;
-            renderHistory();
-        }
-
-        // Function to add to history
-        function addToHistory(entry) {
-            history.unshift(entry);
-            if (history.length > 10) history.pop(); // Limit history to 10 entries
-            localStorage.setItem('history', JSON.stringify(history));
-            renderHistory();
-        }
-
-        // Function to render history
-        function renderHistory() {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-            history.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = item;
-                historyList.appendChild(li);
+            // Event Listeners for QR Type Buttons
+            typeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    typeButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to the clicked button
+                    button.classList.add('active');
+                    // Show the corresponding input field
+                    showInputField(button.getAttribute('data-type'));
+                    // Update the QR code
+                    updateQRCode();
+                });
             });
-        }
 
-        // Function to load favorites from localStorage
-        function loadFavorites() {
-            const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            favorites = storedFavorites;
-            renderFavorites();
-        }
-
-        // Function to render favorites
-        function renderFavorites() {
-            const favoritesList = document.getElementById('favoritesList');
-            favoritesList.innerHTML = '';
-            favorites.forEach((fav, index) => {
-                const li = document.createElement('li');
-
-                const infoDiv = document.createElement('div');
-                infoDiv.classList.add('pattern-info');
-                infoDiv.innerHTML = `<span>${formatUnitName(fav.from)} → ${formatUnitName(fav.to)}</span>
-                                     <span>Category: ${capitalizeFirstLetter(fav.category)}</span>`;
-
-                const actionsDiv = document.createElement('div');
-                actionsDiv.classList.add('favorite-actions');
-                const runBtn = document.createElement('i');
-                runBtn.classList.add('fas', 'fa-play');
-                runBtn.title = 'Run Conversion';
-                runBtn.style.marginRight = '8px';
-                runBtn.onclick = () => selectConversion(fav.category, fav.from, fav.to);
-                const deleteBtn = document.createElement('i');
-                deleteBtn.classList.add('fas', 'fa-trash-alt');
-                deleteBtn.title = 'Remove Favorite';
-                deleteBtn.onclick = () => removeFavorite(index);
-                actionsDiv.appendChild(runBtn);
-                actionsDiv.appendChild(deleteBtn);
-
-                li.appendChild(infoDiv);
-                li.appendChild(actionsDiv);
-                favoritesList.appendChild(li);
+            // Event Listeners for QR Styles Buttons
+            qrStylesButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all style buttons
+                    qrStylesButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to the clicked style button
+                    button.classList.add('active');
+                    // Update the selected style
+                    selectedStyle = button.getAttribute('data-style');
+                    // Update the QR code
+                    updateQRCode();
+                });
             });
-        }
 
-        // Function to remove a favorite
-        function removeFavorite(index) {
-            if (confirm('Are you sure you want to remove this favorite?')) {
-                favorites.splice(index, 1);
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-                renderFavorites();
-            }
-        }
-
-        // Function to toggle dark mode
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const themeIcon = document.querySelector('.theme-toggle i');
-            if (document.body.classList.contains('dark-mode')) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        }
-
-        // Function to select a favorite conversion
-        function selectFavorite(category, from, to) {
-            document.querySelectorAll('.categories-grid button').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-category') === category) btn.classList.add('active');
+            // Event Listener for Logo Upload
+            logoUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    // Validate the file type
+                    if (!file.type.startsWith('image/')) {
+                        alert('Please upload a valid image file.');
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        logoImage = e.target.result;
+                        updateQRCode();
+                    }
+                    reader.readAsDataURL(file);
+                }
             });
-            updateUnits(category);
-            document.getElementById('fromUnit').value = from;
-            document.getElementById('toUnit').value = to;
-            runConversion();
-        }
 
-        // Event Listeners for Measurement Categories Grid
-        document.querySelectorAll('.categories-grid button').forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                document.querySelectorAll('.categories-grid button').forEach(btn => btn.classList.remove('active'));
-                // Add active class to the clicked button
-                button.classList.add('active');
-                // Update units based on selected category
-                const category = button.getAttribute('data-category');
-                updateUnits(category);
-                // Run conversion
-                runConversion();
+            // Event Listeners for Color Pickers
+            foregroundColorInput.addEventListener('input', () => {
+                updateQRCode();
+            });
+
+            backgroundColorInput.addEventListener('input', () => {
+                updateQRCode();
+            });
+
+            // Event Listeners for Input Fields
+            inputFields.forEach(field => {
+                const inputs = field.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        updateQRCode();
+                    });
+                });
+            });
+
+            // Download PNG Button
+            downloadPngBtn.addEventListener('click', () => {
+                qrCode.download({ name: "qr_code", extension: "png" });
+            });
+
+            // Download SVG Button
+            downloadSvgBtn.addEventListener('click', () => {
+                qrCode.download({ name: "qr_code", extension: "svg" });
             });
         });
     </script>
