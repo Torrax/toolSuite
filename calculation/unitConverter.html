@@ -1,0 +1,1379 @@
+<!--╔══════════════════════════════════════════════════════════════════════════════════════════╗
+    ║                                Name: UnitConverter Pro                                   ║
+    ║                                Author: Carson Morris                                    ║
+    ║                                   Date: 11/20/2024                                      ║
+    ║                                      Rev: 3.6                                           ║
+    ╚══════════════════════════════════════════════════════════════════════════════════════════╝-->
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Unit Converter Pro</title>
+        <!-- Font Awesome for Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+              integrity="sha512-pf1QYhZBRU4Caxljw2E1KaQe7bVz+E6B9uC2r5VDTP6zTyrZkW9F+19KTpoTpPpVfAPjz7hH5cBqyk4PU8s5cQ==" 
+              crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <!-- MathJax for Formulas -->
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <style>
+            /* Base Styles */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: 'Roboto', sans-serif;
+                background: linear-gradient(135deg, #1e3c72, #2a5298, #2980b9, #6dd5ed);
+                color: #ecf0f1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 50px 20px;
+                animation: fadeIn 1.5s ease-in-out;
+                min-height: 100vh;
+                position: relative;
+                transition: background 0.5s ease;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+    
+            /* Dark Mode Styles */
+            body.dark-mode {
+                background: linear-gradient(135deg, #2c3e50, #34495e, #4a69bd, #55aefc);
+                color: #ecf0f1;
+            }
+    
+            header {
+                background: linear-gradient(145deg, #34495e, #2c3e50);
+                color: #f1c40f;
+                padding: 20px 30px;
+                text-align: center;
+                border-radius: 12px;
+                width: 100%;
+                max-width: 1200px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            header h1 {
+                font-size: 2.5rem;
+                color: #f39c12;
+                text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+                margin: 0;
+            }
+            .credit {
+                position: absolute;
+                bottom: 10px;
+                right: 20px;
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.8);
+                font-style: italic;
+            }
+            .theme-toggle {
+                position: absolute;
+                top: 20px;
+                right: 30px;
+                cursor: pointer;
+                color: #f1c40f;
+                font-size: 1.5rem;
+                transition: color 0.3s;
+            }
+            .theme-toggle:hover {
+                color: #e67e22;
+            }
+    
+            /* Category Buttons */
+            .category-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            .category-btn {
+                padding: 10px 20px;
+                background-color: #34495e;
+                color: #ecf0f1;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.2s;
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .category-btn:hover {
+                background-color: #2c3e50;
+                transform: translateY(-2px);
+            }
+            .category-btn.active {
+                background-color: #f1c40f;
+                color: #34495e;
+            }
+    
+            /* Main Layout */
+            main {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                width: 100%;
+                max-width: 1200px;
+                margin-top: 30px;
+                background: linear-gradient(145deg, #34495e, #2c3e50);
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                padding: 30px;
+                transition: background 0.5s ease;
+            }
+    
+            /* Form & Input Styling */
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            label {
+                font-size: 1.1rem;
+                color: #f1c40f;
+                font-weight: 500;
+            }
+            /* Hide the dropdown as it's replaced by buttons */
+            #category {
+                display: none;
+            }
+            input[type="text"], select {
+                width: 100%;
+                padding: 12px 15px;
+                font-size: 1rem;
+                border: none;
+                border-radius: 8px;
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+                transition: background-color 0.3s, box-shadow 0.3s;
+            }
+            input[type="text"]:focus, select:focus {
+                background-color: #34495e;
+                box-shadow: inset 0 0 5px #f39c12;
+                outline: none;
+            }
+            .converter {
+                display: flex;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            .converter > div {
+                flex: 1;
+                min-width: 220px;
+            }
+            .input-group {
+                position: relative;
+            }
+            .input-group .unit-icon {
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #f1c40f;
+                pointer-events: none;
+            }
+    
+            /* Action Buttons */
+            .buttons {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .buttons .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+                border: none;
+                border-radius: 25px; /* Rounded buttons */
+                cursor: pointer;
+                transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                min-width: 160px;
+                justify-content: center;
+            }
+            .btn-primary {
+                background-color: #f1c40f;
+                color: #34495e;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            }
+            .btn-primary:hover {
+                background-color: #e67e22;
+                transform: translateY(-2px);
+            }
+    
+            /* Result and Formula Container */
+            .result-explanation-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                max-width: 30vw; /* Approximately 30% of viewport width */
+                width: 30vw;
+                margin: 0 auto;
+            }
+    
+            /* Result Area */
+            #result {
+                width: 100%;
+                height: 113px; /* Set to 75% of previous 150px */
+                padding: 20px;
+                font-size: 1.2rem;
+                border: none;
+                border-radius: 8px;
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                transition: background-color 0.3s;
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Center text horizontally */
+                justify-content: center; /* Center text vertically */
+                text-align: center; /* Center text */
+                /* Removed overflow-y to prevent scrolling */
+            }
+            #result strong {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            #result .converted-value {
+                background-color: rgba(46, 204, 113, 0.3);
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-weight: bold;
+                display: inline-block;
+                font-family: monospace;
+            }
+    
+            /* Explanation Area */
+            #explanation {
+                width: 100%;
+                height: 113px; /* Set to match the Result box */
+                padding: 20px;
+                font-size: 1rem;
+                border: none;
+                border-radius: 8px;
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                transition: background-color 0.3s;
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Center text horizontally */
+                justify-content: center; /* Center text vertically */
+                text-align: center; /* Center text */
+                /* Removed overflow-y to prevent scrolling */
+            }
+            #explanation strong {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            #explanation p {
+                word-wrap: break-word;
+                font-family: monospace;
+            }
+    
+            /* Additional Conversions Container */
+            .additional-conversions {
+                display: flex;
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+    
+            /* Pattern Library */
+            #patternLibrary {
+                flex: 1;
+                padding: 20px;
+                border: none;
+                border-radius: 8px;
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                max-height: 350px;
+                overflow-y: auto;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+                transition: background-color 0.3s;
+                position: relative;
+            }
+            #patternLibrary strong {
+                /* Updated to look like a sticky header bar */
+                position: sticky;
+                top: 0;
+                display: block;
+                background-color: #34495e;
+                padding: 10px;
+                font-size: 1.2rem;
+                color: #f1c40f;
+                text-align: center;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                z-index: 1;
+            }
+            /* Updated to grid layout for better appearance */
+            #patternsList {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+                margin-top: 10px;
+            }
+            #patternsList li {
+                background-color: #34495e;
+                padding: 15px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.2s;
+            }
+            #patternsList li:hover {
+                background-color: #2c3e50;
+                transform: translateY(-2px);
+            }
+            #patternsList li .pattern-info {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            #patternsList li .pattern-info span {
+                font-size: 1rem;
+                color: #bdc3c7;
+            }
+            #patternsList li i {
+                color: #f1c40f;
+                font-size: 1.2rem;
+            }
+    
+            /* Favorites */
+            #favorites {
+                flex: 1;
+                padding: 20px;
+                border: none;
+                border-radius: 8px;
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                max-height: 350px;
+                overflow-y: auto;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+                transition: background-color 0.3s;
+                position: relative;
+            }
+            #favorites strong {
+                /* Updated to look like a sticky header bar */
+                position: sticky;
+                top: 0;
+                display: block;
+                background-color: #34495e;
+                padding: 10px;
+                font-size: 1.2rem;
+                color: #f1c40f;
+                text-align: center;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                z-index: 1;
+            }
+            #favoritesList {
+                list-style: none;
+                padding-left: 0;
+                margin-top: 10px;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px; /* Space between favorites */
+            }
+            #favoritesList li {
+                padding: 15px;
+                /* Removed border-bottom */
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-radius: 8px;
+                background-color: #34495e;
+                transition: background-color 0.3s, transform 0.2s;
+                position: relative;
+                cursor: pointer; /* Make entire item clickable */
+            }
+            #favoritesList li:hover {
+                background-color: #2c3e50;
+                transform: translateY(-2px);
+            }
+            #favoritesList li .favorite-info {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            #favoritesList li .favorite-info span {
+                font-size: 1rem;
+                color: #bdc3c7;
+            }
+            #favoritesList li .remove-favorite {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: transparent;
+                border: none;
+                color: #e74c3c;
+                font-size: 1.2rem;
+                cursor: pointer;
+                display: none; /* Hidden by default */
+                transition: color 0.3s;
+            }
+            #favoritesList li:hover .remove-favorite {
+                display: block;
+            }
+    
+            /* History Log */
+            #historyLog {
+                padding: 20px;
+                border: none;
+                border-radius: 8px;
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                max-height: 300px;
+                overflow-y: auto;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+                transition: background-color 0.3s;
+                position: relative;
+            }
+            #historyLog strong {
+                /* Updated to look like a sticky header bar */
+                position: sticky;
+                top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-color: #34495e;
+                padding: 10px;
+                font-size: 1.2rem;
+                color: #f1c40f;
+                text-align: center;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                z-index: 1;
+            }
+            #historyList {
+                list-style: none;
+                padding-left: 0;
+                margin-top: 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px; /* Space between history items */
+            }
+            #historyList li {
+                padding: 15px;
+                border-bottom: 1px solid #34495e;
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-radius: 8px;
+                background-color: #34495e;
+                transition: background-color 0.3s, transform 0.2s;
+            }
+            #historyList li:hover {
+                background-color: #2c3e50;
+                transform: translateY(-2px);
+            }
+            #historyList li .history-info {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            #historyList li .history-info span {
+                font-size: 1rem;
+                color: #bdc3c7;
+            }
+    
+            /* Clear History Button */
+            #clearHistoryBtn {
+                background-color: transparent;
+                border: none;
+                color: #e74c3c;
+                font-size: 1.2rem;
+                cursor: pointer;
+                transition: color 0.3s;
+            }
+            #clearHistoryBtn:hover {
+                color: #c0392b;
+            }
+    
+            /* Scrollbar Styling */
+            /* WebKit Browsers */
+            #patternLibrary::-webkit-scrollbar,
+            #favorites::-webkit-scrollbar,
+            #historyLog::-webkit-scrollbar {
+                width: 10px;
+            }
+    
+            #patternLibrary::-webkit-scrollbar-track,
+            #favorites::-webkit-scrollbar-track,
+            #historyLog::-webkit-scrollbar-track {
+                background: #2c3e50;
+                border-radius: 5px;
+            }
+    
+            #patternLibrary::-webkit-scrollbar-thumb,
+            #favorites::-webkit-scrollbar-thumb,
+            #historyLog::-webkit-scrollbar-thumb {
+                background-color: #f1c40f;
+                border-radius: 5px;
+                border: 2px solid #2c3e50;
+            }
+    
+            /* Firefox */
+            #patternLibrary,
+            #favorites,
+            #historyLog {
+                scrollbar-width: thin;
+                scrollbar-color: #f1c40f #2c3e50;
+            }
+    
+            /* Responsive Design */
+            @media (max-width: 1024px) {
+                main {
+                    max-width: 1000px;
+                }
+            }
+            @media (max-width: 768px) {
+                .converter {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                .buttons {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                .btn {
+                    width: 100%;
+                    justify-content: center;
+                }
+                .additional-conversions {
+                    flex-direction: column;
+                }
+                #patternLibrary, #favorites {
+                    max-height: 250px;
+                }
+                .result-explanation-container {
+                    max-width: 100%;
+                    width: 100%;
+                }
+            }
+            @media (max-width: 480px) {
+                header h1 {
+                    font-size: 2rem;
+                }
+                .pattern-info span,
+                .favorite-info span,
+                .history-info span {
+                    display: none;
+                }
+                .category-btn {
+                    padding: 8px 16px;
+                    font-size: 0.9rem;
+                }
+                .btn {
+                    padding: 10px 20px;
+                    font-size: 0.9rem;
+                }
+                #result, #explanation {
+                    padding: 15px;
+                    font-size: 1rem;
+                }
+                .result-explanation-container {
+                    max-width: 90vw;
+                    width: 90vw;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <a href="../index.html" style="position: absolute; left: 30px; text-decoration: none; color: #f1c40f;">
+                <i class="fas fa-home" style="font-size: 1.8rem;"></i>
+            </a>
+            <h1>Unit Converter Pro</h1>
+            <div class="credit">Created by: Carson Morris</div>
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+    
+        <main>
+            <!-- Category Buttons -->
+            <div class="category-buttons" id="categoryButtons">
+                <!-- Buttons will be populated dynamically -->
+            </div>
+    
+            <div class="form-group">
+                <!-- Hidden Category Select -->
+                <select id="category" onchange="updateUnits()">
+                    <option value="length">Length</option>
+                    <option value="mass">Mass</option>
+                    <option value="time">Time</option>
+                    <option value="temperature">Temperature</option>
+                    <option value="volume">Volume</option>
+                    <option value="area">Area</option>
+                    <option value="speed">Speed</option>
+                    <option value="energy">Energy</option>
+                    <option value="power">Power</option>
+                    <option value="pressure">Pressure</option>
+                    <option value="data">Data Storage</option>
+                    <!-- Removed Finance Category -->
+                    <option value="astronomy">Astronomy</option>
+                    <option value="encoding">Encoding</option> <!-- Encoding Category -->
+                    <!-- Add more categories as needed -->
+                </select>
+            </div>
+    
+            <div class="converter">
+                <div class="form-group">
+                    <label for="inputValue">Input Value:</label>
+                    <div class="input-group">
+                        <input type="text" id="inputValue" placeholder="Enter value to convert" oninput="handleInputChange()" aria-label="Input Value">
+                        <i class="fas fa-calculator unit-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fromUnit">From:</label>
+                    <select id="fromUnit" onchange="handleInputChange()" aria-label="From Unit">
+                        <!-- Units will be populated dynamically -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="toUnit">To:</label>
+                    <select id="toUnit" onchange="handleInputChange()" aria-label="To Unit">
+                        <!-- Units will be populated dynamically -->
+                    </select>
+                </div>
+            </div>
+    
+            <div class="buttons">
+                <!-- Save Favorite Button with Heart Icon -->
+                <button class="btn btn-primary" onclick="saveFavorite()"><i class="fas fa-heart"></i> Save Favorite</button>
+            </div>
+    
+            <!-- Result and Formula Sections -->
+            <div class="result-explanation-container">
+                <div id="result">
+                    <strong>Result:</strong>
+                    <p id="output"></p>
+                </div>
+    
+                <div id="explanation">
+                    <strong>Formula:</strong>
+                    <p id="conversionExplanation"></p>
+                </div>
+            </div>
+    
+            <!-- Additional Sections: Pattern Library and Favorites -->
+            <div class="additional-conversions">
+                <div id="patternLibrary">
+                    <strong>Common Conversions:</strong>
+                    <ul id="patternsList">
+                        <li onclick="selectConversion('encoding', 'binary', 'hex')">
+                            <div class="pattern-info">
+                                <span>Binary → Hexadecimal</span>
+                                <span>Category: Encoding</span>
+                            </div>
+                            <i class="fas fa-exchange-alt"></i>
+                        </li>
+                        <li onclick="selectConversion('temperature', 'celsius', 'fahrenheit')">
+                            <div class="pattern-info">
+                                <span>Celsius → Fahrenheit</span>
+                                <span>Category: Temperature</span>
+                            </div>
+                            <i class="fas fa-exchange-alt"></i>
+                        </li>
+                        <li onclick="selectConversion('volume', 'liter', 'gallon')">
+                            <div class="pattern-info">
+                                <span>Liter → Gallon</span>
+                                <span>Category: Volume</span>
+                            </div>
+                            <i class="fas fa-exchange-alt"></i>
+                        </li>
+                        <li onclick="selectConversion('mass', 'kilogram', 'pound')">
+                            <div class="pattern-info">
+                                <span>Kilogram → Pound</span>
+                                <span>Category: Mass</span>
+                            </div>
+                            <i class="fas fa-exchange-alt"></i>
+                        </li>
+                        <li onclick="selectConversion('length', 'meter', 'foot')">
+                            <div class="pattern-info">
+                                <span>Meter → Foot</span>
+                                <span>Category: Length</span>
+                            </div>
+                            <i class="fas fa-exchange-alt"></i>
+                        </li>
+                        <li onclick="selectConversion('speed', 'meter_per_second', 'kilometer_per_hour')">
+                            <div class="pattern-info">
+                                <span>m/s → km/h</span>
+                                <span>Category: Speed</span>
+                            </div>
+                            <i class="fas fa-exchange-alt"></i>
+                        </li>
+                        <!-- Removed Finance Pattern -->
+                        <!-- Add more patterns as needed -->
+                    </ul>
+                </div>
+    
+                <div id="favorites">
+                    <strong>Favorites:</strong>
+                    <ul id="favoritesList">
+                        <!-- Favorite conversion patterns will appear here in a grid pattern -->
+                    </ul>
+                </div>
+            </div>
+    
+            <!-- History Log -->
+            <div id="historyLog">
+                <strong>
+                    Conversion History:
+                    <button id="clearHistoryBtn" onclick="clearHistory()" title="Clear All History">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </strong>
+                <ul id="historyList">
+                    <!-- History items will appear here -->
+                </ul>
+            </div>
+        </main>
+    
+        <script>
+            // Unit definitions
+            const units = {
+                length: {
+                    meter: 1,
+                    kilometer: 1000,
+                    centimeter: 0.01,
+                    millimeter: 0.001,
+                    mile: 1609.34,
+                    yard: 0.9144,
+                    foot: 0.3048,
+                    inch: 0.0254,
+                    nautical_mile: 1852
+                },
+                mass: {
+                    kilogram: 1,
+                    gram: 0.001,
+                    milligram: 0.000001,
+                    pound: 0.453592,
+                    ounce: 0.0283495,
+                    ton: 907.185
+                },
+                time: {
+                    second: 1,
+                    minute: 60,
+                    hour: 3600,
+                    day: 86400,
+                    week: 604800,
+                    month: 2629800, // Approximate
+                    year: 31557600 // Approximate
+                },
+                temperature: {
+                    celsius: 'celsius',
+                    fahrenheit: 'fahrenheit',
+                    kelvin: 'kelvin'
+                },
+                volume: {
+                    liter: 1,
+                    milliliter: 0.001,
+                    cubic_meter: 1000,
+                    gallon: 3.78541,
+                    quart: 0.946353,
+                    pint: 0.473176,
+                    cup: 0.24,
+                    ounce_fluid: 0.0295735
+                },
+                area: {
+                    square_meter: 1,
+                    square_kilometer: 1e6,
+                    square_centimeter: 0.0001,
+                    hectare: 10000,
+                    acre: 4046.86,
+                    square_mile: 2589988.11,
+                    square_yard: 0.836127,
+                    square_foot: 0.092903,
+                    square_inch: 0.00064516
+                },
+                speed: {
+                    meter_per_second: 1,
+                    kilometer_per_hour: 0.277778,
+                    mile_per_hour: 0.44704,
+                    knot: 0.514444,
+                    foot_per_second: 0.3048
+                },
+                energy: {
+                    joule: 1,
+                    kilojoule: 1000,
+                    calorie: 4.184,
+                    kilocalorie: 4184,
+                    watt_hour: 3600,
+                    kilowatt_hour: 3.6e6,
+                    british_thermal_unit: 1055.06
+                },
+                power: {
+                    watt: 1,
+                    kilowatt: 1000,
+                    horsepower: 745.7,
+                    megawatt: 1e6
+                },
+                pressure: {
+                    pascal: 1,
+                    kilopascal: 1000,
+                    bar: 100000,
+                    atmosphere: 101325,
+                    psi: 6894.76,
+                    torr: 133.322
+                },
+                data: {
+                    bit: 1,
+                    byte: 8,
+                    kilobit: 1000,
+                    kilobyte: 8000,
+                    megabit: 1e6,
+                    megabyte: 8e6,
+                    gigabit: 1e9,
+                    gigabyte: 8e9,
+                    terabit: 1e12,
+                    terabyte: 8e12
+                },
+                astronomy: {
+                    light_year: 9.461e+15, // meters
+                    astronomical_unit: 1.496e+11, // meters
+                    parsec: 3.086e+16, // meters
+                    lunar_distance: 3.844e+8, // meters
+                    gigalight_year: 9.461e+24, // meters
+                    megaparsec: 3.086e+22 // meters
+                },
+                encoding: {
+                    ascii: 'ascii',
+                    hex: 'hex',
+                    binary: 'binary',
+                    decimal: 'decimal'
+                }
+                // Add more categories and units as needed
+            };
+    
+            // History and Favorites
+            let history = [];
+            let favorites = [];
+    
+            // Debounce Timer for History Logging
+            let historyDebounceTimer;
+    
+            // Units that should be displayed in uppercase
+            const uppercaseUnits = ['usd', 'eur', 'gbp', 'jpy', 'aud', 'cad', 'chf', 'cny', 'inr', 'rub', 'ascii', 'hex', 'binary'];
+    
+            // Temperature conversion functions
+            function convertTemperature(value, from, to) {
+                let tempInCelsius;
+    
+                // Convert from the source unit to Celsius
+                if (from === 'celsius') {
+                    tempInCelsius = value;
+                } else if (from === 'fahrenheit') {
+                    tempInCelsius = (value - 32) * 5/9;
+                } else if (from === 'kelvin') {
+                    tempInCelsius = value - 273.15;
+                }
+    
+                // Convert from Celsius to the target unit
+                if (to === 'celsius') {
+                    return tempInCelsius;
+                } else if (to === 'fahrenheit') {
+                    return (tempInCelsius * 9/5) + 32;
+                } else if (to === 'kelvin') {
+                    return tempInCelsius + 273.15;
+                }
+            }
+    
+            // Encoding conversion functions
+            function convertEncoding(value, from, to) {
+                try {
+                    let intermediate;
+    
+                    // Convert from source to intermediate (string if applicable)
+                    if (from === 'ascii') {
+                        // ASCII to string
+                        intermediate = asciiToString(value);
+                    } else if (from === 'decimal') {
+                        // Decimal to string
+                        intermediate = decimalToString(value);
+                    } else if (from === 'hex') {
+                        // Hex to string
+                        intermediate = hexToString(value);
+                    } else if (from === 'binary') {
+                        // Binary to string
+                        intermediate = binaryToString(value);
+                    } else {
+                        throw new Error('Unsupported encoding format.');
+                    }
+    
+                    // Now convert intermediate string to target format
+                    if (to === 'ascii') {
+                        // String to ASCII
+                        return stringToAscii(intermediate);
+                    } else if (to === 'decimal') {
+                        // String to Decimal
+                        return stringToDecimal(intermediate);
+                    } else if (to === 'hex') {
+                        // String to Hex
+                        return stringToHex(intermediate);
+                    } else if (to === 'binary') {
+                        // String to Binary
+                        return stringToBinary(intermediate);
+                    } else {
+                        throw new Error('Unsupported encoding format.');
+                    }
+                } catch (error) {
+                    return null;
+                }
+            }
+    
+            // Helper functions for Encoding
+            function asciiToString(ascii) {
+                try {
+                    return String.fromCharCode(...ascii.split(',').map(num => parseInt(num.trim())));
+                } catch {
+                    return null;
+                }
+            }
+    
+            function stringToAscii(str) {
+                return str.split('').map(char => char.charCodeAt(0)).join(',');
+            }
+    
+            function hexToString(hex) {
+                let str = '';
+                try {
+                    // Remove '0x' if present
+                    if (hex.startsWith('0x') || hex.startsWith('0X')) {
+                        hex = hex.slice(2);
+                    }
+                    for (let i = 0; i < hex.length; i += 2) {
+                        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+                    }
+                    return str;
+                } catch {
+                    return null;
+                }
+            }
+    
+            function stringToHex(str) {
+                return '0x' + Array.from(str).map(char => char.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+            }
+    
+            function binaryToString(binary) {
+                try {
+                    // Remove '0b' if present and spaces
+                    binary = binary.replace(/0b/g, '').replace(/\s+/g, '');
+                    return String.fromCharCode(...binary.match(/.{1,8}/g).map(bin => parseInt(bin, 2)));
+                } catch {
+                    return null;
+                }
+            }
+    
+            function stringToBinary(str) {
+                return '0b' + Array.from(str).map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
+            }
+    
+            function decimalToString(decimal) {
+                try {
+                    return String.fromCharCode(...decimal.split(',').map(num => parseInt(num.trim())));
+                } catch {
+                    return null;
+                }
+            }
+    
+            function stringToDecimal(str) {
+                return Array.from(str).map(char => char.charCodeAt(0)).join(',');
+            }
+    
+            // Initialize units on page load
+            window.onload = function() {
+                populateCategoryButtons();
+                updateUnits();
+                loadHistory();
+                loadFavorites();
+            };
+    
+            // Function to populate category buttons
+            function populateCategoryButtons() {
+                const categoryButtonsDiv = document.getElementById('categoryButtons');
+                const categorySelect = document.getElementById('category');
+                const categories = Object.keys(units);
+    
+                categories.forEach((category, index) => {
+                    const button = document.createElement('button');
+                    button.classList.add('category-btn');
+                    button.innerHTML = `<i class="fas fa-${getCategoryIcon(category)}"></i> ${formatUnit(category.replace('_', ' '))}`;
+                    button.dataset.category = category;
+                    if (index === 0) {
+                        button.classList.add('active');
+                        categorySelect.value = category;
+                    }
+                    button.onclick = () => {
+                        // Remove active class from all buttons
+                        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                        // Add active class to the clicked button
+                        button.classList.add('active');
+                        // Set the category select value
+                        categorySelect.value = category;
+                        // Update units and run conversion
+                        updateUnits();
+                        runConversion();
+                    };
+                    categoryButtonsDiv.appendChild(button);
+                });
+            }
+    
+            // Function to get appropriate icon for category
+            function getCategoryIcon(category) {
+                const icons = {
+                    length: 'ruler',
+                    mass: 'weight-hanging',
+                    time: 'clock',
+                    temperature: 'temperature-high',
+                    volume: 'tint',
+                    area: 'vector-square',
+                    speed: 'tachometer-alt',
+                    energy: 'bolt',
+                    power: 'lightbulb',
+                    pressure: 'compress',
+                    data: 'database',
+                    astronomy: 'globe',
+                    encoding: 'code',
+                    // Add more mappings as needed
+                };
+                return icons[category] || 'exchange-alt';
+            }
+    
+            // Function to update unit options based on selected category
+            function updateUnits() {
+                const category = document.getElementById('category').value;
+                const fromUnit = document.getElementById('fromUnit');
+                const toUnit = document.getElementById('toUnit');
+    
+                // Clear existing options
+                fromUnit.innerHTML = '';
+                toUnit.innerHTML = '';
+    
+                const categoryUnits = units[category];
+                for (let unit in categoryUnits) {
+                    let option = document.createElement('option');
+                    option.value = unit;
+                    option.text = formatUnit(unit.replace('_', ' '));
+                    fromUnit.appendChild(option.cloneNode(true));
+                    toUnit.appendChild(option.cloneNode(true));
+                }
+    
+                // Optionally, set default units
+                if (fromUnit.options.length > 0) fromUnit.selectedIndex = 0;
+                if (toUnit.options.length > 1) toUnit.selectedIndex = 1;
+            }
+    
+            // Function to format unit names
+            function formatUnit(unit) {
+                if (uppercaseUnits.includes(unit.toLowerCase())) {
+                    return unit.toUpperCase();
+                }
+                return capitalizeFirstLetter(unit);
+            }
+    
+            // Function to capitalize first letter
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
+            }
+    
+            // Function to handle input changes
+            function handleInputChange() {
+                runConversion(); // Display conversion immediately
+                debouncedAddToHistory(); // Add to history after debounce
+            }
+    
+            // Function to run the conversion
+            async function runConversion() {
+                const category = document.getElementById('category').value;
+                const inputValue = document.getElementById('inputValue').value.trim();
+                const from = document.getElementById('fromUnit').value;
+                const to = document.getElementById('toUnit').value;
+                const output = document.getElementById('output');
+                const explanation = document.getElementById('conversionExplanation');
+    
+                if (inputValue === '') {
+                    output.innerHTML = '';
+                    explanation.innerHTML = '';
+                    MathJax.typeset(); // Refresh MathJax
+                    return;
+                }
+    
+                let result;
+                let details = '';
+    
+                try {
+                    if (category === 'temperature') {
+                        const numericValue = parseFloat(inputValue);
+                        if (isNaN(numericValue)) throw new Error('Invalid input for temperature conversion.');
+                        result = convertTemperature(numericValue, from, to);
+                        details = `\\(${numericValue}^\circ${formatUnit(from)}\\) `;
+                        if (from === 'celsius' && to === 'fahrenheit') {
+                            details += `\\times \\frac{9}{5} + 32 = ${result.toFixed(2)}^\circ${formatUnit(to)}`;
+                        } else if (from === 'fahrenheit' && to === 'celsius') {
+                            details += `\\left(${numericValue}^\circ F - 32\\right) \\times \\frac{5}{9} = ${result.toFixed(2)}^\circ C`;
+                        } else if (from === 'celsius' && to === 'kelvin') {
+                            details += ` + 273.15 = ${result.toFixed(2)} K`;
+                        } else if (from === 'kelvin' && to === 'celsius') {
+                            details += ` - 273.15 = ${result.toFixed(2)}^\circ C`;
+                        } else if (from === 'fahrenheit' && to === 'kelvin') {
+                            details += `\\left(\\left(${numericValue}^\circ F - 32\\right) \\times \\frac{5}{9}\\right) + 273.15 = ${result.toFixed(2)} K`;
+                        } else if (from === 'kelvin' && to === 'fahrenheit') {
+                            details += `\\left(\\left(${numericValue} K - 273.15\\right) \\times \\frac{9}{5}\\right) + 32 = ${result.toFixed(2)}^\circ F`;
+                        } else {
+                            details += `= ${result.toFixed(2)}^\circ${formatUnit(to)}`;
+                        }
+                    } else if (category === 'astronomy') {
+                        const numericValue = parseFloat(inputValue);
+                        if (isNaN(numericValue)) throw new Error('Invalid input for astronomy conversion.');
+                        const fromFactor = units[category][from];
+                        const toFactor = units[category][to];
+                        result = (numericValue * fromFactor) / toFactor;
+                        details = `\\(${numericValue} \\text{ ${formatUnit(from)}} \\times \\frac{${fromFactor}}{${toFactor}} = ${result.toExponential(2)} \\text{ ${formatUnit(to)}}\\)`;
+                    } else if (category === 'encoding') {
+                        result = convertEncoding(inputValue, from, to);
+                        if (result === null) throw new Error('Invalid encoding conversion.');
+                        if (to === 'hex') {
+                            // Ensure hex results are prefixed with '0x'
+                            if (!result.startsWith('0x') && !result.startsWith('0X')) {
+                                result = '0x' + result;
+                            }
+                        } else if (to === 'binary') {
+                            // Ensure binary results are prefixed with '0b' and remove spaces
+                            result = result.replace(/\s+/g, '');
+                            if (!result.startsWith('0b') && !result.startsWith('0B')) {
+                                result = '0b' + result;
+                            }
+                        }
+                        details = `\\(${inputValue} \\text{ (${formatUnit(from)}) } \\rightarrow ${result} \\text{ (${formatUnit(to)}) }\\)`;
+                    } else {
+                        const numericValue = parseFloat(inputValue);
+                        if (isNaN(numericValue)) throw new Error('Invalid input for conversion.');
+                        const fromFactor = units[category][from];
+                        const toFactor = units[category][to];
+                        result = (numericValue * fromFactor) / toFactor;
+                        details = `\\(${numericValue} \\text{ ${formatUnit(from)} } \\times \\frac{${fromFactor}}{${toFactor}} = ${result.toFixed(2)} \\text{ ${formatUnit(to)} }\\)`;
+                    }
+    
+                    // Display the result
+                    if (category === 'encoding') {
+                        output.innerHTML = `<span class="converted-value">${result}</span>`;
+                        explanation.innerHTML = details;
+                    } else {
+                        output.innerHTML = `<span class="converted-value">${result.toFixed(2)} ${formatUnit(to)}</span>`;
+                        explanation.innerHTML = details;
+                    }
+    
+                    // Typeset the newly added MathJax content
+                    MathJax.typesetPromise();
+                } catch (e) {
+                    if (category === 'encoding') {
+                        output.innerHTML = `<span style="color: #e74c3c; font-weight: bold;">${e.message}</span>`;
+                        explanation.innerHTML = 'An error occurred during conversion.';
+                    } else {
+                        output.innerHTML = `<span style="color: #e74c3c; font-weight: bold;">${e.message}</span>`;
+                        explanation.innerHTML = 'An error occurred during conversion.';
+                    }
+                    MathJax.typesetPromise();
+                }
+            }
+    
+            // Debounced function to add conversion to history after 5 seconds of inactivity
+            function debouncedAddToHistory() {
+                clearTimeout(historyDebounceTimer);
+                historyDebounceTimer = setTimeout(() => {
+                    const category = document.getElementById('category').value;
+                    const inputValue = document.getElementById('inputValue').value.trim();
+                    const from = document.getElementById('fromUnit').value;
+                    const to = document.getElementById('toUnit').value;
+                    let outputText = document.getElementById('output').innerText;
+    
+                    if (inputValue === '' || outputText === '') return;
+    
+                    if (category === 'encoding') {
+                        addToHistory(`${inputValue} (${formatUnit(from)}) → ${outputText} (${formatUnit(to)})`);
+                    } else {
+                        addToHistory(`${inputValue} ${formatUnit(from)} → ${outputText} ${formatUnit(to)}`);
+                    }
+                }, 5000);
+            }
+    
+            // Function to save a favorite conversion (formula favorite)
+            function saveFavorite() {
+                const category = document.getElementById('category').value;
+                const from = document.getElementById('fromUnit').value;
+                const to = document.getElementById('toUnit').value;
+    
+                const favorite = { category, from, to };
+                // Check for duplicates
+                if (!favorites.some(fav => fav.category === category && fav.from === from && fav.to === to)) {
+                    favorites.push(favorite);
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                    loadFavorites();
+                    // Removed alert
+                }
+                // Removed else alert
+            }
+    
+            // Function to load history from localStorage
+            function loadHistory() {
+                const storedHistory = JSON.parse(localStorage.getItem('history')) || [];
+                history = storedHistory;
+                renderHistory();
+            }
+    
+            // Function to add to history
+            function addToHistory(entry) {
+                // Avoid duplicates within the last 10 entries
+                if (history.length > 0 && history[0] === entry) return;
+                history.unshift(entry);
+                if (history.length > 10) history.pop(); // Limit history to 10 entries
+                localStorage.setItem('history', JSON.stringify(history));
+                renderHistory();
+            }
+    
+            // Function to render history
+            function renderHistory() {
+                const historyList = document.getElementById('historyList');
+                historyList.innerHTML = '';
+                history.forEach(item => {
+                    const li = document.createElement('li');
+    
+                    const infoDiv = document.createElement('div');
+                    infoDiv.classList.add('history-info');
+                    infoDiv.innerHTML = `<span>${item}</span>`;
+    
+                    li.appendChild(infoDiv);
+                    historyList.appendChild(li);
+                });
+            }
+    
+            // Function to load favorites from localStorage
+            function loadFavorites() {
+                const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                favorites = storedFavorites;
+                renderFavorites();
+            }
+    
+            // Function to render favorites
+            function renderFavorites() {
+                const favoritesList = document.getElementById('favoritesList');
+                favoritesList.innerHTML = '';
+                favorites.forEach((fav, index) => {
+                    const li = document.createElement('li');
+    
+                    const infoDiv = document.createElement('div');
+                    infoDiv.classList.add('favorite-info');
+                    infoDiv.innerHTML = `<span>${formatUnit(fav.from)} → ${formatUnit(fav.to)}</span>
+                                         <span>Category: ${formatUnit(fav.category)}</span>`;
+    
+                    // Create the remove "×" button
+                    const removeBtn = document.createElement('button');
+                    removeBtn.classList.add('remove-favorite');
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.onclick = (e) => {
+                        e.stopPropagation(); // Prevent triggering the li onclick
+                        removeFavorite(index);
+                    };
+    
+                    li.appendChild(infoDiv);
+                    li.appendChild(removeBtn);
+    
+                    // Make the entire li clickable to run the conversion
+                    li.onclick = () => selectConversion(fav.category, fav.from, fav.to);
+    
+                    favoritesList.appendChild(li);
+                });
+            }
+    
+            // Function to remove a favorite
+            function removeFavorite(index) {
+                favorites.splice(index, 1);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                renderFavorites();
+                // Removed confirmation and alert
+            }
+    
+            // Function to toggle dark mode
+            function toggleTheme() {
+                document.body.classList.toggle('dark-mode');
+                const themeIcon = document.querySelector('.theme-toggle i');
+                if (document.body.classList.contains('dark-mode')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            }
+    
+            // Function to select a common conversion pattern or favorite
+            function selectConversion(category, from, to) {
+                // Activate the corresponding category button
+                const categoryButtons = document.querySelectorAll('.category-btn');
+                categoryButtons.forEach(btn => {
+                    if (btn.dataset.category === category) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+    
+                // Set the category select value
+                document.getElementById('category').value = category;
+                // Update units
+                updateUnits();
+                // Set from and to units
+                document.getElementById('fromUnit').value = from;
+                document.getElementById('toUnit').value = to;
+                // Run conversion
+                runConversion();
+            }
+    
+            // Function to clear all history
+            function clearHistory() {
+                history = [];
+                localStorage.removeItem('history');
+                renderHistory();
+            }
+    
+            // Function to format unit names with uppercase for specific units
+            function formatUnit(unit) {
+                if (uppercaseUnits.includes(unit.toLowerCase())) {
+                    return unit.toUpperCase();
+                }
+                return capitalizeFirstLetter(unit);
+            }
+    
+            // Function to capitalize first letter
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
+            }
+        </script>
+    </body>
+    </html>
+    
