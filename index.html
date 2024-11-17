@@ -247,7 +247,7 @@
     </style>
 </head>
 <body>
-    <h1>Interactive Tool Suite</h1>
+    <h1>Engineering Tool Suite</h1>
 
     <!-- Navigation Tabs -->
     <nav>
@@ -256,6 +256,7 @@
         <div class="tab" data-tab="projects">Projects</div>
         <div class="tab" data-tab="design">Design</div>
         <div class="tab" data-tab="electrical">Electrical</div>
+        <div class="tab" data-tab="mechanical">Mechanical</div> <!-- Newly added tab -->
         <div class="tab" data-tab="space">Space</div>
     </nav>
 
@@ -407,6 +408,33 @@
         </div>
     </section>
 
+    <!-- Mechanical Section -->
+    <section id="mechanical" class="tab-content hidden">
+        <div class="tool-container">
+            <a href="https://figuro.io/Designer" class="tool-card" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-cube tool-icon"></i>
+                <h3>3D Modeler</h3>
+                <p>Create and design 3D models effortlessly.</p>
+            </a>
+            <a href="mechanical/iframe-slicer.html" class="tool-card">
+                <i class="fas fa-cut tool-icon"></i>
+                <h3>3D GCode Slicer</h3>
+                <p>Prepare and slice 3D models for printing with ease.</p>
+            </a>            
+            <a href="https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html" class="tool-card" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-cogs tool-icon"></i>
+                <h3>Mechanical Simulations</h3>
+                <p>Simulate and explore physical mechanics interactively.</p>
+            </a>
+            <a href="mechanical/iframe-mechdesigner.html" class="tool-card">
+                <i class="fas fa-drafting-compass tool-icon"></i>
+                <h3>Mechanical Simulation Designer</h3>
+                <p>Design and visualize complex mechanical systems.</p>
+            </a>
+            
+        </div>
+    </section>
+
     <!-- Space Section -->
     <section id="space" class="tab-content hidden">
         <div class="tool-container">
@@ -425,6 +453,11 @@
                 <h3>Google Earth</h3>
                 <p>Open Google Earth to explore our planet in 3D.</p>
             </a>
+            <a href="https://phet.colorado.edu/en/simulations/filter?subjects=earth-and-space&type=html" class="tool-card" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-globe tool-icon"></i>
+                <h3>Simulations Earth and Space</h3>
+                <p>Explore simulations of our Earth and outer space.</p>
+            </a>            
         </div>
     </section>
 
