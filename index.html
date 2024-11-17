@@ -400,7 +400,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Carson Morris. Created by <a href="https://github.com/Torrax" target="_blank">Carson Morris</a>. All rights reserved.</p>
+        <p>&copy; 2024 <a href="https://github.com/Torrax" target="_blank">Carson Morris</a></p>
     </footer>
 
     <script>
@@ -408,12 +408,13 @@
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
 
+        const DEFAULT_TAB = 'general';
         const STORAGE_KEY = 'selectedTab';
         const STORAGE_TIME_KEY = 'selectedTabTimestamp';
         const EXPIRATION_TIME = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
 
         // Function to activate a tab by its name
-        function activateTab(tabName) {
+        function activateTab(tabName, updateURL = true) {
             tabs.forEach(t => {
                 if (t.getAttribute('data-tab') === tabName) {
                     t.classList.add('active');
@@ -429,6 +430,11 @@
                     content.classList.add('hidden');
                 }
             });
+
+            // Update URL hash if requested
+            if (updateURL) {
+                window.history.pushState(null, '', `#${tabName}`);
+            }
         }
 
         // Function to save the selected tab with timestamp
@@ -439,22 +445,25 @@
 
         // Function to load the saved tab if it's not expired
         function loadSelectedTab() {
+            const hashTab = window.location.hash.slice(1); // Get tab from URL hash
             const savedTab = localStorage.getItem(STORAGE_KEY);
             const savedTime = localStorage.getItem(STORAGE_TIME_KEY);
+            let tabToActivate = DEFAULT_TAB;
 
-            if (savedTab && savedTime) {
+            if (hashTab) {
+                tabToActivate = hashTab; // Prioritize URL hash
+            } else if (savedTab && savedTime) {
                 const currentTime = Date.now();
                 if (currentTime - savedTime < EXPIRATION_TIME) {
-                    activateTab(savedTab);
-                    return;
+                    tabToActivate = savedTab; // Use saved tab if valid
                 } else {
                     // Expired, remove from storage
                     localStorage.removeItem(STORAGE_KEY);
                     localStorage.removeItem(STORAGE_TIME_KEY);
                 }
             }
-            // If no valid saved tab, activate the default tab (General)
-            activateTab('general');
+
+            activateTab(tabToActivate, false); // Activate without updating URL
         }
 
         // Event listeners for tabs
@@ -468,6 +477,12 @@
 
         // Load the selected tab on page load
         window.addEventListener('DOMContentLoaded', loadSelectedTab);
+
+        // Handle browser back/forward navigation
+        window.addEventListener('popstate', () => {
+            const hashTab = window.location.hash.slice(1) || DEFAULT_TAB;
+            activateTab(hashTab, false); // Activate without updating URL
+        });
     </script>
 </body>
 </html>
