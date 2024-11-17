@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #f39c12;
+        }
+        header a {
+            text-decoration: none;
+            color: #f39c12;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            position: absolute;
+            left: 30px;
+        }
+        header a:hover {
+            color: #ecf0f1;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+        .list {
+            width: 90%;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 90px); /* Adjust height for header */
+        }
+        .list h2 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+        }
+        table thead {
+            background-color: #2980b9;
+        }
+        table thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #2c3e50;
+        }
+        table tbody td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #3d566e;
+        }
+        /* Custom Scrollbar Styles */
+        .list::-webkit-scrollbar {
+            width: 12px;
+        }
+        .list::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+        }
+        .list::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Accent color */
+            border-radius: 6px;
+            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        }
+        .list::-webkit-scrollbar-thumb:hover {
+            background: #f1c40f; /* Lighter accent on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" title="Go Back">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>Linux Cheat Sheet</h1>
+    </header>
+    <main>
+        <div class="list">
+            <h2>Commands</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>ls</td><td>List files and directories.</td><td>ls -l (detailed view)</td></tr>
+                    <tr><td>cd</td><td>Change directory.</td><td>cd /path/to/directory</td></tr>
+                    <tr><td>pwd</td><td>Print the current directory.</td><td>pwd</td></tr>
+                    <tr><td>mkdir</td><td>Create a new directory.</td><td>mkdir new_directory</td></tr>
+                    <tr><td>rm</td><td>Remove files or directories.</td><td>rm file_name; rm -r directory_name</td></tr>
+                    <tr><td>cp</td><td>Copy files or directories.</td><td>cp file1 file2</td></tr>
+                    <tr><td>mv</td><td>Move or rename files.</td><td>mv old_name new_name</td></tr>
+                    <tr><td>chmod</td><td>Change file permissions.</td><td>chmod 755 file_name</td></tr>
+                    <tr><td>chown</td><td>Change file ownership.</td><td>chown user:group file_name</td></tr>
+                    <tr><td>find</td><td>Search for files in a directory hierarchy.</td><td>find /path -name "file_name"</td></tr>
+                    <tr><td>grep</td><td>Search text using patterns.</td><td>grep "pattern" file_name</td></tr>
+                    <tr><td>ps</td><td>Display currently running processes.</td><td>ps aux</td></tr>
+                    <tr><td>kill</td><td>Terminate a process by PID.</td><td>kill -9 PID</td></tr>
+                    <tr><td>top</td><td>Display real-time system activity.</td><td>top</td></tr>
+                    <tr><td>df</td><td>Show disk usage of file systems.</td><td>df -h</td></tr>
+                    <tr><td>du</td><td>Estimate file or directory space usage.</td><td>du -sh directory_name</td></tr>
+                    <tr><td>tar</td><td>Create or extract tar archives.</td><td>tar -cvf archive.tar file_name</td></tr>
+                    <tr><td>zip</td><td>Compress files.</td><td>zip archive.zip file_name</td></tr>
+                    <tr><td>unzip</td><td>Extract compressed files.</td><td>unzip archive.zip</td></tr>
+                    <tr><td>wget</td><td>Download files from the web.</td><td>wget http://example.com/file</td></tr>
+                    <tr><td>curl</td><td>Transfer data from or to a server.</td><td>curl http://example.com</td></tr>
+                    <tr><td>ssh</td><td>Connect to a remote server securely.</td><td>ssh user@hostname</td></tr>
+                    <tr><td>scp</td><td>Copy files over SSH.</td><td>scp file_name user@hostname:/path</td></tr>
+                    <tr><td>man</td><td>Display the manual for a command.</td><td>man ls</td></tr>
+                    <tr><td>alias</td><td>Create shortcuts for commands.</td><td>alias ll='ls -la'</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

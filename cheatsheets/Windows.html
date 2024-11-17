@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #f39c12;
+        }
+        header a {
+            text-decoration: none;
+            color: #f39c12;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            position: absolute;
+            left: 30px;
+        }
+        header a:hover {
+            color: #ecf0f1;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+        .list {
+            width: 90%;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 90px); /* Adjust height for header */
+        }
+        .list h2 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+        }
+        table thead {
+            background-color: #2980b9;
+        }
+        table thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #2c3e50;
+        }
+        table tbody td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #3d566e;
+        }
+        /* Custom Scrollbar Styles */
+        .list::-webkit-scrollbar {
+            width: 12px;
+        }
+        .list::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+        }
+        .list::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Accent color */
+            border-radius: 6px;
+            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        }
+        .list::-webkit-scrollbar-thumb:hover {
+            background: #f1c40f; /* Lighter accent on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" title="Go Back">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>Windows Cheat Sheet</h1>
+    </header>
+    <main>
+        <div class="list">
+            <h2>Hotkeys</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Shortcut</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>WIN + D</td><td>Show desktop</td></tr>
+                    <tr><td>WIN + E</td><td>Open File Explorer</td></tr>
+                    <tr><td>WIN + L</td><td>Lock your PC</td></tr>
+                    <tr><td>WIN + Tab</td><td>Open Task View</td></tr>
+                    <tr><td>ALT + Tab</td><td>Switch between open apps</td></tr>
+                    <tr><td>CTRL + C</td><td>Copy selected item(s)</td></tr>
+                    <tr><td>CTRL + X</td><td>Cut selected item(s)</td></tr>
+                    <tr><td>CTRL + V</td><td>Paste item(s)</td></tr>
+                    <tr><td>CTRL + Z</td><td>Undo an action</td></tr>
+                    <tr><td>CTRL + Y</td><td>Redo an action</td></tr>
+                    <tr><td>SHIFT + DELETE</td><td>Permanently delete an item</td></tr>
+                    <tr><td>CTRL + A</td><td>Select all items in a window or on the desktop</td></tr>
+                    <tr><td>ALT + ENTER</td><td>Open properties for a selected item</td></tr>
+                    <tr><td>CTRL + SHIFT + ESC</td><td>Open Task Manager</td></tr>
+                    <tr><td>WIN + R</td><td>Open the Run dialog box</td></tr>
+                    <tr><td>WIN + I</td><td>Open the Settings app</td></tr>
+                    <tr><td>WIN + X</td><td>Open the Quick Link menu</td></tr>
+                    <tr><td>WIN + Pause</td><td>Open System properties</td></tr>
+                    <tr><td>WIN + Up Arrow</td><td>Maximize the active window</td></tr>
+                    <tr><td>WIN + Down Arrow</td><td>Minimize the active window</td></tr>
+                    <tr><td>WIN + Left Arrow</td><td>Snap the active window to the left half of the screen</td></tr>
+                    <tr><td>WIN + Right Arrow</td><td>Snap the active window to the right half of the screen</td></tr>
+                    <tr><td>ALT + F4</td><td>Close the active window</td></tr>
+                    <tr><td>WIN + SHIFT + S</td><td>Take a screenshot using Snip & Sketch</td></tr>
+                    <tr><td>WIN + Plus (+)</td><td>Open Magnifier and zoom in</td></tr>
+                    <tr><td>WIN + Minus (-)</td><td>Zoom out using Magnifier</td></tr>
+                    <tr><td>WIN + U</td><td>Open the Ease of Access Center</td></tr>
+                    <tr><td>CTRL + ALT + DEL</td><td>Open Security Options (lock, switch user, etc.)</td></tr>
+                    <tr><td>WIN + V</td><td>Open the clipboard history</td></tr>
+                    <tr><td>WIN + P</td><td>Project a screen (e.g., extend or duplicate displays)</td></tr>
+                    <tr><td>WIN + Space</td><td>Switch between input languages or keyboard layouts</td></tr>
+                    <tr><td>WIN + Number</td><td>Open the app pinned to the taskbar at the corresponding position</td></tr>
+                    <tr><td>ALT + Up Arrow</td><td>Go up one folder level in File Explorer</td></tr>
+                    <tr><td>ALT + Left Arrow</td><td>Go back to the previous folder</td></tr>
+                    <tr><td>ALT + Right Arrow</td><td>Go forward to the next folder</td></tr>
+                    <tr><td>F2</td><td>Rename the selected file or folder</td></tr>
+                    <tr><td>F3</td><td>Open the search box in File Explorer</td></tr>
+                    <tr><td>WIN + CTRL + D</td><td>Create a new virtual desktop</td></tr>
+                    <tr><td>WIN + CTRL + Left/Right Arrow</td><td>Switch between virtual desktops</td></tr>
+                    <tr><td>WIN + CTRL + F4</td><td>Close the current virtual desktop</td></tr>
+                    <tr><td>WIN + CTRL + Shift + B</td><td>Restart your display drivers (useful if the screen freezes)</td></tr>
+                    <tr><td>WIN + G</td><td>Open the Game Bar (for screen recording and performance monitoring)</td></tr>
+                    <tr><td>WIN + H</td><td>Open the voice typing tool</td></tr>
+                    <tr><td>WIN + K</td><td>Open the Connect menu for wireless displays and audio devices</td></tr>
+                    <tr><td>CTRL + Shift + Enter</td><td>Open Command Prompt/PowerShell as an administrator</td></tr>
+		    <tr><td>CTRL + C</td><td>Copy the selected text in Command Prompt</td></tr>
+                    <tr><td>CTRL + V</td><td>Paste the text into Command Prompt</td></tr>
+                    <tr><td>WIN + .</td><td>Open the emoji picker</td></tr>
+                    <tr><td>WIN + ;</td><td>Open the emoji picker (same as WIN + .)</td></tr>
+                    <tr><td>WIN + +</td><td>Zoom in using Magnifier</td></tr>
+                    <tr><td>WIN + -</td><td>Zoom out using Magnifier</td></tr>
+                    <tr><td>WIN + CTRL + Enter</td><td>Turn on Narrator</td></tr>
+                    <tr><td>WIN + CTRL + N</td><td>Open Narrator settings</td></tr>
+                    <tr><td>CTRL + Scroll Wheel</td><td>Zoom in or out on the desktop or a document</td></tr>
+                    <tr><td>CTRL + Shift + T</td><td>Reopen the last closed tab in most browsers</td></tr>
+                    <tr><td>ALT + D</td><td>Select the address bar in File Explorer or a browser</td></tr>
+                    <tr><td>CTRL + Shift + Esc</td><td>Open Task Manager directly</td></tr>
+                    <tr><td>WIN + Shift + M</td><td>Restore minimized windows</td></tr>
+                    <tr><td>WIN + Number</td><td>Launch apps pinned to the taskbar (based on their position)</td></tr>
+                    <tr><td>CTRL + ALT + Arrow Keys</td><td>Rotate the display (useful for multi-monitor setups)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

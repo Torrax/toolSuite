@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSLogix 5000 Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #f39c12;
+        }
+        header a {
+            text-decoration: none;
+            color: #f39c12;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            position: absolute;
+            left: 30px;
+        }
+        header a:hover {
+            color: #ecf0f1;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .list {
+            width: 48%;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 90px); /* Adjust height for header */
+        }
+        .list h2 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+        }
+        table thead {
+            background-color: #2980b9;
+        }
+        table thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #2c3e50;
+        }
+        table tbody td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #3d566e;
+        }
+        /* Custom Scrollbar Styles */
+        .list::-webkit-scrollbar {
+            width: 12px;
+        }
+        .list::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+        }
+        .list::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Accent color */
+            border-radius: 6px;
+            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        }
+        .list::-webkit-scrollbar-thumb:hover {
+            background: #f1c40f; /* Lighter accent on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" title="Go Back">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>RSLogix 5000 Cheat Sheet</h1>
+    </header>
+    <main>
+        <div class="list">
+            <h2>Hotkeys</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hotkey</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Hotkey rows -->
+                    <tr><td>CTRL + E</td><td>Opens the Edit Ladder view.</td></tr>
+                    <tr><td>CTRL + G</td><td>Go to a specific rung in the ladder logic.</td></tr>
+                    <tr><td>CTRL + R</td><td>Verify the rung logic for errors.</td></tr>
+                    <tr><td>F4</td><td>Toggle force enable on a selected tag.</td></tr>
+                    <tr><td>ALT + F12</td><td>Access cross-referencing for the selected element.</td></tr>
+                    <tr><td>CTRL + F</td><td>Search within the project file.</td></tr>
+                    <tr><td>CTRL + SHIFT + F</td><td>Open the Find All References window.</td></tr>
+                    <tr><td>CTRL + D</td><td>Download the program to the PLC.</td></tr>
+                    <tr><td>CTRL + SHIFT + D</td><td>Download with edits only.</td></tr>
+                    <tr><td>F7</td><td>Compile the ladder logic.</td></tr>
+                    <tr><td>CTRL + W</td><td>Close the current project window.</td></tr>
+                    <tr><td>CTRL + S</td><td>Save the current project.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="list">
+            <h2>Functions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Function rows -->
+                    <tr><td>ADD</td><td>Adds two values together.</td></tr>
+                    <tr><td>SUB</td><td>Subtracts one value from another.</td></tr>
+                    <tr><td>MUL</td><td>Multiplies two values.</td></tr>
+                    <tr><td>DIV</td><td>Divides one value by another.</td></tr>
+                    <tr><td>TON</td><td>Timer On Delay function block.</td></tr>
+                    <tr><td>TOF</td><td>Timer Off Delay function block.</td></tr>
+                    <tr><td>CTU</td><td>Count Up function block.</td></tr>
+                    <tr><td>CTD</td><td>Count Down function block.</td></tr>
+                    <tr><td>RTO</td><td>Retentive Timer function block.</td></tr>
+                    <tr><td>OSR</td><td>One-Shot Rising function block.</td></tr>
+                    <tr><td>OSF</td><td>One-Shot Falling function block.</td></tr>
+                    <tr><td>MOV</td><td>Move data from one location to another.</td></tr>
+                    <tr><td>LEN</td><td>Get the length of a string.</td></tr>
+                    <tr><td>ABS</td><td>Returns the absolute value of a number.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

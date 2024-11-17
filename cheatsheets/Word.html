@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #f39c12;
+        }
+        header a {
+            text-decoration: none;
+            color: #f39c12;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            position: absolute;
+            left: 30px;
+        }
+        header a:hover {
+            color: #ecf0f1;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+        .list {
+            width: 90%;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 90px); /* Adjust height for header */
+        }
+        .list h2 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+        }
+        table thead {
+            background-color: #2980b9;
+        }
+        table thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #2c3e50;
+        }
+        table tbody td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #3d566e;
+        }
+        /* Custom Scrollbar Styles */
+        .list::-webkit-scrollbar {
+            width: 12px;
+        }
+        .list::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+        }
+        .list::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Accent color */
+            border-radius: 6px;
+            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        }
+        .list::-webkit-scrollbar-thumb:hover {
+            background: #f1c40f; /* Lighter accent on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" title="Go Back">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>Word Cheat Sheet</h1>
+    </header>
+    <main>
+        <div class="list">
+            <h2>Shortcuts</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Shortcut</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Shortcuts -->
+                    <tr><td>CTRL + N</td><td>Create a new document.</td></tr>
+                    <tr><td>CTRL + O</td><td>Open an existing document.</td></tr>
+                    <tr><td>CTRL + S</td><td>Save the current document.</td></tr>
+                    <tr><td>CTRL + P</td><td>Print the document.</td></tr>
+                    <tr><td>CTRL + Z</td><td>Undo the last action.</td></tr>
+                    <tr><td>CTRL + Y</td><td>Redo the last undone action.</td></tr>
+                    <tr><td>CTRL + C</td><td>Copy the selected text or object.</td></tr>
+                    <tr><td>CTRL + X</td><td>Cut the selected text or object.</td></tr>
+                    <tr><td>CTRL + V</td><td>Paste the copied text or object.</td></tr>
+                    <tr><td>CTRL + B</td><td>Apply bold formatting to selected text.</td></tr>
+                    <tr><td>CTRL + I</td><td>Apply italic formatting to selected text.</td></tr>
+                    <tr><td>CTRL + U</td><td>Apply underline formatting to selected text.</td></tr>
+                    <tr><td>CTRL + A</td><td>Select all text and objects in the document.</td></tr>
+                    <tr><td>CTRL + F</td><td>Find text in the document.</td></tr>
+                    <tr><td>CTRL + H</td><td>Replace text in the document.</td></tr>
+                    <tr><td>CTRL + K</td><td>Insert a hyperlink.</td></tr>
+                    <tr><td>CTRL + L</td><td>Align text to the left.</td></tr>
+                    <tr><td>CTRL + E</td><td>Align text to the center.</td></tr>
+                    <tr><td>CTRL + R</td><td>Align text to the right.</td></tr>
+                    <tr><td>CTRL + J</td><td>Justify text alignment.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

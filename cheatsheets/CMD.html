@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMD Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #f39c12;
+        }
+        header a {
+            text-decoration: none;
+            color: #f39c12;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            position: absolute;
+            left: 30px;
+        }
+        header a:hover {
+            color: #ecf0f1;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+        .list {
+            width: 90%;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 90px); /* Adjust height for header */
+        }
+        .list h2 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+        }
+        table thead {
+            background-color: #2980b9;
+        }
+        table thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #2c3e50;
+        }
+        table tbody td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #3d566e;
+        }
+        /* Custom Scrollbar Styles */
+        .list::-webkit-scrollbar {
+            width: 12px;
+        }
+        .list::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+        }
+        .list::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Accent color */
+            border-radius: 6px;
+            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        }
+        .list::-webkit-scrollbar-thumb:hover {
+            background: #f1c40f; /* Lighter accent on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" title="Go Back">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>CMD Cheat Sheet</h1>
+    </header>
+    <main>
+        <div class="list">
+            <h2>Commands</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>cd</td><td>Change the directory.</td><td>cd C:\Users\User</td></tr>
+                    <tr><td>dir</td><td>List the contents of a directory.</td><td>dir</td></tr>
+                    <tr><td>cls</td><td>Clear the Command Prompt screen.</td><td>cls</td></tr>
+                    <tr><td>exit</td><td>Close the Command Prompt.</td><td>exit</td></tr>
+                    <tr><td>echo</td><td>Display messages or enable/disable command echoing.</td><td>echo Hello, World!</td></tr>
+                    <tr><td>copy</td><td>Copy files from one location to another.</td><td>copy file.txt D:\backup</td></tr>
+                    <tr><td>move</td><td>Move or rename files.</td><td>move file.txt newfile.txt</td></tr>
+                    <tr><td>del</td><td>Delete files.</td><td>del file.txt</td></tr>
+                    <tr><td>mkdir</td><td>Create a new directory.</td><td>mkdir new_folder</td></tr>
+                    <tr><td>rmdir</td><td>Remove a directory.</td><td>rmdir /s folder_name</td></tr>
+                    <tr><td>ipconfig</td><td>Display network configuration.</td><td>ipconfig /all</td></tr>
+                    <tr><td>ping</td><td>Test connectivity to a network host.</td><td>ping google.com</td></tr>
+                    <tr><td>hostname</td><td>Display the computer's hostname.</td><td>hostname</td></tr>
+                    <tr><td>systeminfo</td><td>Display detailed system information.</td><td>systeminfo</td></tr>
+                    <tr><td>tasklist</td><td>List all running processes.</td><td>tasklist</td></tr>
+                    <tr><td>taskkill</td><td>Terminate a process by name or PID.</td><td>taskkill /IM notepad.exe /F</td></tr>
+                    <tr><td>chkdsk</td><td>Check and repair disk errors.</td><td>chkdsk C: /f</td></tr>
+                    <tr><td>diskpart</td><td>Manage disk partitions.</td><td>diskpart</td></tr>
+                    <tr><td>format</td><td>Format a disk.</td><td>format E:</td></tr>
+                    <tr><td>fsutil</td><td>Display or manage filesystem properties.</td><td>fsutil dirty query C:</td></tr>
+                    <tr><td>attrib</td><td>Display or change file attributes.</td><td>attrib +h file.txt</td></tr>
+                    <tr><td>netstat</td><td>Display network connections and statistics.</td><td>netstat -an</td></tr>
+                    <tr><td>tracert</td><td>Trace the route to a network host.</td><td>tracert google.com</td></tr>
+                    <tr><td>net use</td><td>Map a network drive.</td><td>net use Z: \\server\share</td></tr>
+                    <tr><td>net user</td><td>Manage user accounts.</td><td>net user username password /add</td></tr>
+                    <tr><td>set</td><td>Display or set environment variables.</td><td>set PATH=C:\NewPath;%PATH%</td></tr>
+                    <tr><td>assoc</td><td>View or change file associations.</td><td>assoc .txt=txtfile</td></tr>
+                    <tr><td>fc</td><td>Compare two files.</td><td>fc file1.txt file2.txt</td></tr>
+                    <tr><td>tree</td><td>Display a graphical representation of a directory structure.</td><td>tree</td></tr>
+                    <tr><td>shutdown</td><td>Shutdown or restart the computer.</td><td>shutdown /r /t 30 (restart in 30 seconds)</td></tr>
+                    <tr><td>help</td><td>Display help for CMD commands.</td><td>help copy</td></tr>
+                    <tr><td>title</td><td>Set the Command Prompt window title.</td><td>title My CMD Session</td></tr>
+                    <tr><td>color</td><td>Change the text and background color.</td><td>color 1F</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

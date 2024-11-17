@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #f39c12;
+        }
+        header a {
+            text-decoration: none;
+            color: #f39c12;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            position: absolute;
+            left: 30px;
+        }
+        header a:hover {
+            color: #ecf0f1;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .list {
+            width: 48%;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 90px); /* Adjust height for header */
+        }
+        .list h2 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+        }
+        table thead {
+            background-color: #2980b9;
+        }
+        table thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #2c3e50;
+        }
+        table tbody td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #3d566e;
+        }
+        /* Custom Scrollbar Styles */
+        .list::-webkit-scrollbar {
+            width: 12px;
+        }
+        .list::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+        }
+        .list::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Accent color */
+            border-radius: 6px;
+            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        }
+        .list::-webkit-scrollbar-thumb:hover {
+            background: #f1c40f; /* Lighter accent on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" title="Go Back">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>Excel Cheat Sheet</h1>
+    </header>
+    <main>
+        <div class="list">
+            <h2>Hotkeys</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hotkey</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Hotkey rows -->
+                    <tr><td>CTRL + F</td><td>Opens the Find and Replace dialog box</td></tr>
+                    <tr><td>CTRL + H</td><td>Opens the Replace tab in the Find and Replace dialog box</td></tr>
+                    <tr><td>CTRL + B</td><td>Applies or removes bold formatting</td></tr>
+                    <tr><td>CTRL + I</td><td>Applies or removes italic formatting</td></tr>
+                    <tr><td>CTRL + U</td><td>Applies or removes underline formatting</td></tr>
+                    <tr><td>CTRL + HOME</td><td>Moves to the beginning of the worksheet</td></tr>
+                    <tr><td>CTRL + END</td><td>Moves to the last cell of the worksheet</td></tr>
+                    <tr><td>CTRL + Arrow Keys</td><td>Moves to the edge of the data region</td></tr>
+                    <tr><td>CTRL + SHIFT + L</td><td>Applies or removes filters</td></tr>
+                    <tr><td>CTRL + 1</td><td>Opens the Format Cells dialog box</td></tr>
+                    <tr><td>CTRL + T</td><td>Creates a table from the selected data</td></tr>
+                    <tr><td>CTRL + D</td><td>Fills the selected cell with the content above it</td></tr>
+                    <tr><td>CTRL + R</td><td>Fills the selected cell with the content to its left</td></tr>
+                    <tr><td>F2</td><td>Edits the active cell</td></tr>
+                    <tr><td>F4</td><td>Repeats the last action</td></tr>
+                    <tr><td>CTRL + A</td><td>Selects the entire worksheet</td></tr>
+                    <tr><td>CTRL + C</td><td>Copies the selected cells</td></tr>
+                    <tr><td>CTRL + V</td><td>Pastes the copied cells</td></tr>
+                    <tr><td>CTRL + X</td><td>Cuts the selected cells</td></tr>
+                    <tr><td>CTRL + Z</td><td>Undoes the last action</td></tr>
+                    <tr><td>CTRL + Y</td><td>Redoes the last action</td></tr>
+                    <tr><td>CTRL + S</td><td>Saves the current workbook</td></tr>
+                    <tr><td>CTRL + P</td><td>Opens the print menu</td></tr>
+                    <tr><td>ALT + Enter</td><td>Starts a new line in the same cell</td></tr>
+                    <tr><td>SHIFT + Space</td><td>Selects the entire row</td></tr>
+                    <tr><td>CTRL + Space</td><td>Selects the entire column</td></tr>
+                    <tr><td>CTRL + ALT + V</td><td>Opens the Paste Special dialog box</td></tr>
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="list">
+            <h2>Functions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Function rows -->
+                    <tr><td>'=SUM(A1:A10)</td><td>Adds the values in the range A1 to A10</td></tr>
+                    <tr><td>'=AVERAGE(A1:A10)</td><td>Calculates the average of the values in the range A1 to A10</td></tr>
+                    <tr><td>'=IF(A1>10,"Yes","No")</td><td>Returns 'Yes' if the value in A1 is greater than 10, otherwise returns 'No'</td></tr>
+                    <tr><td>'=VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])</td><td>Searches for a value in the first column of a range and returns a value in the same row from another column</td></tr>
+                    <tr><td>'=HLOOKUP(lookup_value, table_array, row_index_num, [range_lookup])</td><td>Searches for a value in the first row of a range and returns a value in the same column from another row</td></tr>
+                    <tr><td>'=INDEX(array, row_num, [column_num])</td><td>Returns the value of a cell in a specified row and column of a range</td></tr>
+                    <tr><td>'=MATCH(lookup_value, lookup_array, [match_type])</td><td>Returns the relative position of a value in a range</td></tr>
+                    <tr><td>'=CONCAT(A1, " ", B1)</td><td>Joins values in A1 and B1 with a space between them</td></tr>
+                    <tr><td>'=LEN(A1)</td><td>Counts the number of characters in a cell, including spaces</td></tr>
+                    <tr><td>'=TRIM(A1)</td><td>Removes all extra spaces from text except for single spaces between words</td></tr>
+                    <tr><td>'=LEFT(A1, 5)</td><td>Extracts the first 5 characters from the left side of the text in A1</td></tr>
+                    <tr><td>'=RIGHT(A1, 5)</td><td>Extracts the last 5 characters from the text in A1</td></tr>
+                    <tr><td>'=MID(A1, 2, 3)</td><td>Extracts 3 characters starting from the 2nd character in A1</td></tr>
+                    <tr><td>'=TEXT(A1, "mm/dd/yyyy")</td><td>Converts a number to a specified date format</td></tr>
+                    <tr><td>'=NOW()</td><td>Returns the current date and time</td></tr>
+                    <tr><td>'=TODAY()</td><td>Returns the current date</td></tr>
+                    <tr><td>'=ROUND(A1, 2)</td><td>Rounds the value in A1 to 2 decimal places</td></tr>
+                    <tr><td>'=ROUNDUP(A1, 2)</td><td>Rounds the value in A1 up to 2 decimal places</td></tr>
+                    <tr><td>'=ROUNDDOWN(A1, 2)</td><td>Rounds the value in A1 down to 2 decimal places</td></tr>
+                    <tr><td>'=COUNT(A1:A10)</td><td>Counts the number of numeric entries in the range A1 to A10</td></tr>
+                    <tr><td>'=COUNTA(A1:A10)</td><td>Counts the number of non-empty cells in the range A1 to A10</td></tr>
+                    <tr><td>'=COUNTIF(A1:A10,">10")</td><td>Counts the number of cells in the range A1 to A10 that are greater than 10</td></tr>
+                    <tr><td>'=PMT(rate, nper, pv, [fv], [type])</td><td>Calculates the payment for a loan based on constant interest rates and payments</td></tr>
+                    <tr><td>'=PROPER(A1)</td><td>Capitalizes the first letter of each word in A1</td></tr>
+                    <tr><td>'=UPPER(A1)</td><td>Converts text in A1 to uppercase</td></tr>
+                    <tr><td>'=LOWER(A1)</td><td>Converts text in A1 to lowercase</td></tr>
+                    <tr><td>'=TEXTJOIN(delimiter, ignore_empty, text1, [text2, ...])</td><td>Joins text strings with a specified delimiter, optionally ignoring empty cells.</td></tr>
+                    <tr><td>'=SUBSTITUTE(text, old_text, new_text, [instance_num])</td><td>Replaces occurrences of old text with new text in a string.</td></tr>
+                    <tr><td>'=DATEDIF(start_date, end_date, unit)</td><td>Calculates the difference between two dates in days, months, or years.</td></tr>
+                    <tr><td>'=WORKDAY(start_date, days, [holidays])</td><td>Returns the date after a specified number of workdays, excluding weekends and holidays.</td></tr>
+                    <tr><td>'=AND(logical1, [logical2, ...])</td><td>Returns TRUE if all the arguments evaluate to TRUE.</td></tr>
+                    <tr><td>'=OR(logical1, [logical2, ...])</td><td>Returns TRUE if any of the arguments evaluate to TRUE.</td></tr>
+                    <tr><td>'=NOT(logical)</td><td>Reverses the logical value (TRUE becomes FALSE, and vice versa).</td></tr>                                                    
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

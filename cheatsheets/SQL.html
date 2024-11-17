@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #f39c12;
+        }
+        header a {
+            text-decoration: none;
+            color: #f39c12;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            position: absolute;
+            left: 30px;
+        }
+        header a:hover {
+            color: #ecf0f1;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: hidden;
+        }
+        .list {
+            width: 90%;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            overflow-y: auto;
+            height: calc(100vh - 90px); /* Adjust height for header */
+        }
+        .list h2 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+        }
+        table thead {
+            background-color: #2980b9;
+        }
+        table thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #2c3e50;
+        }
+        table tbody td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #3d566e;
+        }
+        /* Custom Scrollbar Styles */
+        .list::-webkit-scrollbar {
+            width: 12px;
+        }
+        .list::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+        }
+        .list::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Accent color */
+            border-radius: 6px;
+            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        }
+        .list::-webkit-scrollbar-thumb:hover {
+            background: #f1c40f; /* Lighter accent on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" title="Go Back">
+            <i class="fas fa-home"></i>
+        </a>
+        <h1>SQL Cheat Sheet</h1>
+    </header>
+    <main>
+        <div class="list">
+            <h2>SQL Functions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Function rows -->
+                    <tr><td>SELECT</td><td>Retrieves data from one or more tables.</td><td>SELECT column1, column2 FROM table_name WHERE condition;</td></tr>
+                    <tr><td>DISTINCT</td><td>Removes duplicate records from the result.</td><td>SELECT DISTINCT column1 FROM table_name;</td></tr>
+                    <tr><td>WHERE</td><td>Filters records based on conditions.</td><td>SELECT * FROM table_name WHERE column1 = 'value';</td></tr>
+                    <tr><td>ORDER BY</td><td>Sorts the result in ascending or descending order.</td><td>SELECT * FROM table_name ORDER BY column1 ASC;</td></tr>
+                    <tr><td>GROUP BY</td><td>Groups rows sharing a property.</td><td>SELECT column1, COUNT(*) FROM table_name GROUP BY column1;</td></tr>
+                    <tr><td>HAVING</td><td>Filters groups defined by GROUP BY.</td><td>SELECT column1, COUNT(*) FROM table_name GROUP BY column1 HAVING COUNT(*) > 1;</td></tr>
+                    <tr><td>LIMIT</td><td>Limits the number of rows returned.</td><td>SELECT * FROM table_name LIMIT 10;</td></tr>
+                    <tr><td>INSERT INTO</td><td>Inserts new rows into a table.</td><td>INSERT INTO table_name (column1, column2) VALUES ('value1', 'value2');</td></tr>
+                    <tr><td>UPDATE</td><td>Updates existing rows in a table.</td><td>UPDATE table_name SET column1 = 'value' WHERE condition;</td></tr>
+                    <tr><td>DELETE</td><td>Deletes rows from a table.</td><td>DELETE FROM table_name WHERE condition;</td></tr>
+                    <tr><td>CREATE TABLE</td><td>Creates a new table.</td><td>CREATE TABLE table_name (column1 datatype, column2 datatype);</td></tr>
+                    <tr><td>ALTER TABLE</td><td>Modifies an existing table (e.g., add/remove columns).</td><td>ALTER TABLE table_name ADD column_name datatype;</td></tr>
+                    <tr><td>DROP TABLE</td><td>Deletes a table completely.</td><td>DROP TABLE table_name;</td></tr>
+                    <tr><td>INNER JOIN</td><td>Returns rows with matching values in both tables.</td><td>SELECT table1.column1, table2.column2 FROM table1 INNER JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
+                    <tr><td>LEFT JOIN</td><td>Returns all rows from the left table, even if no match is found.</td><td>SELECT * FROM table1 LEFT JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
+                    <tr><td>RIGHT JOIN</td><td>Returns all rows from the right table, even if no match is found.</td><td>SELECT * FROM table1 RIGHT JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
+                    <tr><td>FULL JOIN</td><td>Returns rows when there's a match in either table.</td><td>SELECT * FROM table1 FULL JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
+                    <tr><td>UNION</td><td>Combines results of two SELECT statements.</td><td>SELECT column1 FROM table1 UNION SELECT column1 FROM table2;</td></tr>
+                    <tr><td>CASE</td><td>Adds conditional logic to queries.</td><td>SELECT column1, CASE WHEN condition1 THEN 'Result1' ELSE 'Default' END AS alias FROM table_name;</td></tr>
+                    <tr><td>SUBQUERY</td><td>Embeds a query within another query.</td><td>SELECT column1 FROM table_name WHERE column2 = (SELECT column2 FROM another_table);</td></tr>
+                    <tr><td>CREATE INDEX</td><td>Creates an index on a table.</td><td>CREATE INDEX index_name ON table_name (column_name);</td></tr>
+                    <tr><td>CREATE VIEW</td><td>Creates a virtual table based on a query.</td><td>CREATE VIEW view_name AS SELECT column1 FROM table_name WHERE condition;</td></tr>
+                    <tr><td>BEGIN TRANSACTION</td><td>Starts a new transaction.</td><td>BEGIN TRANSACTION;</td></tr>
+                    <tr><td>COMMIT</td><td>Saves changes made during the transaction.</td><td>COMMIT;</td></tr>
+                    <tr><td>ROLLBACK</td><td>Reverts changes made during the transaction.</td><td>ROLLBACK;</td></tr>
+                    <tr><td>COUNT()</td><td>Counts the number of rows.</td><td>SELECT COUNT(*) FROM table_name;</td></tr>
+                    <tr><td>SUM()</td><td>Adds up numeric values.</td><td>SELECT SUM(column1) FROM table_name;</td></tr>
+                    <tr><td>AVG()</td><td>Calculates the average of numeric values.</td><td>SELECT AVG(column1) FROM table_name;</td></tr>
+                    <tr><td>MIN()</td><td>Finds the smallest value.</td><td>SELECT MIN(column1) FROM table_name;</td></tr>
+                    <tr><td>MAX()</td><td>Finds the largest value.</td><td>SELECT MAX(column1) FROM table_name;</td></tr>
+                    <tr><td>CONCAT()</td><td>Combines strings.</td><td>SELECT CONCAT(column1, ' ', column2) AS FullName FROM table_name;</td></tr>
+                    <tr><td>LENGTH()</td><td>Returns the length of a string.</td><td>SELECT LENGTH(column1) FROM table_name;</td></tr>
+                    <tr><td>UPPER()</td><td>Converts text to uppercase.</td><td>SELECT UPPER(column1) FROM table_name;</td></tr>
+                    <tr><td>LOWER()</td><td>Converts text to lowercase.</td><td>SELECT LOWER(column1) FROM table_name;</td></tr>
+                    <tr><td>SUBSTRING()</td><td>Extracts a part of a string.</td><td>SELECT SUBSTRING(column1, 1, 5) FROM table_name;</td></tr>
+                    <tr><td>TRIM()</td><td>Removes leading and trailing spaces.</td><td>SELECT TRIM(column1) FROM table_name;</td></tr>
+                    <tr><td>NOW()</td><td>Returns the current date and time.</td><td>SELECT NOW();</td></tr>
+                    <tr><td>DATE()</td><td>Extracts the date part.</td><td>SELECT DATE(column1) FROM table_name;</td></tr>
+                    <tr><td>DATEDIFF()</td><td>Calculates the difference between two dates.</td><td>SELECT DATEDIFF(NOW(), column1) AS DaysPassed FROM table_name;</td></tr>
+                    <tr><td>DATE_ADD()</td><td>Adds a time interval to a date.</td><td>SELECT DATE_ADD(column1, INTERVAL 7 DAY) FROM table_name;</td></tr>
+                    <tr><td>DATE_FORMAT()</td><td>Formats date values.</td><td>SELECT DATE_FORMAT(column1, '%Y-%m-%d') FROM table_name;</td></tr>                                   
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
