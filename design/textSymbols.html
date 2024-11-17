@@ -170,7 +170,7 @@
         <!-- Right Column -->
         <div class="column">
             <div class="emoji-search">
-                <input id="emojiSearchInput" onkeypress="if(event.which===13) doEmojiDbSearch()" placeholder="Find individual emojis...">
+                <input id="emojiSearchInput" onkeypress="if(event.key === 'Enter') doEmojiDbSearch()" placeholder="Find individual emojis..." autocapitalize="off" autocomplete="off">
                 <button id="emojiDbSearchButton" onclick="doEmojiDbSearch()">🔎 Search</button>
             </div>
             <iframe id="emojiSearchIframe" allow="clipboard-write" src="https://emojidb.org/arrow-emojis?utm_source=user_search_ec#%7B%22prevSearchQuery%22:%22arrow%22,%22mode%22:%22embed%22%7D"></iframe>
@@ -188,22 +188,20 @@
     </footer>
 
     <script>
-        // Function to handle the search functionality
         function doEmojiDbSearch() {
-            const query = document.getElementById("emojiSearchInput").value.trim(); // Trim whitespace
-            if (query === "") {
+            const inputField = document.getElementById("emojiSearchInput");
+            let query = inputField.value.trim();
+
+            if (!query) {
                 alert("Please enter a valid search query.");
                 return;
             }
-        
-            // Replace special characters with hyphens and encode the query
-            const sanitizedQuery = query.replace(/[^a-zA-Z0-9\s]/g, "").replace(/\s+/g, "-");
+
+            query = encodeURIComponent(query.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "-"));
             const iframe = document.getElementById("emojiSearchIframe");
-        
-            // Update the iframe's src
-            iframe.src = `https://emojidb.org/${sanitizedQuery}-emojis?utm_source=user_search_ec#%7B%22prevSearchQuery%22:%22${encodeURIComponent(query)}%22,%22mode%22:%22embed%22%7D`;
+
+            iframe.src = `https://emojidb.org/${query}-emojis?utm_source=user_search_ec#%7B%22prevSearchQuery%22:%22${query}%22,%22mode%22:%22embed%22%7D`;
         }
-        
     </script>
 </body>
 </html>
