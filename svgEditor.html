@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Photo Editor with Fabric.js</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Reset and Base Styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #34495e;
+            padding: 15px 30px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        header h1 { font-size: 1.8rem; color: #f39c12; }
+        header .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .header-buttons button {
+            background: #34495e;
+            border: none;
+            color: #ecf0f1;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1rem;
+        }
+        header .header-buttons button:hover {
+            background: #2980b9;
+        }
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        /* Sidebar Styles */
+        #sidebar {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+        /* Toolbar Styles */
+        #toolbar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        #toolbar button {
+            padding: 10px;
+            background: #34495e;
+            border: none;
+            color: #ecf0f1;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+        #toolbar button:hover, #toolbar button.active {
+            background: #2980b9;
+        }
+        /* Properties Panel */
+        #properties-panel {
+            background: #34495e;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #properties-panel h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #f39c12;
+        }
+        #properties-panel .property {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #properties-panel .color-picker {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #ecf0f1;
+            cursor: pointer;
+            background-color: #000000;
+        }
+        #properties-panel input[type="color"] {
+            display: none;
+        }
+        #properties-panel .slider {
+            flex: 1;
+        }
+        /* Canvas Container */
+        #canvas-container {
+            flex: 1;
+            background: #34495e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+        }
+        #canvas-container.grabbing {
+            cursor: grabbing;
+        }
+        canvas { 
+            background-color: #ecf0f1; 
+            border-radius: 12px; 
+            width: 100%;
+            height: 100%;
+            user-select: none;
+            cursor: default;
+        }
+        /* Layers Panel */
+        #layers-panel {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+        #layers-panel h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #f39c12;
+        }
+        #layers-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .layer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #3d566e;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .layer.active {
+            background: #2980b9;
+        }
+        .layer .layer-controls {
+            display: flex;
+            gap: 5px;
+        }
+        .layer .layer-controls button {
+            background: transparent;
+            border: none;
+            color: #ecf0f1;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        #add-layer {
+            background: #27ae60;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        #add-layer:hover {
+            background: #2ecc71;
+        }
+        /* Context Menu */
+        #context-menu {
+            position: absolute;
+            background: #34495e;
+            border: 1px solid #2c3e50;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+            min-width: 150px;
+        }
+        #context-menu ul {
+            list-style: none;
+        }
+        #context-menu ul li {
+            padding: 10px;
+            cursor: pointer;
+            color: #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #context-menu ul li:hover {
+            background: #2980b9;
+        }
+        /* Zoom Slider Styles - Moved to Bottom Right */
+        .zoom-slider {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(52, 73, 94, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .zoom-slider input[type="range"] {
+            width: 100px;
+        }
+        .zoom-slider i {
+            font-size: 1.2rem;
+            color: #ecf0f1;
+        }
+        /* Filter Panel */
+        #filter-panel {
+            background: #34495e;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #filter-panel.active {
+            display: flex;
+        }
+        #filter-panel h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #f39c12;
+        }
+        #filter-panel .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #filter-panel .filter-option label {
+            flex: 1;
+        }
+        #filter-panel .filter-option input[type="range"] {
+            flex: 2;
+        }
+        #filter-panel button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        #applyFiltersBtn {
+            background: #2980b9;
+            color: #ecf0f1;
+            margin-top: 10px;
+        }
+        #resetFiltersBtn {
+            background: #c0392b;
+            color: #ecf0f1;
+            margin-top: 5px;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            #sidebar, #layers-panel {
+                width: 250px;
+            }
+        }
+        @media (max-width: 992px) {
+            #sidebar, #layers-panel {
+                width: 200px;
+            }
+            header h1 { font-size: 1.5rem; }
+        }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            main {
+                flex-direction: column;
+            }
+            #sidebar, #layers-panel {
+                width: 100%;
+                height: 200px;
+            }
+            #canvas-container {
+                height: calc(100vh - 300px);
+            }
+            .zoom-slider {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" style="position: absolute; left: 30px; text-decoration: none; color: #f1c40f;">
+            <i class="fas fa-home" style="font-size: 2rem;"></i>
+        </a>
+        <h1>Advanced Photo Editor</h1>
+        <div class="header-buttons">
+            <button id="undoBtn" title="Undo (Ctrl + Z)" disabled><i class="fas fa-undo"></i> Undo</button>
+            <button id="redoBtn" title="Redo (Ctrl + Y)" disabled><i class="fas fa-redo"></i> Redo</button>
+            <button id="downloadBtn" title="Download Photo"><i class="fas fa-download"></i> Download</button>
+            <button id="uploadBtn" title="Upload Photo"><i class="fas fa-upload"></i> Upload</button>
+            <input type="file" id="uploadInput" accept="image/*,.svg" style="display: none;">
+        </div>
+    </header>
+    <main>
+        <!-- Sidebar with toolbar and properties -->
+        <aside id="sidebar">
+            <!-- Toolbar -->
+            <div id="toolbar">
+                <button id="selectTool" class="active"><i class="fas fa-mouse-pointer"></i> Select</button>
+                <button id="drawTool"><i class="fas fa-pencil-alt"></i> Pen</button>
+                <button id="brushTool"><i class="fas fa-brush"></i> Brush</button>
+                <button id="paintBucketTool"><i class="fas fa-fill-drip"></i> Paint Bucket</button>
+                <button id="rectangleTool"><i class="fas fa-square"></i> Rectangle</button>
+                <button id="circleTool"><i class="fas fa-circle"></i> Circle</button>
+                <button id="ellipseTool"><i class="fas fa-ellipse"></i> Ellipse</button>
+                <button id="lineTool"><i class="fas fa-slash"></i> Line</button>
+                <button id="polygonTool"><i class="fas fa-draw-polygon"></i> Polygon</button>
+                <button id="textTool"><i class="fas fa-font"></i> Text</button>
+                <button id="imageTool"><i class="fas fa-image"></i> Image</button>
+                <button id="filterTool"><i class="fas fa-filter"></i> Filters</button>
+            </div>
+            <!-- Properties Panel -->
+            <div id="properties-panel">
+                <h2>Properties</h2>
+                <div class="property">
+                    <div class="color-picker" id="colorDisplay"></div>
+                    <input type="color" id="colorPicker" value="#000000">
+                </div>
+                <div class="property">
+                    <label for="sizeSlider">Size:</label>
+                    <input type="range" id="sizeSlider" class="slider" min="1" max="20" value="2">
+                </div>
+                <div class="property">
+                    <label for="opacitySlider">Opacity:</label>
+                    <input type="range" id="opacitySlider" class="slider" min="0" max="1" step="0.1" value="1">
+                </div>
+            </div>
+            <!-- Filter Panel -->
+            <div id="filter-panel">
+                <h2>Filters</h2>
+                <div class="filter-option">
+                    <label for="grayscale">Grayscale:</label>
+                    <input type="range" id="grayscale" class="slider" min="0" max="1" step="0.1" value="0">
+                </div>
+                <div class="filter-option">
+                    <label for="sepia">Sepia:</label>
+                    <input type="range" id="sepia" class="slider" min="0" max="1" step="0.1" value="0">
+                </div>
+                <div class="filter-option">
+                    <label for="brightness">Brightness:</label>
+                    <input type="range" id="brightness" class="slider" min="0.5" max="1.5" step="0.1" value="1">
+                </div>
+                <div class="filter-option">
+                    <label for="contrast">Contrast:</label>
+                    <input type="range" id="contrast" class="slider" min="0.5" max="1.5" step="0.1" value="1">
+                </div>
+                <button id="applyFiltersBtn">Apply Filters</button>
+                <button id="resetFiltersBtn">Reset Filters</button>
+            </div>
+        </aside>
+        <!-- Canvas Container -->
+        <section id="canvas-container">
+            <canvas id="c"></canvas>
+            <!-- Context Menu -->
+            <div id="context-menu">
+                <ul>
+                    <li id="context-delete"><i class="fas fa-trash-alt"></i> Delete</li>
+                </ul>
+            </div>
+            <!-- Zoom Slider at Bottom Right -->
+            <div class="zoom-slider">
+                <i class="fas fa-search-minus"></i>
+                <input type="range" id="zoomSlider" min="10" max="500" value="100">
+                <i class="fas fa-search-plus"></i>
+            </div>
+        </section>
+        <!-- Layers Panel -->
+        <aside id="layers-panel">
+            <h2>Layers</h2>
+            <div id="layers-list"></div>
+            <button id="add-layer"><i class="fas fa-plus"></i> Add Layer</button>
+        </aside>
+    </main>
+
+    <!-- Fabric.js Library -->
+    <!-- Removed the 'integrity' attribute to prevent blocking the script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // Initialize Fabric.js Canvas
+        const canvasElement = document.getElementById('c');
+        const canvasContainer = document.getElementById('canvas-container');
+        const canvas = new fabric.Canvas('c', {
+            backgroundColor: '#ecf0f1',
+            selection: true,
+            preserveObjectStacking: true,
+            width: canvasContainer.clientWidth,
+            height: canvasContainer.clientHeight
+        });
+
+        // Adjust canvas size on window resize
+        window.addEventListener('resize', () => {
+            canvas.setWidth(canvasContainer.clientWidth);
+            canvas.setHeight(canvasContainer.clientHeight);
+            canvas.renderAll();
+        });
+
+        // --- Declare Essential Variables First ---
+        // Undo/Redo Buttons
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+
+        // Zoom Slider
+        const zoomSlider = document.getElementById('zoomSlider');
+
+        // Other Essential Variables
+        let activeTool = 'select';
+        let drawingObject;
+        let isDrawing = false;
+        let brushColor = '#000000';
+        let brushSize = 2;
+        let brushOpacity = 1;
+        let history = [];
+        let historyIndex = -1;
+        let zoomLevel = 1;
+
+        // Clipboard Data
+        let clipboardData;
+
+        // Layers Panel Management
+        const layersList = document.getElementById('layers-list');
+        const addLayerButton = document.getElementById('add-layer');
+        let layers = [];
+
+        // --- Initialize Layers ---
+        function addLayer(name) {
+            const layerGroup = new fabric.Group([], { name: name, selectable: false });
+            canvas.add(layerGroup);
+            layers.push(layerGroup);
+            updateLayersPanel();
+            selectLayer(layerGroup);
+            pushToHistory();
+        }
+
+        function updateLayersPanel() {
+            layersList.innerHTML = '';
+            // Display layers from top to bottom
+            const reversedLayers = [...layers].reverse();
+            reversedLayers.forEach((layer, index) => {
+                const layerDiv = document.createElement('div');
+                layerDiv.classList.add('layer');
+                if (layer === canvas.getActiveObject()) {
+                    layerDiv.classList.add('active');
+                }
+                layerDiv.innerHTML = `
+                    <span>${layer.name}</span>
+                    <div class="layer-controls">
+                        <button class="visibility-toggle" title="Toggle Visibility"><i class="fas fa-eye"></i></button>
+                        <button class="delete-layer" title="Delete Layer"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+                // Layer Click to select
+                layerDiv.addEventListener('click', (e) => {
+                    if (e.target.closest('.layer-controls')) return;
+                    selectLayer(layer);
+                });
+                // Visibility Toggle
+                layerDiv.querySelector('.visibility-toggle').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleLayerVisibility(layer, e.target);
+                });
+                // Delete Layer
+                layerDiv.querySelector('.delete-layer').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteLayer(layer);
+                });
+                layersList.appendChild(layerDiv);
+            });
+        }
+
+        function selectLayer(layer) {
+            canvas.setActiveObject(layer);
+            canvas.renderAll();
+            updateLayersPanel();
+        }
+
+        function toggleLayerVisibility(layer, toggleButton) {
+            layer.visible = !layer.visible;
+            toggleButton.innerHTML = layer.visible ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            canvas.renderAll();
+            pushToHistory();
+        }
+
+        function deleteLayer(layer) {
+            if (layers.length === 1) {
+                alert("Cannot delete the only layer.");
+                return;
+            }
+            // Remove all objects in the layer
+            layer.forEachObject(obj => {
+                canvas.remove(obj);
+            });
+            // Remove the layer group
+            canvas.remove(layer);
+            layers = layers.filter(l => l !== layer);
+            updateLayersPanel();
+            pushToHistory();
+        }
+
+        addLayerButton.addEventListener('click', () => {
+            const layerName = prompt("Enter layer name:", `Layer ${layers.length + 1}`);
+            if (layerName) {
+                addLayer(layerName);
+            }
+        });
+
+        // Initialize with default layer only once
+        addLayer('Layer 1');
+
+        // --- Toolbar Buttons ---
+        const toolbarButtons = {
+            select: document.getElementById('selectTool'),
+            draw: document.getElementById('drawTool'),
+            brush: document.getElementById('brushTool'),
+            paintBucket: document.getElementById('paintBucketTool'),
+            rectangle: document.getElementById('rectangleTool'),
+            circle: document.getElementById('circleTool'),
+            ellipse: document.getElementById('ellipseTool'),
+            line: document.getElementById('lineTool'),
+            polygon: document.getElementById('polygonTool'),
+            text: document.getElementById('textTool'),
+            image: document.getElementById('imageTool'),
+            filter: document.getElementById('filterTool')
+        };
+
+        // --- Activate Tool Function ---
+        function activateTool(tool) {
+            activeTool = tool;
+            // Remove active class from all buttons
+            Object.values(toolbarButtons).forEach(btn => btn.classList.remove('active'));
+            // Add active class to selected tool
+            if (toolbarButtons[tool]) {
+                toolbarButtons[tool].classList.add('active');
+            }
+            // Toggle filter panel
+            if (tool === 'filter') {
+                document.getElementById('filter-panel').style.display = 'flex';
+            } else {
+                document.getElementById('filter-panel').style.display = 'none';
+            }
+            // Disable Fabric.js selection when drawing
+            if (tool === 'select') {
+                canvas.isDrawingMode = false;
+                canvas.selection = true;
+                canvas.defaultCursor = 'default';
+            } else if (tool === 'brush') {
+                canvas.isDrawingMode = true;
+                canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+                canvas.freeDrawingBrush.color = brushColor;
+                canvas.freeDrawingBrush.width = brushSize;
+                canvas.freeDrawingBrush.opacity = brushOpacity;
+                canvas.selection = false;
+                canvas.defaultCursor = 'crosshair';
+            } else {
+                canvas.isDrawingMode = false;
+                canvas.selection = false;
+                canvas.defaultCursor = 'crosshair';
+            }
+        }
+
+        // --- Attach Event Listeners to Toolbar Buttons ---
+        Object.keys(toolbarButtons).forEach(tool => {
+            toolbarButtons[tool].addEventListener('click', () => activateTool(tool));
+        });
+
+        // --- Properties Panel Elements ---
+        const colorDisplay = document.getElementById('colorDisplay');
+        const colorPicker = document.getElementById('colorPicker');
+        const sizeSlider = document.getElementById('sizeSlider');
+        const opacitySlider = document.getElementById('opacitySlider');
+
+        // --- Update Properties Panel Based on Selection ---
+        canvas.on('selection:created', updatePropertiesPanel);
+        canvas.on('selection:updated', updatePropertiesPanel);
+        canvas.on('selection:cleared', resetPropertiesPanel);
+        canvas.on('object:modified', pushToHistory);
+        canvas.on('object:added', pushToHistory);
+        canvas.on('object:removed', pushToHistory);
+
+        function updatePropertiesPanel() {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                // Update color picker
+                if (activeObject.fill && activeObject.type !== 'image') {
+                    brushColor = activeObject.fill;
+                    colorDisplay.style.backgroundColor = brushColor;
+                    colorPicker.value = rgbToHex(brushColor);
+                } else if (activeObject.stroke) {
+                    brushColor = activeObject.stroke;
+                    colorDisplay.style.backgroundColor = brushColor;
+                    colorPicker.value = rgbToHex(brushColor);
+                }
+                // Update size slider
+                if (activeObject.strokeWidth) {
+                    brushSize = activeObject.strokeWidth;
+                    sizeSlider.value = brushSize;
+                }
+                // Update opacity slider
+                if (activeObject.opacity) {
+                    brushOpacity = activeObject.opacity;
+                    opacitySlider.value = brushOpacity;
+                }
+            }
+        }
+
+        function resetPropertiesPanel() {
+            brushColor = '#000000';
+            colorDisplay.style.backgroundColor = brushColor;
+            colorPicker.value = '#000000';
+            brushSize = 2;
+            sizeSlider.value = brushSize;
+            brushOpacity = 1;
+            opacitySlider.value = brushOpacity;
+        }
+
+        // --- Color Picker Functionality ---
+        colorDisplay.addEventListener('click', () => {
+            colorPicker.click();
+        });
+
+        colorPicker.addEventListener('change', (e) => {
+            brushColor = e.target.value;
+            colorDisplay.style.backgroundColor = brushColor;
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                if (activeTool === 'paintBucket') {
+                    // Apply fill color
+                    activeObject.set('fill', brushColor);
+                } else if (activeObject.type === 'text') {
+                    activeObject.set('fill', brushColor);
+                } else if (activeObject.type !== 'image') { // Avoid changing stroke for images
+                    activeObject.set('stroke', brushColor);
+                    activeObject.set('fill', brushColor);
+                }
+                canvas.renderAll();
+                pushToHistory();
+            }
+            // Update brush color if in brush mode
+            if (activeTool === 'brush') {
+                canvas.freeDrawingBrush.color = brushColor;
+            }
+        });
+
+        // --- Size Slider Functionality ---
+        sizeSlider.addEventListener('input', (e) => {
+            brushSize = parseInt(e.target.value, 10);
+            const activeObject = canvas.getActiveObject();
+            if (activeObject && activeObject.type !== 'image') {
+                activeObject.set('strokeWidth', brushSize);
+                canvas.renderAll();
+                pushToHistory();
+            }
+            // Update brush size if in brush mode
+            if (activeTool === 'brush') {
+                canvas.freeDrawingBrush.width = brushSize;
+            }
+        });
+
+        // --- Opacity Slider Functionality ---
+        opacitySlider.addEventListener('input', (e) => {
+            brushOpacity = parseFloat(e.target.value);
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                activeObject.set('opacity', brushOpacity);
+                canvas.renderAll();
+                pushToHistory();
+            }
+            // Update brush opacity if in brush mode
+            if (activeTool === 'brush') {
+                canvas.freeDrawingBrush.opacity = brushOpacity;
+            }
+        });
+
+        // --- Undo/Redo Functionality ---
+        function pushToHistory() {
+            const json = canvas.toJSON(['name']);
+            // Truncate history if not at the end
+            if (historyIndex < history.length - 1) {
+                history = history.slice(0, historyIndex + 1);
+            }
+            history.push(json);
+            historyIndex++;
+            updateUndoRedoButtons();
+        }
+
+        function updateUndoRedoButtons() {
+            undoBtn.disabled = historyIndex <= 0;
+            redoBtn.disabled = historyIndex >= history.length - 1;
+        }
+
+        undoBtn.addEventListener('click', () => {
+            if (historyIndex <= 0) return;
+            historyIndex--;
+            canvas.loadFromJSON(history[historyIndex], () => {
+                canvas.renderAll();
+                updateLayersPanel();
+            });
+            updateUndoRedoButtons();
+        });
+
+        redoBtn.addEventListener('click', () => {
+            if (historyIndex >= history.length - 1) return;
+            historyIndex++;
+            canvas.loadFromJSON(history[historyIndex], () => {
+                canvas.renderAll();
+                updateLayersPanel();
+            });
+            updateUndoRedoButtons();
+        });
+
+        // Initialize history
+        pushToHistory();
+
+        // --- Download Functionality ---
+        const downloadBtn = document.getElementById('downloadBtn');
+        downloadBtn.addEventListener('click', () => {
+            const dataURL = canvas.toDataURL({
+                format: 'png',
+                quality: 1,
+                multiplier: 2
+            });
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'canvas.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // --- Upload Functionality ---
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadInput = document.getElementById('uploadInput');
+
+        uploadBtn.addEventListener('click', () => {
+            uploadInput.click();
+        });
+
+        uploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                fabric.Image.fromURL(event.target.result, function(img) {
+                    img.set({
+                        left: 100,
+                        top: 100,
+                        scaleX: img.width > 500 ? 500 / img.width : 1,
+                        scaleY: img.height > 500 ? 500 / img.height : 1,
+                        opacity: brushOpacity,
+                        selectable: true
+                    });
+                    addObjectToActiveLayer(img);
+                    canvas.setActiveObject(img);
+                    pushToHistory();
+                }, { crossOrigin: 'anonymous' }); // Added crossOrigin for CORS issues
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // --- Drag and Drop Upload ---
+        canvasContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            canvasContainer.style.background = '#95a5a6';
+        });
+
+        canvasContainer.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            canvasContainer.style.background = '#34495e';
+        });
+
+        canvasContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            canvasContainer.style.background = '#34495e';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    fabric.Image.fromURL(event.target.result, function(img) {
+                        img.set({
+                            left: 100,
+                            top: 100,
+                            scaleX: img.width > 500 ? 500 / img.width : 1,
+                            scaleY: img.height > 500 ? 500 / img.height : 1,
+                            opacity: brushOpacity,
+                            selectable: true
+                        });
+                        addObjectToActiveLayer(img);
+                        canvas.setActiveObject(img);
+                        pushToHistory();
+                    }, { crossOrigin: 'anonymous' }); // Added crossOrigin for CORS issues
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // --- Context Menu Functionality ---
+        const contextMenu = document.getElementById('context-menu');
+        const contextDelete = document.getElementById('context-delete');
+
+        canvas.on('mouse:down', function(options) {
+            if (options.e.button === 2) { // Right-click
+                if (options.target) {
+                    contextMenu.style.display = 'block';
+                    contextMenu.style.left = `${options.e.clientX}px`;
+                    contextMenu.style.top = `${options.e.clientY}px`;
+                    canvas.setActiveObject(options.target);
+                } else {
+                    contextMenu.style.display = 'none';
+                }
+            } else {
+                contextMenu.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('click', () => {
+            contextMenu.style.display = 'none';
+        });
+
+        contextDelete.addEventListener('click', () => {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                removeObjectFromLayer(activeObject);
+                pushToHistory();
+            }
+            contextMenu.style.display = 'none';
+        });
+
+        // Prevent default context menu
+        window.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        }, false);
+
+        // --- Copy, Paste, Cut Functionality ---
+        function copy() {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                clipboardData = activeObject.toJSON(['name']);
+            }
+        }
+
+        function paste() {
+            if (clipboardData) {
+                fabric.util.enlivenObjects([clipboardData], function(objects) {
+                    objects.forEach(function(o) {
+                        o.set({
+                            left: o.left + 10,
+                            top: o.top + 10
+                        });
+                        addObjectToActiveLayer(o);
+                        canvas.setActiveObject(o);
+                        pushToHistory();
+                    });
+                });
+            }
+        }
+
+        function cut() {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                copy();
+                removeObjectFromLayer(activeObject);
+                pushToHistory();
+            }
+        }
+
+        // --- Attach Keyboard Shortcuts ---
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'z') {
+                e.preventDefault();
+                undoBtn.click();
+            } else if (e.ctrlKey && e.key === 'y') {
+                e.preventDefault();
+                redoBtn.click();
+            } else if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                copy();
+            } else if (e.ctrlKey && e.key === 'v') {
+                e.preventDefault();
+                paste();
+            } else if (e.ctrlKey && e.key === 'x') {
+                e.preventDefault();
+                cut();
+            } else if (e.key === 'Delete') {
+                e.preventDefault();
+                const activeObject = canvas.getActiveObject();
+                if (activeObject) {
+                    removeObjectFromLayer(activeObject);
+                    pushToHistory();
+                }
+            } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                const activeObject = canvas.getActiveObject();
+                if (activeObject) {
+                    e.preventDefault();
+                    const step = e.shiftKey ? 10 : 1;
+                    if (e.key === 'ArrowUp') activeObject.top -= step;
+                    if (e.key === 'ArrowDown') activeObject.top += step;
+                    if (e.key === 'ArrowLeft') activeObject.left -= step;
+                    if (e.key === 'ArrowRight') activeObject.left += step;
+                    activeObject.setCoords();
+                    canvas.renderAll();
+                    pushToHistory();
+                }
+            }
+        });
+
+        // --- Zoom Functionality ---
+        zoomSlider.addEventListener('input', () => {
+            zoomLevel = zoomSlider.value / 100;
+            canvas.setZoom(zoomLevel);
+            canvas.renderAll();
+        });
+
+        // Ctrl + Scroll to Zoom
+        canvasContainer.addEventListener('wheel', (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                if (e.deltaY < 0) {
+                    zoomLevel *= 1.1;
+                } else {
+                    zoomLevel /= 1.1;
+                }
+                zoomLevel = Math.min(Math.max(zoomLevel, 0.1), 5);
+                zoomSlider.value = zoomLevel * 100;
+                canvas.setZoom(zoomLevel);
+                canvas.renderAll();
+            }
+        });
+
+        // --- Panning Functionality ---
+        let isPanningFlag = false;
+        let lastPosX = 0;
+        let lastPosY = 0;
+
+        canvas.on('mouse:down', function(opt) {
+            const evt = opt.e;
+            if (evt.altKey) { // Use Alt key to pan
+                isPanningFlag = true;
+                lastPosX = evt.clientX;
+                lastPosY = evt.clientY;
+                canvasContainer.style.cursor = 'grabbing';
+            }
+        });
+
+        canvas.on('mouse:move', function(opt) {
+            if (isPanningFlag) {
+                const e = opt.e;
+                const vpt = canvas.viewportTransform;
+                vpt[4] += e.clientX - lastPosX;
+                vpt[5] += e.clientY - lastPosY;
+                canvas.requestRenderAll();
+                lastPosX = e.clientX;
+                lastPosY = e.clientY;
+            }
+        });
+
+        canvas.on('mouse:up', function(opt) {
+            if (isPanningFlag) {
+                isPanningFlag = false;
+                canvasContainer.style.cursor = activeTool === 'select' ? 'default' : 'crosshair';
+                pushToHistory();
+            }
+        });
+
+        // --- Tool Implementations ---
+
+        // Rectangle Tool
+        toolbarButtons.rectangle.addEventListener('click', () => {
+            if (activeTool !== 'rectangle') {
+                activateTool('rectangle');
+                canvas.isDrawingMode = false;
+                canvas.selection = false;
+            }
+            canvas.on('mouse:down', addRectangle);
+        });
+
+        function addRectangle(opt) {
+            const pointer = canvas.getPointer(opt.e);
+            const rect = new fabric.Rect({
+                left: pointer.x,
+                top: pointer.y,
+                fill: brushColor,
+                width: 100,
+                height: 60,
+                stroke: brushColor,
+                strokeWidth: brushSize,
+                opacity: brushOpacity,
+                selectable: true
+            });
+            addObjectToActiveLayer(rect);
+            canvas.setActiveObject(rect);
+            pushToHistory();
+            canvas.off('mouse:down', addRectangle);
+            activateTool('select');
+        }
+
+        // Circle Tool
+        toolbarButtons.circle.addEventListener('click', () => {
+            if (activeTool !== 'circle') {
+                activateTool('circle');
+                canvas.isDrawingMode = false;
+                canvas.selection = false;
+            }
+            canvas.on('mouse:down', addCircle);
+        });
+
+        function addCircle(opt) {
+            const pointer = canvas.getPointer(opt.e);
+            const circle = new fabric.Circle({
+                left: pointer.x,
+                top: pointer.y,
+                fill: brushColor,
+                radius: 50,
+                stroke: brushColor,
+                strokeWidth: brushSize,
+                opacity: brushOpacity,
+                selectable: true
+            });
+            addObjectToActiveLayer(circle);
+            canvas.setActiveObject(circle);
+            pushToHistory();
+            canvas.off('mouse:down', addCircle);
+            activateTool('select');
+        }
+
+        // Ellipse Tool
+        toolbarButtons.ellipse.addEventListener('click', () => {
+            if (activeTool !== 'ellipse') {
+                activateTool('ellipse');
+                canvas.isDrawingMode = false;
+                canvas.selection = false;
+            }
+            canvas.on('mouse:down', addEllipse);
+        });
+
+        function addEllipse(opt) {
+            const pointer = canvas.getPointer(opt.e);
+            const ellipse = new fabric.Ellipse({
+                left: pointer.x,
+                top: pointer.y,
+                fill: brushColor,
+                rx: 80,
+                ry: 50,
+                stroke: brushColor,
+                strokeWidth: brushSize,
+                opacity: brushOpacity,
+                selectable: true
+            });
+            addObjectToActiveLayer(ellipse);
+            canvas.setActiveObject(ellipse);
+            pushToHistory();
+            canvas.off('mouse:down', addEllipse);
+            activateTool('select');
+        }
+
+        // Line Tool
+        toolbarButtons.line.addEventListener('click', () => {
+            if (activeTool !== 'line') {
+                activateTool('line');
+                canvas.isDrawingMode = false;
+                canvas.selection = false;
+            }
+            canvas.on('mouse:down', addLine);
+        });
+
+        function addLine(opt) {
+            const pointer = canvas.getPointer(opt.e);
+            const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+            const line = new fabric.Line(points, {
+                strokeWidth: brushSize,
+                fill: brushColor,
+                stroke: brushColor,
+                originX: 'center',
+                originY: 'center',
+                opacity: brushOpacity,
+                selectable: true
+            });
+            addObjectToActiveLayer(line);
+            canvas.setActiveObject(line);
+            pushToHistory();
+            canvas.on('mouse:move', updateLine.bind(this, line));
+            canvas.on('mouse:up', () => {
+                canvas.off('mouse:move', updateLine.bind(this, line));
+                activateTool('select');
+            });
+        }
+
+        function updateLine(line, opt) {
+            const pointer = canvas.getPointer(opt.e);
+            line.set({ x2: pointer.x, y2: pointer.y });
+            canvas.renderAll();
+        }
+
+        // Polygon Tool
+        toolbarButtons.polygon.addEventListener('click', () => {
+            if (activeTool !== 'polygon') {
+                activateTool('polygon');
+                canvas.isDrawingMode = false;
+                canvas.selection = false;
+            }
+            let polygonPoints = [];
+            const polygon = new fabric.Polygon([], {
+                fill: brushColor,
+                stroke: brushColor,
+                strokeWidth: brushSize,
+                opacity: brushOpacity,
+                selectable: true
+            });
+            addObjectToActiveLayer(polygon);
+
+            function addPoint(opt) {
+                const pointer = canvas.getPointer(opt.e);
+                polygonPoints.push({ x: pointer.x, y: pointer.y });
+                polygon.set({ points: polygonPoints });
+                canvas.renderAll();
+            }
+
+            function finishPolygon() {
+                canvas.off('mouse:down', addPoint);
+                pushToHistory();
+                activateTool('select');
+            }
+
+            canvas.on('mouse:down', addPoint);
+            canvas.on('mouse:dblclick', finishPolygon);
+        });
+
+        // Text Tool
+        toolbarButtons.text.addEventListener('click', () => {
+            activateTool('text');
+            const text = prompt("Enter text:");
+            if (text) {
+                const textbox = new fabric.Textbox(text, {
+                    left: 100,
+                    top: 100,
+                    fill: brushColor,
+                    fontSize: brushSize * 4,
+                    opacity: brushOpacity,
+                    selectable: true
+                });
+                addObjectToActiveLayer(textbox);
+                canvas.setActiveObject(textbox);
+                pushToHistory();
+            }
+            activateTool('select');
+        });
+
+        // Image Tool
+        toolbarButtons.image.addEventListener('click', () => {
+            activateTool('image');
+            const imageUrl = prompt("Enter image URL:");
+            if (imageUrl) {
+                fabric.Image.fromURL(imageUrl, function(img) {
+                    img.set({
+                        left: 100,
+                        top: 100,
+                        scaleX: img.width > 500 ? 500 / img.width : 1,
+                        scaleY: img.height > 500 ? 500 / img.height : 1,
+                        opacity: brushOpacity,
+                        selectable: true
+                    });
+                    addObjectToActiveLayer(img);
+                    canvas.setActiveObject(img);
+                    pushToHistory();
+                }, { crossOrigin: 'anonymous' }); // Added crossOrigin for CORS issues
+            }
+            activateTool('select');
+        });
+
+        // Paint Bucket Tool Click Handling (Placeholder)
+        // You need to implement the paint bucket functionality as Fabric.js doesn't have it by default
+        function applyPaintBucket(target) {
+            // Placeholder implementation: Change fill color of the target object
+            if (target.type !== 'image') { // Assuming images shouldn't have their fill changed directly
+                target.set('fill', brushColor);
+                canvas.renderAll();
+            }
+        }
+
+        // --- Context Menu Functionality ---
+        // (Already handled above)
+
+        // --- Copy, Paste, Cut Functionality ---
+        // (Already handled above)
+
+        // --- Zoom Functionality ---
+        // (Already handled above)
+
+        // --- Panning Functionality ---
+        // (Already handled above)
+
+        // --- Filter Tool Implementation ---
+        const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+        const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+
+        applyFiltersBtn.addEventListener('click', () => {
+            const activeObject = canvas.getActiveObject();
+            if (!activeObject) return;
+
+            if (activeObject.type === 'image') {
+                const grayscale = parseFloat(document.getElementById('grayscale').value);
+                const sepia = parseFloat(document.getElementById('sepia').value);
+                const brightness = parseFloat(document.getElementById('brightness').value);
+                const contrast = parseFloat(document.getElementById('contrast').value);
+
+                const filters = [];
+
+                if (grayscale > 0) {
+                    const grayscaleFilter = new fabric.Image.filters.Grayscale();
+                    filters.push(grayscaleFilter);
+                }
+                if (sepia > 0) {
+                    const sepiaFilter = new fabric.Image.filters.Sepia();
+                    filters.push(sepiaFilter);
+                }
+                if (brightness !== 1) {
+                    const brightnessFilter = new fabric.Image.filters.Brightness({ brightness: brightness });
+                    filters.push(brightnessFilter);
+                }
+                if (contrast !== 1) {
+                    const contrastFilter = new fabric.Image.filters.Contrast({ contrast: contrast });
+                    filters.push(contrastFilter);
+                }
+
+                activeObject.filters = filters;
+                activeObject.applyFilters();
+                canvas.renderAll();
+                pushToHistory();
+            } else {
+                // For non-image objects, implement custom filters or property adjustments
+                // Example: Adjust fill color brightness (placeholder)
+                // Advanced filters would require custom implementations
+            }
+        });
+
+        resetFiltersBtn.addEventListener('click', () => {
+            const activeObject = canvas.getActiveObject();
+            if (!activeObject) return;
+
+            if (activeObject.type === 'image') {
+                activeObject.filters = [];
+                activeObject.applyFilters();
+                canvas.renderAll();
+                pushToHistory();
+            }
+            // Reset filter sliders
+            document.getElementById('grayscale').value = 0;
+            document.getElementById('sepia').value = 0;
+            document.getElementById('brightness').value = 1;
+            document.getElementById('contrast').value = 1;
+        });
+
+        // --- Utility Functions ---
+
+        // Convert RGB to Hex
+        function rgbToHex(color) {
+            if (!color) return '#000000';
+            const ctx = document.createElement('canvas').getContext('2d');
+            ctx.fillStyle = color;
+            return ctx.fillStyle;
+        }
+
+        // Add Object to Active Layer
+        function addObjectToActiveLayer(obj) {
+            const activeLayer = canvas.getActiveObject();
+            if (activeLayer && activeLayer.type === 'group') {
+                activeLayer.addWithUpdate(obj);
+                canvas.setActiveObject(obj);
+            } else {
+                // If no active layer, add to the top layer
+                if (layers.length > 0) {
+                    layers[layers.length - 1].addWithUpdate(obj);
+                } else {
+                    canvas.add(obj);
+                }
+            }
+            canvas.renderAll();
+        }
+
+        // Remove Object from its Layer
+        function removeObjectFromLayer(obj) {
+            const layersWithObject = layers.filter(layer => layer.contains(obj));
+            if (layersWithObject.length > 0) {
+                const layer = layersWithObject[0];
+                layer.removeWithUpdate(obj);
+                canvas.renderAll();
+            } else {
+                // If object is not in any layer group, remove directly
+                canvas.remove(obj);
+            }
+        }
+
+        // Ensure all objects are added to their respective layers on load
+        canvas.on('object:added', function(opt) {
+            if (opt.target && !opt.target.group) {
+                addObjectToActiveLayer(opt.target);
+            }
+        });
+    </script>
+</body>
+</html>
