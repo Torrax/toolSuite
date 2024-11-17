@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Symbols</title>
+    <title>Symbols Explorer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         /* Reset Styles */
@@ -57,26 +57,74 @@
             margin-right: 10px;
         }
 
-        /* Iframe and Search Container */
-        #iframe-container {
+        /* Layout Styles */
+        #main-container {
+            display: flex;
             flex: 1;
-            position: relative;
             width: 100%;
-            margin: 0;
+            height: calc(100% - 60px); /* Adjust height to account for header and footer */
+        }
+
+        .column {
+            flex: 1;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
         }
 
         iframe {
+            flex: 1;
             width: 100%;
-            height: calc(100% - 3rem); /* Adjust height to account for the search bar */
-            border: none;
+            border: 1px solid #808080;
+            border-radius: 3px;
+            box-sizing: border-box;
         }
 
-        /* Search Bar Styles */
+        /* Custom Scrollbar for Iframes */
+        iframe::-webkit-scrollbar {
+            width: 12px;
+            background: #2a5298; /* Scrollbar background */
+        }
+
+        iframe::-webkit-scrollbar-thumb {
+            background: #f1c40f; /* Scrollbar handle */
+            border-radius: 6px;
+            border: 3px solid #2a5298; /* Add padding around handle */
+        }
+
+        iframe::-webkit-scrollbar-thumb:hover {
+            background: #f39c12; /* Handle hover effect */
+        }
+
+        /* Footer Styles */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #34495e;
+            color: #ecf0f1;
+            font-size: 0.9rem;
+        }
+
+        footer .column-footer {
+            text-align: center;
+            flex: 1;
+        }
+
+        footer a {
+            color: #f1c40f;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Emoji Search Feature */
         .emoji-search {
             display: flex;
-            width: 100%;
-            padding: 0.5rem;
-            box-sizing: border-box;
+            margin-bottom: 0.5rem;
         }
 
         .emoji-search input {
@@ -101,24 +149,6 @@
         .emoji-search button:hover {
             background-color: #2c3e50;
         }
-
-        /* Footer Styles */
-        footer {
-            text-align: center;
-            padding: 10px 20px;
-            background: #34495e;
-            color: #ecf0f1;
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: #f1c40f;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -127,21 +157,34 @@
         <a href="../index.html">
             <i class="fas fa-home"></i>
         </a>
-        <h1>Text Symbols</h1>
+        <h1>Symbols Explorer</h1>
     </header>
 
-    <!-- Emoji Search and Iframe -->
-    <div id="iframe-container">
-        <div class="emoji-search">
-            <input id="emojiSearchInput" onkeypress="if(event.which===13) doEmojiDbSearch()" placeholder="Find individual emojis...">
-            <button id="emojiDbSearchButton" onclick="doEmojiDbSearch()">🔎 Search</button>
+    <!-- Main Container -->
+    <div id="main-container">
+        <!-- Left Column -->
+        <div class="column">
+            <iframe src="https://www.i2symbol.com/symbols/math"></iframe>
         </div>
-        <iframe id="emojiSearchIframe" allow="clipboard-write" src="https://emojidb.org/arrow-emojis?utm_source=user_search_ec#%7B%22prevSearchQuery%22:%22arrow%22,%22mode%22:%22embed%22%7D"></iframe>
+
+        <!-- Right Column -->
+        <div class="column">
+            <div class="emoji-search">
+                <input id="emojiSearchInput" onkeypress="if(event.which===13) doEmojiDbSearch()" placeholder="Find individual emojis...">
+                <button id="emojiDbSearchButton" onclick="doEmojiDbSearch()">🔎 Search</button>
+            </div>
+            <iframe id="emojiSearchIframe" allow="clipboard-write" src="https://emojidb.org/arrow-emojis?utm_source=user_search_ec#%7B%22prevSearchQuery%22:%22arrow%22,%22mode%22:%22embed%22%7D"></iframe>
+        </div>
     </div>
 
     <!-- Footer -->
     <footer>
-        <p>Powered by <a href="https://www.symbolspy.com/" target="_blank">Symbol Spy</a>. All rights reserved.</p>
+        <div class="column-footer">
+            Powered by <a href="https://www.i2symbol.com" target="_blank">i2Symbol</a>. All rights reserved.
+        </div>
+        <div class="column-footer">
+            Powered by <a href="https://emojidb.org" target="_blank">EmojiDB</a>. All rights reserved.
+        </div>
     </footer>
 
     <script>
