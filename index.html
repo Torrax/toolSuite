@@ -288,7 +288,7 @@
     <!-- Calculation Section -->
     <section id="calculation" class="tab-content hidden">
         <div class="tool-container">
-            <a href="calculation/iframe-DesmosGraphing.html" class="tool-card">
+            <a href="calculation/iframe-Desmos.html" class="tool-card">
                 <i class="fas fa-calculator tool-icon"></i>
                 <h3>Graphing Calculator</h3>
                 <p>Access Desmos, a powerful graphing calculator.</p>
@@ -399,7 +399,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Carson Morris.</p>
+        <p>&copy; 2024 Carson Morris. Created by <a href="https://github.com/Torrax" target="_blank">Carson Morris</a>. All rights reserved.</p>
     </footer>
 
     <script>
@@ -407,25 +407,66 @@
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
 
+        const STORAGE_KEY = 'selectedTab';
+        const STORAGE_TIME_KEY = 'selectedTabTimestamp';
+        const EXPIRATION_TIME = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
+
+        // Function to activate a tab by its name
+        function activateTab(tabName) {
+            tabs.forEach(t => {
+                if (t.getAttribute('data-tab') === tabName) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+
+            tabContents.forEach(content => {
+                if (content.id === tabName) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        // Function to save the selected tab with timestamp
+        function saveSelectedTab(tabName) {
+            localStorage.setItem(STORAGE_KEY, tabName);
+            localStorage.setItem(STORAGE_TIME_KEY, Date.now());
+        }
+
+        // Function to load the saved tab if it's not expired
+        function loadSelectedTab() {
+            const savedTab = localStorage.getItem(STORAGE_KEY);
+            const savedTime = localStorage.getItem(STORAGE_TIME_KEY);
+
+            if (savedTab && savedTime) {
+                const currentTime = Date.now();
+                if (currentTime - savedTime < EXPIRATION_TIME) {
+                    activateTab(savedTab);
+                    return;
+                } else {
+                    // Expired, remove from storage
+                    localStorage.removeItem(STORAGE_KEY);
+                    localStorage.removeItem(STORAGE_TIME_KEY);
+                }
+            }
+            // If no valid saved tab, activate the default tab (General)
+            activateTab('general');
+        }
+
+        // Event listeners for tabs
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                // Remove 'active' class from all tabs
-                tabs.forEach(t => t.classList.remove('active'));
-                // Add 'active' class to the clicked tab
-                tab.classList.add('active');
-
-                // Get the target tab content ID
                 const targetTab = tab.getAttribute('data-tab');
-                // Show the target tab content and hide others
-                tabContents.forEach(content => {
-                    if (content.id === targetTab) {
-                        content.classList.remove('hidden');
-                    } else {
-                        content.classList.add('hidden');
-                    }
-                });
+                activateTab(targetTab);
+                saveSelectedTab(targetTab);
             });
         });
+
+        // Load the selected tab on page load
+        window.addEventListener('DOMContentLoaded', loadSelectedTab);
     </script>
 </body>
 </html>
