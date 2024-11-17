@@ -190,10 +190,20 @@
     <script>
         // Function to handle the search functionality
         function doEmojiDbSearch() {
-            const query = document.getElementById("emojiSearchInput").value;
+            const query = document.getElementById("emojiSearchInput").value.trim(); // Trim whitespace
+            if (query === "") {
+                alert("Please enter a valid search query.");
+                return;
+            }
+        
+            // Replace special characters with hyphens and encode the query
+            const sanitizedQuery = query.replace(/[^a-zA-Z0-9\s]/g, "").replace(/\s+/g, "-");
             const iframe = document.getElementById("emojiSearchIframe");
-            iframe.src = `https://emojidb.org/${query.replace(/ /g, '-')}-emojis?utm_source=user_search_ec#%7B%22prevSearchQuery%22:%22${encodeURIComponent(query)}%22,%22mode%22:%22embed%22%7D`;
+        
+            // Update the iframe's src
+            iframe.src = `https://emojidb.org/${sanitizedQuery}-emojis?utm_source=user_search_ec#%7B%22prevSearchQuery%22:%22${encodeURIComponent(query)}%22,%22mode%22:%22embed%22%7D`;
         }
+        
     </script>
 </body>
 </html>
