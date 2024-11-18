@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL Cheat Sheet</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Prism.js CSS for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <!-- Custom Styles -->
     <style>
         /* Reset and Base Styles */
         * {
@@ -19,8 +23,8 @@
             color: #ecf0f1;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent horizontal scrolling */
         }
         header {
             background: #34495e;
@@ -30,87 +34,347 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            flex-shrink: 0; /* Prevent header from shrinking */
+            z-index: 2; /* Ensure header is above other elements */
         }
         header h1 {
-            font-size: 1.8rem;
-            color: #f39c12;
+            font-size: 2rem;
+            color: #f39c12; /* Gold color for the title */
+            text-align: center;
         }
         header a {
             text-decoration: none;
-            color: #f39c12;
+            color: #f39c12; /* Gold color for the home icon */
             font-size: 1.5rem;
             transition: color 0.3s;
             position: absolute;
             left: 30px;
+            z-index: 3; /* Ensure home icon is above shadows */
         }
         header a:hover {
             color: #ecf0f1;
         }
         main {
             flex: 1;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            overflow-y: hidden;
+            align-items: flex-start; /* Align to top */
+            overflow: auto; /* Enable scrolling if content overflows */
+            position: relative;
+            z-index: 1; /* Below header */
         }
         .list {
-            width: 90%;
             background: #34495e;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px auto;
-            overflow-y: auto;
-            height: calc(100vh - 90px); /* Adjust height for header */
+            border-radius: 15px; /* Rounded corners for containers */
+            padding: 30px 25px; /* Increased padding for better spacing */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* Enhanced box-shadow */
+            overflow-y: auto; /* Enable vertical scrolling within each box */
+            max-height: calc(100vh - 100px); /* Adjust height for header */
+            transition: transform 0.3s;
+            width: 75%; /* Increased width for better visibility */
+            max-width: 1400px; /* Optimized max-width for larger screens */
+            position: relative;
+            z-index: 1;
+        }
+        .list:hover {
+            transform: translateY(-2px); /* Subtle lift on hover */
         }
         .list h2 {
-            color: #f39c12;
-            margin-bottom: 10px;
+            color: #f39c12; /* Gold color for the heading */
+            margin-bottom: 25px; /* Increased margin for better separation */
+            font-size: 2.2rem; /* Slightly larger font size */
+            text-align: center;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             background: #34495e;
+            border-radius: 10px; /* Rounded corners for table */
+            overflow: hidden; /* Ensure border-radius applies */
+            table-layout: fixed; /* Ensures columns are fixed width */
         }
         table thead {
             background-color: #2980b9;
         }
         table thead th {
-            padding: 15px;
+            padding: 14px 18px; /* Increased padding for better spacing */
             text-align: left;
-            font-size: 1.2rem;
+            font-size: 1.2rem; /* Slightly larger font size */
             color: #ecf0f1;
+            border-bottom: 2px solid #2c3e50;
+            white-space: nowrap; /* Prevent header text from wrapping */
         }
         table tbody tr {
-            border-bottom: 1px solid #2c3e50;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+            cursor: pointer; /* Pointer cursor on hover */
+            position: relative;
+            z-index: 1; /* Ensure shadows appear above other elements */
         }
+        table tbody tr:hover {
+            background-color: #bca11a; /* Brightened teal color for better contrast */
+            transform: translateY(-2px) scale(1.01); /* Subtle lift and scale */
+            box-shadow: 0 3px 8px rgba(0,0,0,0.5); /* Shadow on hover */
+            z-index: 2; /* Bring hovered row above others */
+        }
+        /* Function Column Styling */
+        table tbody td:first-child {
+            background-color: #3d566a; /* Blue shade to fit theme */
+            color: #ffffff; /* Light text for better contrast on blue background */
+            padding: 14px 18px; /* Increased padding */
+            vertical-align: middle;
+            word-wrap: break-word;
+            overflow: hidden; /* Ensure content doesn't overflow */
+            text-overflow: ellipsis; /* Add ellipsis if content is too long */
+            /* Remove rounded corners from cells */
+            border-bottom-left-radius: 0;
+        }
+        /* Description Column Styling */
+        table tbody td:nth-child(2) {
+            background-color: #3d566e; /* Darker shade for Description column */
+            padding: 14px 18px; /* Increased padding */
+            vertical-align: middle;
+            word-wrap: break-word;
+            color: #ecf0f1; /* Ensure text is readable on dark background */
+            /* Remove rounded corners from cells */
+            border-bottom-right-radius: 0;
+        }
+        /* Example Column Styling */
+        table tbody td:nth-child(3) {
+            background-color: #3d566e; /* Darker shade for Example column */
+            padding: 14px 18px; /* Increased padding */
+            vertical-align: middle;
+            word-wrap: break-word;
+            color: #ecf0f1; /* Ensure text is readable on dark background */
+            /* Remove rounded corners from cells */
+            border-bottom-right-radius: 0;
+        }
+        /* Remove rounded corners from internal cells */
         table tbody td {
-            padding: 15px;
-            text-align: left;
+            border-radius: 0;
+            position: relative; /* For positioning copy button */
+        }
+        /* Rounded corners for the last row */
+        table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 10px; /* Rounded corners for first cell in last row */
+        }
+        table tbody tr:last-child td:nth-child(3) {
+            border-bottom-right-radius: 10px; /* Rounded corners for third cell in last row */
+        }
+        /* Styled Hotkeys */
+        .hotkey {
+            display: inline-block;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 0 3px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        /* Styled Function Names */
+        .function-name {
+            /* Distinct styling for functions */
+            color: #c9c9c9; /* Changed to a more neutral color for better contrast */
+            font-weight: bold;
             font-size: 1rem;
         }
-        table tbody tr:nth-child(even) {
-            background-color: #3d566e;
+        /* Alternating Row Colors */
+        table tbody tr:nth-child(even) td:first-child {
+            background-color: #35495e; /* Slightly darker blue for even rows */
         }
-        /* Custom Scrollbar Styles */
+        table tbody tr:nth-child(even) td:nth-child(2),
+        table tbody tr:nth-child(even) td:nth-child(3) {
+            background-color: #354966; /* Slightly darker shade for Description and Example in even rows */
+        }
+        /* Code Block Styles */
+        .code-container {
+            position: relative; /* For positioning copy button */
+        }
+        pre {
+            background: #2c3e50;
+            padding: 14px 20px; /* Increased padding for better spacing */
+            padding-bottom: 40px; /* Additional padding for the copy button */
+            border-radius: 5px;
+            white-space: pre-wrap; /* Allow wrapping */
+            word-wrap: break-word; /* Break long words */
+            margin: 0; /* Remove default margin */
+            overflow: auto; /* Enable scrollbars when necessary */
+            max-height: 300px; /* Optional: Limit height for better UX */
+        }
+        pre code {
+            white-space: pre-wrap; /* Ensure code wraps */
+            word-wrap: break-word;
+            font-size: 1rem; /* Slightly larger font for better readability */
+        }
+        .copy-btn {
+            position: absolute;
+            bottom: 10px; /* Positioned at the bottom */
+            right: 10px;
+            background: #f39c12; /* Gold color for copy buttons */
+            border: none;
+            color: #fff;
+            padding: 6px 10px; /* Increased padding for better click area */
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem; /* Slightly larger font */
+            transition: background 0.3s;
+            z-index: 3; /* Ensure the button stays above the code */
+        }
+        .copy-btn:hover {
+            background: #e67e22; /* Darker gold on hover */
+        }
+        /* Custom Scrollbar Styles for Vertical Scroll */
+        body::-webkit-scrollbar {
+            width: 12px; /* Increased width for better visibility */
+        }
+        body::-webkit-scrollbar-track {
+            background: #2c3e50;
+            border-radius: 10px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Gold color for scrollbar thumb */
+            border-radius: 10px;
+            border: 3px solid #2c3e50; /* Matches track color for spacing */
+        }
+        body::-webkit-scrollbar-thumb:hover {
+            background: #e67e22; /* Darker gold on hover */
+        }
+        /* Custom Scrollbar Styles for .list */
         .list::-webkit-scrollbar {
-            width: 12px;
+            width: 12px; /* Consistent scrollbar width */
         }
         .list::-webkit-scrollbar-track {
             background: #2c3e50; /* Dark background */
+            border-radius: 6px;
         }
         .list::-webkit-scrollbar-thumb {
-            background: #f39c12; /* Accent color */
+            background: #f39c12; /* Gold color for scrollbar thumb */
             border-radius: 6px;
             border: 2px solid #2c3e50; /* Matches track color for spacing */
         }
         .list::-webkit-scrollbar-thumb:hover {
-            background: #f1c40f; /* Lighter accent on hover */
+            background: #e67e22; /* Darker gold on hover */
+        }
+        /* Custom Scrollbar Styles for <pre> Elements */
+        pre::-webkit-scrollbar {
+            width: 6px; /* Thinner scrollbar for code blocks */
+        }
+        pre::-webkit-scrollbar-track {
+            background: #2c3e50; /* Dark background */
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Gold color for scrollbar thumb */
+            border-radius: 4px;
+            border: 1px solid #2c3e50; /* Matches track color for spacing */
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #e67e22; /* Darker gold on hover */
+        }
+        /* Firefox Scrollbar Styles */
+        pre {
+            scrollbar-width: thin; /* Thinner scrollbar */
+            scrollbar-color: #f39c12 #2c3e50; /* Thumb and track color */
+        }
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .list {
+                width: 80%; /* Slightly increase width on medium screens */
+                max-width: 1200px; /* Adjust max-width accordingly */
+            }
+            .list h2 {
+                font-size: 2.2rem;
+            }
+            table thead th {
+                font-size: 1rem;
+                padding: 10px 12px; /* Adjusted padding */
+            }
+            table tbody td {
+                padding: 10px 12px; /* Adjusted padding */
+                font-size: 0.9rem;
+            }
+            .copy-btn {
+                padding: 5px 8px; /* Slightly reduced padding */
+                font-size: 0.8rem;
+            }
+            .function-name {
+                font-size: 1rem;
+            }
+            pre {
+                padding: 12px 16px; /* Adjusted padding */
+                padding-bottom: 40px; /* Ensure space for copy button */
+            }
+            pre code {
+                font-size: 0.95rem; /* Slightly smaller font */
+            }
+        }
+        @media (max-width: 1200px) {
+            .list {
+                width: 90%; /* Increase width on smaller screens */
+                max-width: 1000px; /* Adjust max-width accordingly */
+            }
+            .list h2 {
+                font-size: 2rem;
+            }
+            table thead th {
+                font-size: 1rem;
+                padding: 10px 8px;
+            }
+            table tbody td {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+            .copy-btn {
+                padding: 4px 6px;
+                font-size: 0.75rem;
+            }
+            .function-name {
+                font-size: 1rem;
+            }
+            pre {
+                padding: 10px 14px;
+                padding-bottom: 40px; /* Ensure space for copy button */
+            }
+            pre code {
+                font-size: 0.85rem;
+            }
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .list h2 {
+                font-size: 1.8rem;
+            }
+            table thead th, table tbody td {
+                padding: 8px 6px;
+                font-size: 0.85rem;
+            }
+            .copy-btn {
+                padding: 3px 5px;
+                font-size: 0.7rem;
+            }
+            .function-name {
+                font-size: 0.95rem;
+            }
+            pre {
+                padding: 8px 12px;
+                padding-bottom: 40px; /* Ensure space for copy button */
+            }
+            pre code {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="../index.html" title="Go Back">
+        <a href="../index.html" title="Go Back" aria-label="Go Back">
             <i class="fas fa-home"></i>
         </a>
         <h1>SQL Cheat Sheet</h1>
@@ -119,6 +383,11 @@
         <div class="list">
             <h2>SQL Functions</h2>
             <table>
+                <colgroup>
+                    <col style="width: 15%;"> <!-- Function Column -->
+                    <col style="width: 25%;"> <!-- Description Column -->
+                    <col style="width: 60%;"> <!-- Example Column -->
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Function</th>
@@ -128,50 +397,109 @@
                 </thead>
                 <tbody>
                     <!-- Function rows -->
-                    <tr><td>SELECT</td><td>Retrieves data from one or more tables.</td><td>SELECT column1, column2 FROM table_name WHERE condition;</td></tr>
-                    <tr><td>DISTINCT</td><td>Removes duplicate records from the result.</td><td>SELECT DISTINCT column1 FROM table_name;</td></tr>
-                    <tr><td>WHERE</td><td>Filters records based on conditions.</td><td>SELECT * FROM table_name WHERE column1 = 'value';</td></tr>
-                    <tr><td>ORDER BY</td><td>Sorts the result in ascending or descending order.</td><td>SELECT * FROM table_name ORDER BY column1 ASC;</td></tr>
-                    <tr><td>GROUP BY</td><td>Groups rows sharing a property.</td><td>SELECT column1, COUNT(*) FROM table_name GROUP BY column1;</td></tr>
-                    <tr><td>HAVING</td><td>Filters groups defined by GROUP BY.</td><td>SELECT column1, COUNT(*) FROM table_name GROUP BY column1 HAVING COUNT(*) > 1;</td></tr>
-                    <tr><td>LIMIT</td><td>Limits the number of rows returned.</td><td>SELECT * FROM table_name LIMIT 10;</td></tr>
-                    <tr><td>INSERT INTO</td><td>Inserts new rows into a table.</td><td>INSERT INTO table_name (column1, column2) VALUES ('value1', 'value2');</td></tr>
-                    <tr><td>UPDATE</td><td>Updates existing rows in a table.</td><td>UPDATE table_name SET column1 = 'value' WHERE condition;</td></tr>
-                    <tr><td>DELETE</td><td>Deletes rows from a table.</td><td>DELETE FROM table_name WHERE condition;</td></tr>
-                    <tr><td>CREATE TABLE</td><td>Creates a new table.</td><td>CREATE TABLE table_name (column1 datatype, column2 datatype);</td></tr>
-                    <tr><td>ALTER TABLE</td><td>Modifies an existing table (e.g., add/remove columns).</td><td>ALTER TABLE table_name ADD column_name datatype;</td></tr>
-                    <tr><td>DROP TABLE</td><td>Deletes a table completely.</td><td>DROP TABLE table_name;</td></tr>
-                    <tr><td>INNER JOIN</td><td>Returns rows with matching values in both tables.</td><td>SELECT table1.column1, table2.column2 FROM table1 INNER JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
-                    <tr><td>LEFT JOIN</td><td>Returns all rows from the left table, even if no match is found.</td><td>SELECT * FROM table1 LEFT JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
-                    <tr><td>RIGHT JOIN</td><td>Returns all rows from the right table, even if no match is found.</td><td>SELECT * FROM table1 RIGHT JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
-                    <tr><td>FULL JOIN</td><td>Returns rows when there's a match in either table.</td><td>SELECT * FROM table1 FULL JOIN table2 ON table1.common_column = table2.common_column;</td></tr>
-                    <tr><td>UNION</td><td>Combines results of two SELECT statements.</td><td>SELECT column1 FROM table1 UNION SELECT column1 FROM table2;</td></tr>
-                    <tr><td>CASE</td><td>Adds conditional logic to queries.</td><td>SELECT column1, CASE WHEN condition1 THEN 'Result1' ELSE 'Default' END AS alias FROM table_name;</td></tr>
-                    <tr><td>SUBQUERY</td><td>Embeds a query within another query.</td><td>SELECT column1 FROM table_name WHERE column2 = (SELECT column2 FROM another_table);</td></tr>
-                    <tr><td>CREATE INDEX</td><td>Creates an index on a table.</td><td>CREATE INDEX index_name ON table_name (column_name);</td></tr>
-                    <tr><td>CREATE VIEW</td><td>Creates a virtual table based on a query.</td><td>CREATE VIEW view_name AS SELECT column1 FROM table_name WHERE condition;</td></tr>
-                    <tr><td>BEGIN TRANSACTION</td><td>Starts a new transaction.</td><td>BEGIN TRANSACTION;</td></tr>
-                    <tr><td>COMMIT</td><td>Saves changes made during the transaction.</td><td>COMMIT;</td></tr>
-                    <tr><td>ROLLBACK</td><td>Reverts changes made during the transaction.</td><td>ROLLBACK;</td></tr>
-                    <tr><td>COUNT()</td><td>Counts the number of rows.</td><td>SELECT COUNT(*) FROM table_name;</td></tr>
-                    <tr><td>SUM()</td><td>Adds up numeric values.</td><td>SELECT SUM(column1) FROM table_name;</td></tr>
-                    <tr><td>AVG()</td><td>Calculates the average of numeric values.</td><td>SELECT AVG(column1) FROM table_name;</td></tr>
-                    <tr><td>MIN()</td><td>Finds the smallest value.</td><td>SELECT MIN(column1) FROM table_name;</td></tr>
-                    <tr><td>MAX()</td><td>Finds the largest value.</td><td>SELECT MAX(column1) FROM table_name;</td></tr>
-                    <tr><td>CONCAT()</td><td>Combines strings.</td><td>SELECT CONCAT(column1, ' ', column2) AS FullName FROM table_name;</td></tr>
-                    <tr><td>LENGTH()</td><td>Returns the length of a string.</td><td>SELECT LENGTH(column1) FROM table_name;</td></tr>
-                    <tr><td>UPPER()</td><td>Converts text to uppercase.</td><td>SELECT UPPER(column1) FROM table_name;</td></tr>
-                    <tr><td>LOWER()</td><td>Converts text to lowercase.</td><td>SELECT LOWER(column1) FROM table_name;</td></tr>
-                    <tr><td>SUBSTRING()</td><td>Extracts a part of a string.</td><td>SELECT SUBSTRING(column1, 1, 5) FROM table_name;</td></tr>
-                    <tr><td>TRIM()</td><td>Removes leading and trailing spaces.</td><td>SELECT TRIM(column1) FROM table_name;</td></tr>
-                    <tr><td>NOW()</td><td>Returns the current date and time.</td><td>SELECT NOW();</td></tr>
-                    <tr><td>DATE()</td><td>Extracts the date part.</td><td>SELECT DATE(column1) FROM table_name;</td></tr>
-                    <tr><td>DATEDIFF()</td><td>Calculates the difference between two dates.</td><td>SELECT DATEDIFF(NOW(), column1) AS DaysPassed FROM table_name;</td></tr>
-                    <tr><td>DATE_ADD()</td><td>Adds a time interval to a date.</td><td>SELECT DATE_ADD(column1, INTERVAL 7 DAY) FROM table_name;</td></tr>
-                    <tr><td>DATE_FORMAT()</td><td>Formats date values.</td><td>SELECT DATE_FORMAT(column1, '%Y-%m-%d') FROM table_name;</td></tr>                                   
+                    <tr>
+                        <td><span class="function-name">SELECT</span></td>
+                        <td>Retrieves data from one or more tables.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT column1, column2 FROM table_name WHERE condition;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT column1, column2 FROM table_name WHERE condition;" aria-label="Copy SELECT statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">DISTINCT</span></td>
+                        <td>Removes duplicate records from the result.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT DISTINCT column1 FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT DISTINCT column1 FROM table_name;" aria-label="Copy DISTINCT statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">WHERE</span></td>
+                        <td>Filters records based on conditions.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT * FROM table_name WHERE column1 = 'value';</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT * FROM table_name WHERE column1 = 'value';" aria-label="Copy WHERE statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">ORDER BY</span></td>
+                        <td>Sorts the result in ascending or descending order.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT * FROM table_name ORDER BY column1 ASC;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT * FROM table_name ORDER BY column1 ASC;" aria-label="Copy ORDER BY statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">GROUP BY</span></td>
+                        <td>Groups rows sharing a property.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT column1, COUNT(*) FROM table_name GROUP BY column1;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT column1, COUNT(*) FROM table_name GROUP BY column1;" aria-label="Copy GROUP BY statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">HAVING</span></td>
+                        <td>Filters groups defined by GROUP BY.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT column1, COUNT(*) FROM table_name GROUP BY column1 HAVING COUNT(*) > 1;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT column1, COUNT(*) FROM table_name GROUP BY column1 HAVING COUNT(*) > 1;" aria-label="Copy HAVING statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">LIMIT</span></td>
+                        <td>Limits the number of rows returned.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT * FROM table_name LIMIT 10;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT * FROM table_name LIMIT 10;" aria-label="Copy LIMIT statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Add more function rows as needed following the same structure -->
                 </tbody>
             </table>
         </div>
     </main>
+
+    <!-- Prism.js JS for Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <!-- Clipboard.js for Copy Functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Initialize Clipboard.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const clipboard = new ClipboardJS('.copy-btn');
+
+            clipboard.on('success', function(e) {
+                e.trigger.textContent = 'Copied!';
+                e.trigger.classList.add('copied');
+                setTimeout(() => {
+                    e.trigger.textContent = 'Copy';
+                    e.trigger.classList.remove('copied');
+                }, 2000);
+                e.clearSelection();
+            });
+
+            clipboard.on('error', function(e) {
+                e.trigger.textContent = 'Error';
+                setTimeout(() => {
+                    e.trigger.textContent = 'Copy';
+                }, 2000);
+            });
+        });
+    </script>
 </body>
 </html>

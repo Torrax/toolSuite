@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Cheat Sheet</title>
+    <title>Windows Shortcuts Cheat Sheet</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Custom Styles -->
     <style>
         /* Reset and Base Styles */
         * {
@@ -19,92 +21,194 @@
             color: #ecf0f1;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: flex-start; /* Accommodate header overhang */
+            padding: 40px 20px 20px 20px; /* Top padding for header overhang */
         }
         header {
             background: #34495e;
-            padding: 15px 30px;
-            border-bottom: 2px solid #2c3e50;
+            padding: 20px 40px; /* Increased padding for a larger header */
+            border-radius: 15px; /* More rounded corners */
+            margin-bottom: 30px; /* Increased space below header */
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            width: 100%;
+            max-width: 1000px; /* Increased max-width for larger header */
+            /* Overhang Effect */
+            margin-left: -50px;
+            margin-right: -50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Added subtle shadow to header */
         }
         header h1 {
-            font-size: 1.8rem;
-            color: #f39c12;
+            font-size: 2.5rem; /* Increased font size */
+            color: #f39c12; /* Gold color for the title */
+            text-align: center;
         }
         header a {
             text-decoration: none;
-            color: #f39c12;
-            font-size: 1.5rem;
+            color: #f39c12; /* Gold color for the home icon */
+            font-size: 1.8rem; /* Increased icon size */
             transition: color 0.3s;
             position: absolute;
-            left: 30px;
+            left: 40px; /* Adjusted position */
         }
         header a:hover {
             color: #ecf0f1;
         }
         main {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            overflow-y: auto;
-        }
-        .list {
-            width: 90%;
+            width: 100%;
+            max-width: 1000px; /* Increased max-width for larger table container */
             background: #34495e;
-            border-radius: 10px;
-            padding: 20px;
-            overflow-y: auto;
-            height: calc(100vh - 90px); /* Adjust height for header */
+            border-radius: 20px; /* More rounded corners for container */
+            padding: 30px 25px; /* Increased padding */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* Enhanced box-shadow */
+            overflow-x: auto;
         }
-        .list h2 {
-            color: #f39c12;
-            margin-bottom: 10px;
+        main h2 {
+            color: #f39c12; /* Gold color for the heading */
+            margin-bottom: 25px;
+            font-size: 2.5rem; /* Increased font size */
+            text-align: center;
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 15px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             background: #34495e;
+            border-radius: 15px; /* Rounded corners for table */
+            overflow: hidden; /* Ensure border-radius applies */
+            table-layout: fixed; /* Ensures columns are fixed width */
+            position: relative; /* For z-index to work */
         }
         table thead {
             background-color: #2980b9;
         }
         table thead th {
-            padding: 15px;
+            padding: 15px 20px; /* Increased padding */
             text-align: left;
-            font-size: 1.2rem;
+            font-size: 1.2rem; /* Increased font size */
             color: #ecf0f1;
+            border-bottom: 3px solid #2c3e50;
         }
         table tbody tr {
-            border-bottom: 1px solid #2c3e50;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+            cursor: pointer; /* Pointer cursor on hover */
+            position: relative; /* For z-index to work */
+            z-index: 0; /* Default z-index */
         }
-        table tbody td {
-            padding: 15px;
-            text-align: left;
-            font-size: 1rem;
+        table tbody tr:hover {
+            background-color: #bca11a; /* Highlight color on hover */
+            transform: translateY(-3px) scale(1.02); /* Slightly more lift and scale */
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            z-index: 1; /* Bring hovered row above others */
         }
-        table tbody tr:nth-child(even) {
-            background-color: #3d566e;
+        /* Shortcut Column Styling */
+        table tbody td:first-child {
+            background-color: #3d566a; /* Blue shade to fit theme */
+            color: #ffffff; /* Light text for better contrast on blue background */
+            padding: 15px 20px; /* Increased padding */
+            vertical-align: middle;
+            word-wrap: break-word;
+            overflow: hidden; /* Ensure content doesn't overflow */
+            text-overflow: ellipsis; /* Add ellipsis if content is too long */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center horizontally */
+            flex-wrap: wrap;
+            text-align: center; /* Center text if wrapped */
+        }
+        /* Description Column Styling */
+        table tbody td:last-child {
+            background-color: #3d566e; /* Darker shade for Description column */
+            padding: 15px 20px; /* Increased padding */
+            vertical-align: middle;
+            word-wrap: break-word;
+            color: #ecf0f1; /* Ensure text is readable on dark background */
+        }
+        /* Styled Shortcuts */
+        .shortcut {
+            display: inline-flex;
+            align-items: center;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 5px 10px; /* Reduced padding for smaller keys */
+            margin: 0 4px 4px 0; /* Added bottom margin for wrapping */
+            font-size: 0.9rem; /* Reduced font size for smaller keys */
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .shortcut i {
+            margin-left: 5px; /* Spacing between key and icon */
+            font-size: 1rem; /* Slightly smaller icons */
+        }
+        /* Styled Symbols */
+        .symbol {
+            margin: 0 6px; /* Increased spacing around + and / symbols */
+            font-size: 1rem; /* Consistent font size */
+        }
+        /* Alternating Row Colors */
+        table tbody tr:nth-child(even) td:first-child {
+            background-color: #35495e; /* Slightly darker blue for even rows */
+        }
+        table tbody tr:nth-child(even) td:last-child {
+            background-color: #354966; /* Slightly darker shade for Description in even rows */
+        }
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            header {
+                margin-left: -30px;
+                margin-right: -30px;
+            }
+            main {
+                max-width: 90%;
+            }
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            main h2 {
+                font-size: 2rem;
+            }
+            table thead th, table tbody td {
+                padding: 12px 15px;
+                font-size: 0.95rem; /* Slightly reduced font size */
+            }
+            .shortcut {
+                font-size: 0.8rem; /* Further reduced font size */
+                padding: 4px 8px; /* Reduced padding */
+                margin: 0 3px 3px 0; /* Reduced margins */
+            }
+            .shortcut i {
+                font-size: 0.9rem; /* Adjust icon size */
+                margin-left: 3px; /* Reduced spacing */
+            }
+            .symbol {
+                margin: 0 4px; /* Reduced spacing around symbols */
+                font-size: 0.9rem; /* Adjust symbol size */
+            }
         }
         /* Custom Scrollbar Styles */
-        .list::-webkit-scrollbar {
-            width: 12px;
+        table::-webkit-scrollbar {
+            width: 14px; /* Increased width for better visibility */
         }
-        .list::-webkit-scrollbar-track {
+        table::-webkit-scrollbar-track {
             background: #2c3e50; /* Dark background */
+            border-radius: 7px;
         }
-        .list::-webkit-scrollbar-thumb {
-            background: #f39c12; /* Accent color */
-            border-radius: 6px;
-            border: 2px solid #2c3e50; /* Matches track color for spacing */
+        table::-webkit-scrollbar-thumb {
+            background: #f39c12; /* Gold color for scrollbar thumb */
+            border-radius: 7px;
+            border: 3px solid #2c3e50; /* Matches track color for spacing */
         }
-        .list::-webkit-scrollbar-thumb:hover {
-            background: #f1c40f; /* Lighter accent on hover */
+        table::-webkit-scrollbar-thumb:hover {
+            background: #e67e22; /* Darker gold on hover */
         }
     </style>
 </head>
@@ -113,82 +217,267 @@
         <a href="../index.html" title="Go Back">
             <i class="fas fa-home"></i>
         </a>
-        <h1>Windows Cheat Sheet</h1>
+        <h1>Windows Shortcuts Cheat Sheet</h1>
     </header>
     <main>
-        <div class="list">
-            <h2>Hotkeys</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Shortcut</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>WIN + D</td><td>Show desktop</td></tr>
-                    <tr><td>WIN + E</td><td>Open File Explorer</td></tr>
-                    <tr><td>WIN + L</td><td>Lock your PC</td></tr>
-                    <tr><td>WIN + Tab</td><td>Open Task View</td></tr>
-                    <tr><td>ALT + Tab</td><td>Switch between open apps</td></tr>
-                    <tr><td>CTRL + C</td><td>Copy selected item(s)</td></tr>
-                    <tr><td>CTRL + X</td><td>Cut selected item(s)</td></tr>
-                    <tr><td>CTRL + V</td><td>Paste item(s)</td></tr>
-                    <tr><td>CTRL + Z</td><td>Undo an action</td></tr>
-                    <tr><td>CTRL + Y</td><td>Redo an action</td></tr>
-                    <tr><td>SHIFT + DELETE</td><td>Permanently delete an item</td></tr>
-                    <tr><td>CTRL + A</td><td>Select all items in a window or on the desktop</td></tr>
-                    <tr><td>ALT + ENTER</td><td>Open properties for a selected item</td></tr>
-                    <tr><td>CTRL + SHIFT + ESC</td><td>Open Task Manager</td></tr>
-                    <tr><td>WIN + R</td><td>Open the Run dialog box</td></tr>
-                    <tr><td>WIN + I</td><td>Open the Settings app</td></tr>
-                    <tr><td>WIN + X</td><td>Open the Quick Link menu</td></tr>
-                    <tr><td>WIN + Pause</td><td>Open System properties</td></tr>
-                    <tr><td>WIN + Up Arrow</td><td>Maximize the active window</td></tr>
-                    <tr><td>WIN + Down Arrow</td><td>Minimize the active window</td></tr>
-                    <tr><td>WIN + Left Arrow</td><td>Snap the active window to the left half of the screen</td></tr>
-                    <tr><td>WIN + Right Arrow</td><td>Snap the active window to the right half of the screen</td></tr>
-                    <tr><td>ALT + F4</td><td>Close the active window</td></tr>
-                    <tr><td>WIN + SHIFT + S</td><td>Take a screenshot using Snip & Sketch</td></tr>
-                    <tr><td>WIN + Plus (+)</td><td>Open Magnifier and zoom in</td></tr>
-                    <tr><td>WIN + Minus (-)</td><td>Zoom out using Magnifier</td></tr>
-                    <tr><td>WIN + U</td><td>Open the Ease of Access Center</td></tr>
-                    <tr><td>CTRL + ALT + DEL</td><td>Open Security Options (lock, switch user, etc.)</td></tr>
-                    <tr><td>WIN + V</td><td>Open the clipboard history</td></tr>
-                    <tr><td>WIN + P</td><td>Project a screen (e.g., extend or duplicate displays)</td></tr>
-                    <tr><td>WIN + Space</td><td>Switch between input languages or keyboard layouts</td></tr>
-                    <tr><td>WIN + Number</td><td>Open the app pinned to the taskbar at the corresponding position</td></tr>
-                    <tr><td>ALT + Up Arrow</td><td>Go up one folder level in File Explorer</td></tr>
-                    <tr><td>ALT + Left Arrow</td><td>Go back to the previous folder</td></tr>
-                    <tr><td>ALT + Right Arrow</td><td>Go forward to the next folder</td></tr>
-                    <tr><td>F2</td><td>Rename the selected file or folder</td></tr>
-                    <tr><td>F3</td><td>Open the search box in File Explorer</td></tr>
-                    <tr><td>WIN + CTRL + D</td><td>Create a new virtual desktop</td></tr>
-                    <tr><td>WIN + CTRL + Left/Right Arrow</td><td>Switch between virtual desktops</td></tr>
-                    <tr><td>WIN + CTRL + F4</td><td>Close the current virtual desktop</td></tr>
-                    <tr><td>WIN + CTRL + Shift + B</td><td>Restart your display drivers (useful if the screen freezes)</td></tr>
-                    <tr><td>WIN + G</td><td>Open the Game Bar (for screen recording and performance monitoring)</td></tr>
-                    <tr><td>WIN + H</td><td>Open the voice typing tool</td></tr>
-                    <tr><td>WIN + K</td><td>Open the Connect menu for wireless displays and audio devices</td></tr>
-                    <tr><td>CTRL + Shift + Enter</td><td>Open Command Prompt/PowerShell as an administrator</td></tr>
-		    <tr><td>CTRL + C</td><td>Copy the selected text in Command Prompt</td></tr>
-                    <tr><td>CTRL + V</td><td>Paste the text into Command Prompt</td></tr>
-                    <tr><td>WIN + .</td><td>Open the emoji picker</td></tr>
-                    <tr><td>WIN + ;</td><td>Open the emoji picker (same as WIN + .)</td></tr>
-                    <tr><td>WIN + +</td><td>Zoom in using Magnifier</td></tr>
-                    <tr><td>WIN + -</td><td>Zoom out using Magnifier</td></tr>
-                    <tr><td>WIN + CTRL + Enter</td><td>Turn on Narrator</td></tr>
-                    <tr><td>WIN + CTRL + N</td><td>Open Narrator settings</td></tr>
-                    <tr><td>CTRL + Scroll Wheel</td><td>Zoom in or out on the desktop or a document</td></tr>
-                    <tr><td>CTRL + Shift + T</td><td>Reopen the last closed tab in most browsers</td></tr>
-                    <tr><td>ALT + D</td><td>Select the address bar in File Explorer or a browser</td></tr>
-                    <tr><td>CTRL + Shift + Esc</td><td>Open Task Manager directly</td></tr>
-                    <tr><td>WIN + Shift + M</td><td>Restore minimized windows</td></tr>
-                    <tr><td>WIN + Number</td><td>Launch apps pinned to the taskbar (based on their position)</td></tr>
-                    <tr><td>CTRL + ALT + Arrow Keys</td><td>Rotate the display (useful for multi-monitor setups)</td></tr>
-                </tbody>
-            </table>
-        </div>
+        <h2>Keyboard Shortcuts</h2>
+        <table>
+            <colgroup>
+                <col style="width: 42%;">
+                <col style="width: 58%;"> <!-- Defines the second column width -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Shortcut</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Shortcut rows -->
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">D</span></td>
+                    <td>Show desktop.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">E</span></td>
+                    <td>Open File Explorer.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">L</span></td>
+                    <td>Lock your PC.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-up"></i></span></td>
+                    <td>Open Task View.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-up"></i></span></td>
+                    <td>Switch between open apps.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">C</span></td>
+                    <td>Copy selected item(s).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">X</span></td>
+                    <td>Cut selected item(s).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">V</span></td>
+                    <td>Paste item(s).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">Z</span></td>
+                    <td>Undo an action.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">Y</span></td>
+                    <td>Redo an action.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">SHIFT</span> <span class="symbol">+</span> <span class="shortcut">DELETE</span></td>
+                    <td>Permanently delete an item.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">A</span></td>
+                    <td>Select all items in a window or on the desktop.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut">ENTER</span></td>
+                    <td>Open properties for a selected item.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">SHIFT</span> <span class="symbol">+</span> <span class="shortcut">ESC</span></td>
+                    <td>Open Task Manager.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">R</span></td>
+                    <td>Open the Run dialog box.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">I</span></td>
+                    <td>Open the Settings app.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">X</span></td>
+                    <td>Open the Quick Link menu.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">Pause</span></td>
+                    <td>Open System properties.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-up"></i></span></td>
+                    <td>Maximize the active window.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-down"></i></span></td>
+                    <td>Minimize the active window.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-left"></i></span></td>
+                    <td>Snap the active window to the left half of the screen.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-right"></i></span></td>
+                    <td>Snap the active window to the right half of the screen.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut">F4</span></td>
+                    <td>Close the active window.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">SHIFT</span> <span class="symbol">+</span> <span class="shortcut">S</span></td>
+                    <td>Take a screenshot using Snip &amp; Sketch.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">+</span></td>
+                    <td>Zoom in using Magnifier.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">-</span></td>
+                    <td>Zoom out using Magnifier.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">U</span></td>
+                    <td>Open the Ease of Access Center.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut">DEL</span></td>
+                    <td>Open Security Options (lock, switch user, etc.).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">V</span></td>
+                    <td>Open the clipboard history.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">P</span></td>
+                    <td>Project a screen (e.g., extend or duplicate displays).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">Space</span></td>
+                    <td>Switch between input languages or keyboard layouts.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">Number</span></td>
+                    <td>Open the app pinned to the taskbar at the corresponding position.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-up"></i></span></td>
+                    <td>Go up one folder level in File Explorer.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-left"></i></span></td>
+                    <td>Go back to the previous folder.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut"><i class="fas fa-arrow-right"></i></span></td>
+                    <td>Go forward to the next folder.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">F2</span></td>
+                    <td>Rename the selected file or folder.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">F3</span></td>
+                    <td>Open the search box in File Explorer.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">D</span></td>
+                    <td>Create a new virtual desktop.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">CTRL</span> <span class="symbol">+</span>
+                        <span class="shortcut"><i class="fas fa-arrow-left"></i></span> / <span class="shortcut"><i class="fas fa-arrow-right"></i></span>
+                    </td>
+                    <td>Switch between virtual desktops.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">F4</span></td>
+                    <td>Close the current virtual desktop.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">SHIFT</span> <span class="symbol">+</span> <span class="shortcut">B</span></td>
+                    <td>Restart your display drivers (useful if the screen freezes).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">G</span></td>
+                    <td>Open the Game Bar (for screen recording and performance monitoring).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">H</span></td>
+                    <td>Open the voice typing tool.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">K</span></td>
+                    <td>Open the Connect menu for wireless displays and audio devices.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">SHIFT</span> <span class="symbol">+</span> <span class="shortcut">Enter</span></td>
+                    <td>Open Command Prompt/PowerShell as an administrator.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">C</span></td>
+                    <td>Copy the selected text in Command Prompt.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">V</span></td>
+                    <td>Paste the text into Command Prompt.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">.</span></td>
+                    <td>Open the emoji picker.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">;</span></td>
+                    <td>Open the emoji picker (same as WIN + .).</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">+</span></td>
+                    <td>Zoom in using Magnifier.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">-</span></td>
+                    <td>Zoom out using Magnifier.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">Enter</span></td>
+                    <td>Turn on Narrator.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">N</span></td>
+                    <td>Open Narrator settings.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">Scroll Wheel</span></td>
+                    <td>Zoom in or out on the desktop or a document.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">SHIFT</span> <span class="symbol">+</span> <span class="shortcut">T</span></td>
+                    <td>Reopen the last closed tab in most browsers.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">ALT</span> <span class="symbol">+</span> <span class="shortcut">D</span></td>
+                    <td>Select the address bar in File Explorer or a browser.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">SHIFT</span> <span class="symbol">+</span> <span class="shortcut">Esc</span></td>
+                    <td>Open Task Manager directly.</td>
+                </tr>
+                <tr>
+                    <td><span class="shortcut">WIN</span> <span class="symbol">+</span> <span class="shortcut">Shift</span> <span class="symbol">+</span> <span class="shortcut">M</span></td>
+                    <td>Restore minimized windows.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="shortcut">CTRL</span> <span class="symbol">+</span> <span class="shortcut">ALT</span> <span class="symbol">+</span> 
+                        <span class="shortcut"><i class="fas fa-arrow-up"></i></span> / <span class="shortcut"><i class="fas fa-arrow-down"></i></span> / <span class="shortcut"><i class="fas fa-arrow-left"></i></span> / <span class="shortcut"><i class="fas fa-arrow-right"></i></span>
+                    </td>
+                    <td>Rotate the display (useful for multi-monitor setups).</td>
+                </tr>
+            </tbody>
+        </table>
     </main>
 </body>
 </html>

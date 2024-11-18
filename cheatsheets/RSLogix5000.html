@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSLogix 5000 Cheat Sheet</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Custom Styles -->
     <style>
         /* Reset and Base Styles */
         * {
@@ -19,8 +21,10 @@
             color: #ecf0f1;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 40px 20px 20px 20px;
         }
         header {
             background: #34495e;
@@ -30,14 +34,19 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            flex-shrink: 0;
+            width: 85%; /* Span the entire width */
+            border-radius: 15px; /* Rounded corners for header */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Subtle shadow */
         }
         header h1 {
-            font-size: 1.8rem;
-            color: #f39c12;
+            font-size: 2rem;
+            color: #f39c12; /* Gold color for the title */
+            text-align: center;
         }
         header a {
             text-decoration: none;
-            color: #f39c12;
+            color: #f39c12; /* Gold color for the home icon */
             font-size: 1.5rem;
             transition: color 0.3s;
             position: absolute;
@@ -52,58 +61,194 @@
             display: flex;
             justify-content: space-between;
             gap: 20px;
+            width: 100%;
+            max-width: 1400px; /* Increased max-width for larger screens */
         }
         .list {
-            width: 48%;
             background: #34495e;
-            border-radius: 10px;
-            padding: 20px;
-            overflow-y: auto;
-            height: calc(100vh - 90px); /* Adjust height for header */
+            border-radius: 15px; /* Rounded corners for containers */
+            padding: 25px 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            overflow-y: auto; /* Enable vertical scrolling within each box */
+            max-height: calc(100vh - 120px); /* Adjust height for header */
+            transition: transform 0.3s;
+        }
+        .list:hover {
+            transform: translateY(-2px); /* Subtle lift on hover */
         }
         .list h2 {
-            color: #f39c12;
-            margin-bottom: 10px;
+            color: #f39c12; /* Gold color for the heading */
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-align: center;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        }
+        /* Adjusted widths: Hotkeys (left) 55%, Functions (right) 43% */
+        .list:first-child {
+            width: 55%;
+        }
+        .list:last-child {
+            width: 43%;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             background: #34495e;
+            border-radius: 10px; /* Rounded corners for table */
+            overflow: hidden; /* Ensure border-radius applies */
+            table-layout: fixed; /* Ensures columns are fixed width */
+            position: relative; /* For z-index to work */
         }
         table thead {
             background-color: #2980b9;
         }
         table thead th {
-            padding: 15px;
+            padding: 12px 15px;
             text-align: left;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #ecf0f1;
+            border-bottom: 2px solid #2c3e50;
         }
         table tbody tr {
-            border-bottom: 1px solid #2c3e50;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            z-index: 0;
         }
-        table tbody td {
-            padding: 15px;
-            text-align: left;
-            font-size: 1rem;
+        table tbody tr:hover {
+            background-color: #bca11a;
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            z-index: 1;
         }
-        table tbody tr:nth-child(even) {
+        /* Centering Hotkeys and Functions Column */
+        table tbody td:first-child {
+            background-color: #3d566a;
+            color: #ffffff;
+            padding: 12px 15px;
+            vertical-align: middle;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center horizontally */
+            text-align: center; /* Center text if wrapped */
+            flex-wrap: wrap;
+        }
+        /* Description Column Styling */
+        table tbody td:last-child {
             background-color: #3d566e;
+            padding: 12px 15px;
+            vertical-align: middle;
+            word-wrap: break-word;
+            color: #ecf0f1;
+        }
+        /* Remove rounded corners from internal cells */
+        table tbody td {
+            border-radius: 0;
+        }
+        /* Rounded corners for the last row */
+        table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+        table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+        /* Styled Hotkeys */
+        .hotkey {
+            display: inline-flex;
+            align-items: center;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 4px 8px; /* Reduced padding for smaller keys */
+            margin: 0 4px 4px 0; /* Added bottom margin for wrapping */
+            font-size: 0.8rem; /* Reduced font size for smaller keys */
+            font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .hotkey i {
+            margin-left: 3px; /* Spacing between key and icon */
+            font-size: 0.9rem; /* Slightly smaller icons */
+        }
+        /* Styled Function Names */
+        .function-name {
+            display: inline-block;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 4px 8px;
+            margin: 0 4px 4px 0;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        /* Styled Symbols */
+        .symbol {
+            margin: 0 6px; /* Increased spacing around + symbols */
+            font-size: 1rem; /* Consistent font size */
+        }
+        /* Alternating Row Colors */
+        table tbody tr:nth-child(even) td:first-child {
+            background-color: #35495e;
+        }
+        table tbody tr:nth-child(even) td:last-child {
+            background-color: #354966;
+        }
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            main {
+                flex-direction: column;
+            }
+            .list {
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .list h2 {
+                font-size: 1.8rem;
+            }
+            table thead th, table tbody td {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+            .hotkey, .function-name {
+                font-size: 0.8rem;
+                padding: 4px 6px;
+                margin: 0 3px 3px 0;
+            }
+            .hotkey i, .function-name i {
+                font-size: 0.8rem;
+                margin-left: 2px;
+            }
+            .symbol {
+                margin: 0 4px;
+                font-size: 0.9rem;
+            }
         }
         /* Custom Scrollbar Styles */
         .list::-webkit-scrollbar {
             width: 12px;
         }
         .list::-webkit-scrollbar-track {
-            background: #2c3e50; /* Dark background */
+            background: #2c3e50;
+            border-radius: 6px;
         }
         .list::-webkit-scrollbar-thumb {
-            background: #f39c12; /* Accent color */
+            background: #f39c12;
             border-radius: 6px;
-            border: 2px solid #2c3e50; /* Matches track color for spacing */
+            border: 2px solid #2c3e50;
         }
         .list::-webkit-scrollbar-thumb:hover {
-            background: #f1c40f; /* Lighter accent on hover */
+            background: #e67e22;
         }
     </style>
 </head>
@@ -118,6 +263,10 @@
         <div class="list">
             <h2>Hotkeys</h2>
             <table>
+                <colgroup>
+                    <col style="width: 40%;">
+                    <col style="width: 60%;"> <!-- Defines the second column width -->
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Hotkey</th>
@@ -126,24 +275,64 @@
                 </thead>
                 <tbody>
                     <!-- Hotkey rows -->
-                    <tr><td>CTRL + E</td><td>Opens the Edit Ladder view.</td></tr>
-                    <tr><td>CTRL + G</td><td>Go to a specific rung in the ladder logic.</td></tr>
-                    <tr><td>CTRL + R</td><td>Verify the rung logic for errors.</td></tr>
-                    <tr><td>F4</td><td>Toggle force enable on a selected tag.</td></tr>
-                    <tr><td>ALT + F12</td><td>Access cross-referencing for the selected element.</td></tr>
-                    <tr><td>CTRL + F</td><td>Search within the project file.</td></tr>
-                    <tr><td>CTRL + SHIFT + F</td><td>Open the Find All References window.</td></tr>
-                    <tr><td>CTRL + D</td><td>Download the program to the PLC.</td></tr>
-                    <tr><td>CTRL + SHIFT + D</td><td>Download with edits only.</td></tr>
-                    <tr><td>F7</td><td>Compile the ladder logic.</td></tr>
-                    <tr><td>CTRL + W</td><td>Close the current project window.</td></tr>
-                    <tr><td>CTRL + S</td><td>Save the current project.</td></tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">E</span></td>
+                        <td>Opens the Edit Ladder view.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">G</span></td>
+                        <td>Go to a specific rung in the ladder logic.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">R</span></td>
+                        <td>Verify the rung logic for errors.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">F4</span></td>
+                        <td>Toggle force enable on a selected tag.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">ALT</span> <span class="symbol">+</span> <span class="hotkey">F12</span></td>
+                        <td>Access cross-referencing for the selected element.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">F</span></td>
+                        <td>Search within the project file.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">SHIFT</span> <span class="symbol">+</span> <span class="hotkey">F</span></td>
+                        <td>Open the Find All References window.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">D</span></td>
+                        <td>Download the program to the PLC.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">SHIFT</span> <span class="symbol">+</span> <span class="hotkey">D</span></td>
+                        <td>Download with edits only.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">F7</span></td>
+                        <td>Compile the ladder logic.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">W</span></td>
+                        <td>Close the current project window.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">S</span></td>
+                        <td>Save the current project.</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div class="list">
             <h2>Functions</h2>
             <table>
+                <colgroup>
+                    <col style="width: 30%;">
+                    <col style="width: 70%;"> <!-- Defines the second column width -->
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Function</th>
@@ -152,20 +341,62 @@
                 </thead>
                 <tbody>
                     <!-- Function rows -->
-                    <tr><td>ADD</td><td>Adds two values together.</td></tr>
-                    <tr><td>SUB</td><td>Subtracts one value from another.</td></tr>
-                    <tr><td>MUL</td><td>Multiplies two values.</td></tr>
-                    <tr><td>DIV</td><td>Divides one value by another.</td></tr>
-                    <tr><td>TON</td><td>Timer On Delay function block.</td></tr>
-                    <tr><td>TOF</td><td>Timer Off Delay function block.</td></tr>
-                    <tr><td>CTU</td><td>Count Up function block.</td></tr>
-                    <tr><td>CTD</td><td>Count Down function block.</td></tr>
-                    <tr><td>RTO</td><td>Retentive Timer function block.</td></tr>
-                    <tr><td>OSR</td><td>One-Shot Rising function block.</td></tr>
-                    <tr><td>OSF</td><td>One-Shot Falling function block.</td></tr>
-                    <tr><td>MOV</td><td>Move data from one location to another.</td></tr>
-                    <tr><td>LEN</td><td>Get the length of a string.</td></tr>
-                    <tr><td>ABS</td><td>Returns the absolute value of a number.</td></tr>
+                    <tr>
+                        <td><span class="function-name">ADD</span></td>
+                        <td>Adds two values together.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">SUB</span></td>
+                        <td>Subtracts one value from another.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">MUL</span></td>
+                        <td>Multiplies two values.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">DIV</span></td>
+                        <td>Divides one value by another.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">TON</span></td>
+                        <td>Timer On Delay function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">TOF</span></td>
+                        <td>Timer Off Delay function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">CTU</span></td>
+                        <td>Count Up function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">CTD</span></td>
+                        <td>Count Down function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">RTO</span></td>
+                        <td>Retentive Timer function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">OSR</span></td>
+                        <td>One-Shot Rising function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">OSF</span></td>
+                        <td>One-Shot Falling function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">MOV</span></td>
+                        <td>Move data from one location to another.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">LEN</span></td>
+                        <td>Get the length of a string.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">ABS</span></td>
+                        <td>Returns the absolute value of a number.</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
