@@ -276,7 +276,7 @@
             }
             /* Preview Area */
             #preview {
-                width: 60%;
+                width: 100%;
                 background: linear-gradient(145deg, #34495e, #2c3e50);
                 border-radius: 12px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -346,7 +346,6 @@
                 background-color: transparent;
                 padding: 0;
                 position: relative;
-                border-radius: 8px;
                 box-shadow: none;
                 overflow: visible;
             }
@@ -355,7 +354,6 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                border-radius: 8px;
                 background-color: transparent;
             }
             /* Image Text */
@@ -524,29 +522,6 @@
                 text-align: center;
             }
         </style>
-        
-        <!-- SVG Filters for Pixelate and Noise Effects -->
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="position: absolute; width: 0; height: 0;">
-            <defs>
-                <!-- Pixelate Filter -->
-                <filter id="pixelateFilter">
-                    <!-- Scale down the image -->
-                    <feImage xlink:href="" result="sourceImage"/>
-                    <feScale in="sourceImage" scale="0.1" result="scaledDown"/>
-                    <!-- Scale up the image to create pixelation -->
-                    <feScale in="scaledDown" scale="10" result="pixelated"/>
-                    <!-- Overlay the pixelated image onto the original -->
-                    <feComposite in="pixelated" in2="SourceGraphic" operator="over"/>
-                </filter>
-
-                <!-- Noise Filter -->
-                <filter id="noiseFilter">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise"/>
-                    <feColorMatrix type="saturate" values="0" in="noise" result="monoNoise"/>
-                    <feBlend in="SourceGraphic" in2="monoNoise" mode="multiply"/>
-                </filter>
-            </defs>
-        </svg>
 
         <!-- Dynamic Styles -->
         <style id="dynamicStyles">
@@ -702,7 +677,7 @@
                             </label>
                             <label for="imageResizePercentage">
                                 <span>Resize Percentage (%):</span>
-                                <input type="number" id="imageResizePercentage" value="100" min="10" max="200">
+                                <input type="number" id="imageResizePercentage" value="100" min="10" max="1000">
                             </label>
                         </div>
                         <!-- Flip and Rotate Controls on the Same Row -->
@@ -1044,6 +1019,7 @@
             window.addEventListener('DOMContentLoaded', function() {
                 // Define a global variable to track the current active tab
                 let currentTab = 'text'; // Default active tab
+                let isInitialImageLoad = true;
 
                 // Tab Elements
                 const textTab = document.getElementById('textTab');
@@ -1472,162 +1448,153 @@
                 }
 
                 // Function to update styles for Image Button
+                // Create an off-screen canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Store the original image data
+                let originalImage = null;
+
+                // When the image is loaded
+                imageButtonImg.onload = function() {
+                    if (isInitialImageLoad) {
+                        // Set canvas dimensions to the image dimensions
+                        canvas.width = imageButtonImg.naturalWidth;
+                        canvas.height = imageButtonImg.naturalHeight;
+                        // Draw the image onto the canvas
+                        ctx.drawImage(imageButtonImg, 0, 0);
+                        // Store the original image data
+                        originalImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        isInitialImageLoad = false; // Prevent overwriting originalImage in future loads
+                    }
+                    // Apply filters
+                    updateImageButtonStyles();
+                };
+                
+
                 function updateImageButtonStyles() {
-                    if (uploadedImage) {
-                        // Apply CSS Filters
-                        const brightness = imageBrightness.value;
-                        const contrast = imageContrast.value;
-                        const hue = imageHue.value;
-                        const saturation = imageSaturation.value;
-                        const opacity = imageOpacity.value;
-                        const blur = imageBlur.value;
-
-                        let filterCSS = `
-                            brightness(${brightness}%)
-                            contrast(${contrast}%)
-                            hue-rotate(${hue}deg)
-                            saturate(${saturation}%)
-                            opacity(${opacity}%)
-                            blur(${blur}px)
-                        `.replace(/\s+/g, ' ').trim();
-
-                        // Apply Shadow Effect if enabled
-                        if (imageShadowEffect && imageShadowEffect.checked) {
-                            const xOffset = imageShadowXOffset.value;
-                            const yOffset = imageShadowYOffset.value;
-                            const shadowBlurVal = imageShadowBlur.value;
-                            const color = imageShadowColor.value;
-                            filterCSS += ` drop-shadow(${xOffset}px ${yOffset}px ${shadowBlurVal}px ${color})`;
-                        }
-
-                        // Apply Pixelate Filter if value > 1
-                        const pixelateValue = parseInt(imagePixelate.value);
-                        if (pixelateValue > 1) {
-                            // Update the scale based on pixelateValue
-                            const scaleDown = 1 / pixelateValue;
-                            const scaleUp = pixelateValue;
-
-                            // Dynamically update the pixelate filter's scale
-                            const pixelateFilter = document.getElementById('pixelateFilter');
-                            if (pixelateFilter) {
-                                const feScaleDown = pixelateFilter.querySelector('feScale:first-of-type');
-                                const feScaleUp = pixelateFilter.querySelector('feScale:last-of-type');
-                                if (feScaleDown && feScaleUp) {
-                                    feScaleDown.setAttribute('scale', scaleDown.toString());
-                                    feScaleUp.setAttribute('scale', scaleUp.toString());
-                                }
-                            }
-
-                            filterCSS += ` url(#pixelateFilter)`;
-                        }
-
-                        // Apply Noise Filter if value > 0
-                        const noiseValue = parseInt(imageNoise.value);
-                        if (noiseValue > 0) {
-                            // Update the noise filter's baseFrequency based on noiseValue
-                            const noiseFilter = document.getElementById('noiseFilter');
-                            if (noiseFilter) {
-                                const feTurbulence = noiseFilter.querySelector('feTurbulence');
-                                if (feTurbulence) {
-                                    // Adjust baseFrequency based on noiseValue
-                                    // Normalize noiseValue (0-100) to baseFrequency (0.1-1)
-                                    const baseFrequency = (noiseValue / 100) * 0.9 + 0.1;
-                                    feTurbulence.setAttribute('baseFrequency', baseFrequency.toString());
-                                }
-                            }
-
-                            filterCSS += ` url(#noiseFilter)`;
-                        }
-
-                        // Apply Transformations
-                        const resizePercentage = parseInt(imageResizePercentage.value) || 100;
-                        const transform = `scale(${flipHorizontal * (resizePercentage / 100)}, ${flipVertical * (resizePercentage / 100)}) rotate(${rotationAngle}deg)`;
-
-                        // Apply manual size if specified
-                        if (imageWidth.value) {
-                            imageButton.style.width = `${imageWidth.value}px`;
-                        } else {
-                            imageButton.style.width = 'auto';
-                        }
-                        if (imageHeight.value) {
-                            imageButton.style.height = `${imageHeight.value}px`;
-                        } else {
-                            imageButton.style.height = 'auto';
-                        }
-
-                        // Build CSS for Image Button with higher specificity
-                        let css = '';
-                        css += '#preview #buttonContainer #imageButton {\n'; // Increased specificity
-                        css += `  filter: ${filterCSS};\n`;
-                        css += `  transform: ${transform};\n`;
-                        css += '  transition: all 0.3s ease;\n';
-                        css += '}\n';
-
-                        // Hover State (Increase Brightness by 10%)
-                        css += '#preview #buttonContainer #imageButton:hover {\n'; // Increased specificity
-                        const hoverBrightness = Math.min(parseFloat(imageBrightness.value) * 1.1, 200); // Cap at 200%
-                        let hoverFilterCSS = `
-                            brightness(${hoverBrightness}%)
-                            contrast(${contrast}%)
-                            hue-rotate(${hue}deg)
-                            saturate(${saturation}%)
-                            opacity(${opacity}%)
-                            blur(${blur}px)
-                        `.replace(/\s+/g, ' ').trim();
-                        if (imageShadowEffect && imageShadowEffect.checked) {
-                            hoverFilterCSS += ` drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})`;
-                        }
-                        if (pixelateValue > 1) {
-                            hoverFilterCSS += ` url(#pixelateFilter)`;
-                        }
-                        if (noiseValue > 0) {
-                            hoverFilterCSS += ` url(#noiseFilter)`;
-                        }
-                        css += `  filter: ${hoverFilterCSS};\n`;
-                        css += '}\n';
-
-                        // Active State (Decrease Brightness by 15%)
-                        css += '#preview #buttonContainer #imageButton:active {\n'; // Increased specificity
-                        const activeBrightness = Math.max(parseFloat(imageBrightness.value) * 0.85, 0); // Floor at 0%
-                        let activeFilterCSS = `
-                            brightness(${activeBrightness}%)
-                            contrast(${contrast}%)
-                            hue-rotate(${hue}deg)
-                            saturate(${saturation}%)
-                            opacity(${opacity}%)
-                            blur(${blur}px)
-                        `.replace(/\s+/g, ' ').trim();
-                        if (imageShadowEffect && imageShadowEffect.checked) {
-                            activeFilterCSS += ` drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})`;
-                        }
-                        if (pixelateValue > 1) {
-                            activeFilterCSS += ` url(#pixelateFilter)`;
-                        }
-                        if (noiseValue > 0) {
-                            activeFilterCSS += ` url(#noiseFilter)`;
-                        }
-                        css += `  filter: ${activeFilterCSS};\n`;
-                        css += '}\n';
-
-                        // Apply CSS
-                        dynamicStyles.textContent = css;
-
-                        // Handle Image Text
-                        if (showImageText.checked) {
-                            imageText.style.display = 'block';
-                            imageText.textContent = imageButtonText.value;
-                            applyImageTextStyles(imageText);
-                            const offsetX = parseInt(textOffsetX.value) || 0;
-                            const offsetY = parseInt(textOffsetY.value) || 0;
-                            imageText.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-                        } else {
-                            imageText.style.display = 'none';
-                        }
-
-                        // Debugging
-                        console.log('Dynamic Styles Updated for Image Button:', css);
+                    if (!uploadedImage) return;
+                
+                    // Create a canvas
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                
+                    // Get the resize percentage
+                    const resizePercentage = parseInt(imageResizePercentage.value) || 100;
+                    const scaleFactor = resizePercentage / 100;
+                
+                    // Calculate scaled dimensions
+                    const imageWidth = uploadedImage.width * scaleFactor;
+                    const imageHeight = uploadedImage.height * scaleFactor;
+                
+                    // Determine canvas size to accommodate rotation
+                    let canvasWidth, canvasHeight;
+                
+                    if (rotationAngle % 180 === 0) {
+                        canvasWidth = Math.abs(imageWidth);
+                        canvasHeight = Math.abs(imageHeight);
+                    } else {
+                        canvasWidth = Math.abs(imageHeight);
+                        canvasHeight = Math.abs(imageWidth);
+                    }
+                
+                    canvas.width = canvasWidth;
+                    canvas.height = canvasHeight;
+                
+                    ctx.save();
+                
+                    // Move to the center of the canvas
+                    ctx.translate(canvasWidth / 2, canvasHeight / 2);
+                
+                    // Apply rotation
+                    ctx.rotate(rotationAngle * Math.PI / 180);
+                
+                    // Apply flip
+                    ctx.scale(flipHorizontal, flipVertical);
+                
+                    // Draw the image onto the canvas
+                    ctx.drawImage(
+                        uploadedImage,
+                        -imageWidth / 2,
+                        -imageHeight / 2,
+                        imageWidth,
+                        imageHeight
+                    );
+                
+                    ctx.restore();
+                
+                    // Get image data for pixel manipulation
+                    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    let data = imageData.data;
+                
+                    // Only apply brightness and contrast adjustments if values differ from defaults
+                    const defaultBrightness = 100;
+                    const defaultContrast = 100;
+                    const brightnessValue = parseInt(imageBrightness.value);
+                    const contrastValue = parseInt(imageContrast.value);
+                
+                    if (brightnessValue !== defaultBrightness || contrastValue !== defaultContrast) {
+                        applyBrightnessContrast(data, brightnessValue, contrastValue);
+                        ctx.putImageData(imageData, 0, 0);
+                    }
+                
+                    // Only apply hue and saturation adjustments if values differ from defaults
+                    const defaultHue = 0;
+                    const defaultSaturation = 100;
+                    const hueValue = parseInt(imageHue.value);
+                    const saturationValue = parseInt(imageSaturation.value);
+                
+                    if (hueValue !== defaultHue || saturationValue !== defaultSaturation) {
+                        applyHueSaturation(data, hueValue, saturationValue);
+                        ctx.putImageData(imageData, 0, 0);
+                    }
+                
+                    // Set the image source to the canvas data URL
+                    imageButtonImg.src = canvas.toDataURL();
+                
+                    // Apply opacity only if it differs from default
+                    imageButtonImg.style.opacity =
+                        imageOpacity.value !== '100' ? imageOpacity.value / 100 : '';
+                
+                    // Remove CSS filters and transforms
+                    imageButtonImg.style.filter = '';
+                    imageButtonImg.style.transform = '';
+                
+                    // Handle Image Text
+                    if (showImageText.checked) {
+                        imageText.style.display = 'block';
+                        imageText.textContent = imageButtonText.value;
+                        const offsetX = parseInt(textOffsetX.value) || 0;
+                        const offsetY = parseInt(textOffsetY.value) || 0;
+                        imageText.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
+                    } else {
+                        imageText.style.display = 'none';
+                    }
+                
+                    // Apply manual size if specified
+                    if (imageWidth.value) {
+                        imageButton.style.width = `${imageWidth.value}px`;
+                    } else {
+                        imageButton.style.width = `${canvasWidth}px`;
+                    }
+                    if (imageHeight.value) {
+                        imageButton.style.height = `${imageHeight.value}px`;
+                    } else {
+                        imageButton.style.height = `${canvasHeight}px`;
+                    }
+                
+                    // Apply shadow effect if enabled
+                    if (imageShadowEffect.checked) {
+                        const xOffset = imageShadowXOffset.value;
+                        const yOffset = imageShadowYOffset.value;
+                        const blurVal = imageShadowBlur.value;
+                        const color = imageShadowColor.value;
+                        imageButton.style.filter = `drop-shadow(${xOffset}px ${yOffset}px ${blurVal}px ${color})`;
+                    } else {
+                        imageButton.style.filter = 'none';
                     }
                 }
+                
 
                 // Helper function to copy computed styles to an element
                 function copyComputedStyles(sourceElement, targetElement) {
@@ -1799,36 +1766,126 @@
                     textClone.style.whiteSpace = 'nowrap';
                 }
 
-                // Function to handle image upload
+                function applyBrightnessContrast(data, brightness, contrast) {
+                    brightness = parseInt(brightness) - 100;
+                    contrast = parseInt(contrast);
+                    const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = factor * (data[i] - 128) + 128 + brightness;     // Red
+                        data[i+1] = factor * (data[i+1] - 128) + 128 + brightness; // Green
+                        data[i+2] = factor * (data[i+2] - 128) + 128 + brightness; // Blue
+                    }
+                }
+                
+                function applyHueSaturation(data, hue, saturation) {
+                    hue = parseInt(hue);
+                    saturation = parseInt(saturation) / 100;
+                    for (let i = 0; i < data.length; i += 4) {
+                        // Convert RGB to HSL
+                        let r = data[i] / 255;
+                        let g = data[i+1] / 255;
+                        let b = data[i+2] / 255;
+                        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+                        let h, s, l = (max + min) / 2;
+                
+                        if(max == min){
+                            h = s = 0; // achromatic
+                        }else{
+                            let d = max - min;
+                            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                            switch(max){
+                                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                                case g: h = (b - r) / d + 2; break;
+                                case b: h = (r - g) / d + 4; break;
+                            }
+                            h /= 6;
+                        }
+                
+                        // Adjust hue and saturation
+                        h = (h + hue / 360) % 1;
+                        s = s * saturation;
+                
+                        // Convert HSL back to RGB
+                        if(s == 0){
+                            r = g = b = l; // achromatic
+                        }else{
+                            const hue2rgb = function(p, q, t){
+                                if(t < 0) t += 1;
+                                if(t > 1) t -= 1;
+                                if(t < 1/6) return p + (q - p) * 6 * t;
+                                if(t < 1/2) return q;
+                                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                                return p;
+                            }
+                            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                            let p = 2 * l - q;
+                            r = hue2rgb(p, q, h + 1/3);
+                            g = hue2rgb(p, q, h);
+                            b = hue2rgb(p, q, h - 1/3);
+                        }
+                        data[i] = r * 255;
+                        data[i+1] = g * 255;
+                        data[i+2] = b * 255;
+                    }
+                }
+                
+                function addNoiseToImageData(data, noiseLevel) {
+                    noiseLevel = parseInt(noiseLevel);
+                    for (let i = 0; i < data.length; i += 4) {
+                        const rand = (Math.random() - 0.5) * noiseLevel;
+                        data[i] += rand;     // Red
+                        data[i+1] += rand;   // Green
+                        data[i+2] += rand;   // Blue
+                    }
+                }
+                
+                function pixelateImage(ctx, width, height, pixelSize) {
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                
+                    tempCanvas.width = Math.ceil(width / pixelSize);
+                    tempCanvas.height = Math.ceil(height / pixelSize);
+                
+                    tempCtx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, width, height);
+                    ctx.imageSmoothingEnabled = true;
+                }
+
                 function handleImageUpload(event) {
                     const file = event.target.files[0];
                     if (file && file.type.startsWith('image/')) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            const img = new Image();
-                            img.crossOrigin = 'Anonymous'; // To avoid CORS issues
-                            img.onload = function() {
-                                // Set the image source
-                                imageButtonImg.src = e.target.result;
-                                uploadedImage = img;
+                            // Reset transformations
+                            rotationAngle = 0;
+                            flipHorizontal = 1;
+                            flipVertical = 1;
+
+                            // Create a new Image object
+                            uploadedImage = new Image();
+                            uploadedImage.crossOrigin = 'Anonymous'; // To avoid CORS issues
+                            uploadedImage.onload = function() {
                                 // Update styles
-                                if (currentTab === 'image') { // Use currentTab instead of activeTab
-                                    // Show Image Button only if an image is uploaded
-                                    imageButton.style.display = uploadedImage ? 'inline-block' : 'none';
-                                    // Show Image Text if checkbox is checked
-                                    imageText.style.display = showImageText.checked && uploadedImage ? 'block' : 'none';
+                                if (currentTab === 'image') {
+                                    imageButton.style.display = 'inline-block';
+                                    imageText.style.display = showImageText.checked ? 'block' : 'none';
                                 } else {
                                     imageButton.style.display = 'none';
                                     imageText.style.display = 'none';
                                 }
+
                                 // Update image button styles
                                 updateImageButtonStyles();
-                            }
-                            img.src = e.target.result;
-                        }
+                            };
+                            uploadedImage.src = e.target.result;
+                        };
                         reader.readAsDataURL(file);
                     }
                 }
+
+                            
 
                 // Function to reset effects to default values
                 function resetEffectsToDefault() {
@@ -1945,6 +2002,11 @@
                 const flipHorizontalButton = document.getElementById('flipHorizontal');
                 const flipVerticalButton = document.getElementById('flipVertical');
 
+                // Add event listeners for image resizing inputs
+                imageResizePercentage.addEventListener('input', updateImageButtonStyles);
+                imageWidth.addEventListener('input', updateImageButtonStyles);
+                imageHeight.addEventListener('input', updateImageButtonStyles);
+
                 rotateLeftButton.addEventListener('click', () => {
                     rotationAngle = (rotationAngle - 90) % 360;
                     updateImageButtonStyles();
@@ -2010,67 +2072,31 @@
                 }
 
                 // Function to download Text Button
-                function downloadTextButton(state) {
-                    // Clone the textButton
-                    const clone = textButton.cloneNode(true);
-
-                    // Remove any existing inline styles to prevent conflicts
-                    clone.removeAttribute('style');
-
-                    // Apply computed styles to clone
-                    copyComputedStyles(textButton, clone);
-
-                    // Apply state-specific styles
-                    applyCloneTextButtonStyles(clone, state);
-
-                    // Create a temporary container for capturing
-                    const tempContainer = document.createElement('div');
-                    tempContainer.style.display = 'inline-block';
-                    tempContainer.style.margin = '0';
-                    tempContainer.style.padding = '0';
-                    tempContainer.style.border = 'none';
-                    tempContainer.style.background = 'none';
-
-                    // Position the container off-screen to avoid affecting layout
-                    tempContainer.style.position = 'fixed';
-                    tempContainer.style.top = '-10000px';
-                    tempContainer.style.left = '-10000px';
-
-                    tempContainer.appendChild(clone);
-                    document.body.appendChild(tempContainer);
-
-                    // Use html2canvas to capture the button as PNG with transparent background and increased scale
-                    html2canvas(clone, {
-                        useCORS: true,
-                        allowTaint: false,
-                        backgroundColor: null, // Make background transparent
-                        scale: 3 // Increase scale for better resolution
-                    })
-                        .then(function (canvas) {
-                            const dataUrl = canvas.toDataURL('image/png');
-                            downloadDataUrl(`text-button-${state}.png`, dataUrl);
-                            document.body.removeChild(tempContainer);
-                        })
-                        .catch(function (error) {
-                            console.error('An error occurred while capturing the Text Button:', error);
-                            document.body.removeChild(tempContainer);
-                        });
-                }
-
-                // Function to download Image Button
                 function downloadImageButton(state) {
                     // Clone the imageButton
                     const clone = imageButton.cloneNode(true);
-
+                
                     // Remove any existing inline styles to prevent conflicts
                     clone.removeAttribute('style');
-
+                
                     // Apply computed styles to clone
                     copyComputedStyles(imageButton, clone);
-
-                    // Apply state-specific styles
-                    applyCloneImageButtonStyles(clone, state);
-
+                
+                    // Remove CSS transforms and filters
+                    clone.style.transform = 'none';
+                    clone.style.filter = 'none';
+                
+                    // Apply shadow effect if enabled
+                    if (imageShadowEffect.checked) {
+                        const xOffset = imageShadowXOffset.value;
+                        const yOffset = imageShadowYOffset.value;
+                        const blurVal = imageShadowBlur.value;
+                        const color = imageShadowColor.value;
+                        clone.style.filter = `drop-shadow(${xOffset}px ${yOffset}px ${blurVal}px ${color})`;
+                    } else {
+                        clone.style.filter = 'none';
+                    }
+                
                     // Handle Image Text if applicable
                     const textClone = clone.querySelector('.image-text');
                     if (showImageText.checked && uploadedImage) {
@@ -2084,7 +2110,7 @@
                             textClone.style.display = 'none';
                         }
                     }
-
+                
                     // Create a temporary container for capturing
                     const tempContainer = document.createElement('div');
                     tempContainer.style.display = 'inline-block';
@@ -2092,32 +2118,32 @@
                     tempContainer.style.padding = '0';
                     tempContainer.style.border = 'none';
                     tempContainer.style.background = 'none';
-
+                
                     // Position the container off-screen to avoid affecting layout
                     tempContainer.style.position = 'fixed';
                     tempContainer.style.top = '-10000px';
                     tempContainer.style.left = '-10000px';
-
+                
                     tempContainer.appendChild(clone);
                     document.body.appendChild(tempContainer);
-
-                    // Use html2canvas to capture the button as PNG with transparent background and increased scale
+                
+                    // Use html2canvas to capture the button as PNG with transparent background
                     html2canvas(clone, {
                         useCORS: true,
                         allowTaint: false,
-                        backgroundColor: null, // Make background transparent
-                        scale: 3 // Increase scale for better resolution
+                        backgroundColor: null,
+                        scale: 1 // Capture at actual size
                     })
-                        .then(function (canvas) {
-                            const dataUrl = canvas.toDataURL('image/png');
-                            downloadDataUrl(`image-button-${state}.png`, dataUrl);
-                            document.body.removeChild(tempContainer);
-                        })
-                        .catch(function (error) {
-                            console.error('An error occurred while capturing the Image Button:', error);
-                            document.body.removeChild(tempContainer);
-                        });
-                }
+                    .then(function (canvas) {
+                        const dataUrl = canvas.toDataURL('image/png');
+                        downloadDataUrl(`image-button-${state}.png`, dataUrl);
+                        document.body.removeChild(tempContainer);
+                    })
+                    .catch(function (error) {
+                        console.error('An error occurred while capturing the Image Button:', error);
+                        document.body.removeChild(tempContainer);
+                    });
+                }                
 
             });
         </script>
