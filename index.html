@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tool Suite</title>
+    <title>Engineering Tool Suite</title>
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <meta name="description" content="A comprehensive suite of engineering tools for general use, calculations, projects, design, electrical, mechanical, space exploration, and cheat sheets.">
+    <meta name="keywords" content="Engineering Tools, Calculator, Project Management, Design Tools, Electrical Simulator, Mechanical Simulator, Space Exploration, Cheat Sheets">
     <style>
         /* Reset and Box-sizing */
         * {
@@ -92,7 +94,7 @@
             width: 300px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.3s ease;
             overflow: hidden;
             color: inherit;
             text-decoration: none;
@@ -100,10 +102,11 @@
             flex-direction: column;
             align-items: center;
         }
-
+        
         .tool-card:hover {
             transform: translateY(-10px) scale(1.05);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            background-color: #2c3e50; /* Slight color change on hover */
         }
 
         /* Tool Card Titles */
@@ -167,6 +170,67 @@
 
         footer a:hover {
             color: #e67e22;
+        }
+
+        /* Sub-Navigation Tabs */
+        .sub-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .sub-tab {
+            padding: 8px 16px;
+            background: #34495e;
+            border-radius: 6px;
+            color: #ecf0f1;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .sub-tab:hover, .sub-tab.active {
+            background: #1abc9c;
+        }
+
+        /* Subtab Content */
+        .subtab-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        /* Subtab Content Hidden - Enhanced Specificity */
+        .subtab-content.hidden {
+            display: none;
+        }
+
+        /* Responsive Sub-Navigation */
+        @media (max-width: 768px) {
+            .sub-nav {
+                gap: 8px;
+            }
+
+            .sub-tab {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+
+            .subtab-content {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sub-tab {
+                padding: 4px 8px;
+                font-size: 0.6rem;
+            }
         }
 
         /* Media Queries for Responsiveness */
@@ -250,13 +314,14 @@
     <h1>Engineering Tool Suite</h1>
 
     <!-- Navigation Tabs -->
-    <nav>
+    <nav aria-label="Main Navigation">
         <div class="tab active" data-tab="general">General</div>
         <div class="tab" data-tab="calculation">Calculation</div>
         <div class="tab" data-tab="projects">Projects</div>
         <div class="tab" data-tab="design">Design</div>
         <div class="tab" data-tab="electrical">Electrical</div>
         <div class="tab" data-tab="mechanical">Mechanical</div>
+        <div class="tab" data-tab="programming">Programming</div> <!-- Programming Tab -->
         <div class="tab" data-tab="space">Space</div>
         <div class="tab" data-tab="cheatsheets">Cheat Sheets</div>
     </nav>
@@ -391,11 +456,6 @@
                 <h3>Circuit Simulator</h3>
                 <p>Make live circuits with Falstad's interactive circuit simulator.</p>
             </a>            
-            <a href="https://github.com/codespaces" class="tool-card" target="_blank">
-                <i class="fas fa-code tool-icon"></i>
-                <h3>VS CodeSpace</h3>
-                <p>Open Visual Studio Code in your browser.</p>
-            </a>
             <a href="electrical/iframe-PLCSim.html" class="tool-card">
                 <i class="fas fa-cogs tool-icon" aria-hidden="true"></i>
                 <h3>PLC Simulator</h3>
@@ -413,6 +473,7 @@
             </a>         
         </div>        
     </section>
+    
     <!-- Mechanical Section -->
     <section id="mechanical" class="tab-content hidden">
         <div class="tool-container">
@@ -436,7 +497,315 @@
                 <h3>Mechanical Simulation Designer</h3>
                 <p>Design and visualize complex mechanical systems.</p>
             </a>
-            
+        </div>
+    </section>
+
+    <!-- Programming Section -->
+    <section id="programming" class="tab-content hidden">
+        <!-- Sub-Navigation Tabs for Programming Languages -->
+        <div class="sub-nav" aria-label="Programming Language Navigation">
+            <div class="sub-tab active" data-subtab="python">Python</div>
+            <div class="sub-tab" data-subtab="javascript">JavaScript</div>
+            <div class="sub-tab" data-subtab="java">Java</div>
+            <div class="sub-tab" data-subtab="csharp">C#</div>
+            <div class="sub-tab" data-subtab="c">C</div>
+            <div class="sub-tab" data-subtab="cpp">C++</div>
+            <div class="sub-tab" data-subtab="htmlcss">HTML/CSS</div>
+            <div class="sub-tab" data-subtab="sql">SQL</div>
+        </div>
+        
+        <!-- Python Tools -->
+        <div id="python" class="subtab-content">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/python3" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Run Python code online without signing up.</p>
+                </a>
+                <!-- Python Compiler -->
+                <a href="https://www.programiz.com/python-programming/online-compiler/" class="tool-card" target="_blank">
+                    <i class="fas fa-flask tool-icon"></i>
+                    <h3>Python Compiler</h3>
+                    <p>Test and share Python code snippets easily.</p>
+                </a>
+                <!-- PyPI Package Explorer -->
+                <a href="https://pypi.org/" class="tool-card" target="_blank">
+                    <i class="fas fa-box-open tool-icon"></i>
+                    <h3>PyPI Package Explorer</h3>
+                    <p>Browse and explore Python packages.</p>
+                </a>
+                <!-- Documentation -->
+                <a href="https://docs.python.org/3/" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access official Python documentation and guides.</p>
+                </a>
+            </div>
+        </div>
+        
+        <!-- JavaScript Tools -->
+        <div id="javascript" class="subtab-content hidden">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/javascript" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Run JavaScript code online without signing up.</p>
+                </a>
+                <!-- Compiler -->
+                <a href="https://www.programiz.com/javascript/online-compiler/" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>JS Compiler</h3>
+                    <p>Run JavaScript code online without signing up.</p>
+                </a>
+                <!-- Beautifier -->
+                <a href="https://codebeautify.org/jsviewer" class="tool-card" target="_blank">
+                    <i class="fas fa-paint-brush tool-icon"></i>
+                    <h3>Beautifier</h3>
+                    <p>Format and beautify your JavaScript code.</p>
+                </a>
+                <!-- Can I Use -->
+                <a href="https://caniuse.com/" class="tool-card" target="_blank">
+                    <i class="fas fa-check tool-icon"></i>
+                    <h3>Can I Use</h3>
+                    <p>Check browser compatibility for JavaScript features.</p>
+                </a>
+                <!-- Documentation -->
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access official JavaScript documentation and guides.</p>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Java Tools -->
+        <div id="java" class="subtab-content hidden">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/java10" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Run Java code online without signing up.</p>
+                </a>
+                <!-- JDoodle -->
+                <a href="https://www.jdoodle.com/online-java-compiler/" class="tool-card" target="_blank">
+                    <i class="fas fa-flask tool-icon"></i>
+                    <h3>JDoodle</h3>
+                    <p>Compile and run Java code instantly.</p>
+                </a>
+                <!-- Documentation -->
+                <a href="https://docs.oracle.com/en/java/" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access official Java documentation and guides.</p>
+                </a>
+            </div>
+        </div>
+        
+        <!-- C# Tools -->
+        <div id="csharp" class="subtab-content hidden">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/csharp" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Run C# code online without signing up.</p>
+                </a>
+                <!-- Compiler -->
+                <a href="https://www.programiz.com/csharp-programming/online-compiler/" class="tool-card" target="_blank">
+                    <i class="fas fa-flask tool-icon"></i>
+                    <h3>C# Compiler</h3>
+                    <p>Write, run, and share C# code snippets.</p>
+                </a>
+                <!-- Beautifier -->
+                <a href="https://codebeautify.org/csharpviewer" class="tool-card" target="_blank">
+                    <i class="fas fa-paint-brush tool-icon"></i>
+                    <h3>Beautifier</h3>
+                    <p>Format and beautify your C# code.</p>
+                </a>
+                <!-- Documentation -->
+                <a href="https://docs.microsoft.com/en-us/dotnet/csharp/" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access official C# documentation and guides.</p>
+                </a>
+            </div>
+        </div>
+        
+        <!-- C Tools -->
+        <div id="c" class="subtab-content hidden">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/c" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Run C code online without signing up.</p>
+                </a>
+                <!-- Compiler -->
+                <a href="https://www.programiz.com/c-programming/online-compiler/" class="tool-card" target="_blank">
+                    <i class="fas fa-flask tool-icon"></i>
+                    <h3>C Compiler</h3>
+                    <p>Write, compile, and run C code directly in your browser.</p>
+                </a>
+                <!-- Beautifier -->
+                <a href="https://codebeautify.org/c-formatter-beautifier" class="tool-card" target="_blank">
+                    <i class="fas fa-paint-brush tool-icon"></i>
+                    <h3>Beautifier</h3>
+                    <p>Format and beautify your C code.</p>
+                </a>
+                <!-- Documentation -->
+                <a href="https://en.cppreference.com/w/c" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access comprehensive C programming documentation.</p>
+                </a>
+            </div>
+        </div>
+        
+        <!-- C++ Tools -->
+        <div id="cpp" class="subtab-content hidden">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/cpp" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Run C++ code online without signing up.</p>
+                </a>
+                <!-- Compiler -->
+                <a href="https://www.programiz.com/cpp-programming/online-compiler/" class="tool-card" target="_blank">
+                    <i class="fas fa-flask tool-icon"></i>
+                    <h3>C++ Compiler</h3>
+                    <p>Write, compile, and run C++ code directly in your browser.</p>
+                </a>
+                <!-- Beautifier -->
+                <a href="https://codebeautify.org/cpp-formatter-beautifier" class="tool-card" target="_blank">
+                    <i class="fas fa-paint-brush tool-icon"></i>
+                    <h3>Beautifier</h3>
+                    <p>Format and beautify your C++ code.</p>
+                </a>
+                <!-- Documentation -->
+                <a href="https://en.cppreference.com/w/cpp" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access comprehensive C++ programming documentation.</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- HTML/CSS Tools -->
+        <div id="htmlcss" class="subtab-content hidden">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/html" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Create and test HTML/CSS projects online without signing up.</p>
+                </a>
+                <!-- CodePen -->
+                <a href="https://codepen.io/pen/" class="tool-card" target="_blank">
+                    <i class="fas fa-paint-brush tool-icon"></i>
+                    <h3>CodePen</h3>
+                    <p>Write and preview HTML, CSS, and JavaScript code with instant feedback.</p>
+                </a>
+                <!-- GitHub Pages -->
+                <a href="https://pages.github.com/" class="tool-card" target="_blank">
+                    <i class="fas fa-cloud-upload-alt tool-icon"></i>
+                    <h3>GitHub Pages</h3>
+                    <p>Host your static websites for free directly from GitHub repositories.</p>
+                </a>
+                <!-- Beautify -->
+                <a href="https://www.freeformatter.com/css-beautifier.html" class="tool-card" target="_blank">
+                    <i class="fas fa-paint-brush tool-icon"></i>
+                    <h3>Beautifier</h3>
+                    <p>Format and beautify your CSS code for better readability.</p>
+                </a>
+                <!-- Documentation -->
+                <a href="https://developer.mozilla.org/en-US/docs/Web" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access comprehensive HTML and CSS documentation and guides.</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- SQL Tools -->
+        <div id="sql" class="subtab-content hidden">
+            <div class="tool-container">
+                <!-- GitHub VS Code -->
+                <a href="https://vscode.dev/" class="tool-card" target="_blank">
+                    <i class="fas fa-code tool-icon"></i>
+                    <h3>GitHub VS Code</h3>
+                    <p>Open Visual Studio Code in your browser.</p>
+                </a>
+                <!-- Replit -->
+                <a href="https://replit.com/languages/sqlite" class="tool-card" target="_blank">
+                    <i class="fas fa-terminal tool-icon"></i>
+                    <h3>Replit</h3>
+                    <p>Execute SQL queries online without signing up.</p>
+                </a>
+                <!-- Compiler -->
+                <a href= "https://www.programiz.com/sql/online-compiler/" class="tool-card" target="_blank">
+                    <i class="fas fa-flask tool-icon"></i>
+                    <h3>SQL Compiler</h3>
+                    <p>Test and share SQL queries across a database.</p>
+                </a>
+                <!-- Beautifier -->
+                <a href="http://www.dpriver.com/pp/sqlformat.htm" class="tool-card" target="_blank">
+                    <i class="fas fa-paint-brush tool-icon"></i>
+                    <h3>Beautifier</h3>
+                    <p>Quickly format your SQL code with support for various dialects.</p>
+                </a>                           
+                <!-- Documentation -->
+                <a href="https://www.w3schools.com/sql/" class="tool-card" target="_blank">
+                    <i class="fas fa-book tool-icon"></i>
+                    <h3>Documentation</h3>
+                    <p>Access comprehensive SQL tutorials and references.</p>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -519,7 +888,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Created By<a href="https://github.com/Torrax" target="_blank">Carson Morris</a></p>
+        <p>&copy; 2024 Created By<a href="https://github.com/Torrax" target="_blank" rel="noopener noreferrer"> Carson Morris</a></p>
     </footer>
 
     <script>
@@ -528,12 +897,19 @@
         const tabContents = document.querySelectorAll('.tab-content');
 
         const DEFAULT_TAB = 'general';
-        const STORAGE_KEY = 'selectedTab';
-        const STORAGE_TIME_KEY = 'selectedTabTimestamp';
+        const MAIN_STORAGE_KEY = 'selectedTab';
+        const MAIN_STORAGE_TIME_KEY = 'selectedTabTimestamp';
+        const SUB_STORAGE_KEY = 'selectedProgrammingSubTab';
         const EXPIRATION_TIME = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
 
-        // Function to activate a tab by its name
-        function activateTab(tabName, updateURL = true) {
+        // Function to activate a main tab by its name
+        function activateTab(tabName, subTabName = null, updateURL = true) {
+            // Validate if the tab exists
+            const validTab = Array.from(tabs).some(t => t.getAttribute('data-tab') === tabName);
+            if (!validTab) {
+                tabName = DEFAULT_TAB;
+            }
+
             tabs.forEach(t => {
                 if (t.getAttribute('data-tab') === tabName) {
                     t.classList.add('active');
@@ -550,42 +926,104 @@
                 }
             });
 
+            // If the activated tab is 'programming' and a subTabName is provided, activate it
+            if (tabName === 'programming' && subTabName) {
+                activateSubTab(subTabName, false); // Activate without updating URL again
+            }
+
             // Update URL hash if requested
             if (updateURL) {
-                window.history.pushState(null, '', `#${tabName}`);
+                let newHash = `#${tabName}`;
+                if (tabName === 'programming' && subTabName) {
+                    newHash += `/${subTabName}`;
+                }
+                window.history.pushState(null, '', newHash);
             }
         }
 
-        // Function to save the selected tab with timestamp
+        // Function to save the selected main tab with timestamp
         function saveSelectedTab(tabName) {
-            localStorage.setItem(STORAGE_KEY, tabName);
-            localStorage.setItem(STORAGE_TIME_KEY, Date.now());
+            localStorage.setItem(MAIN_STORAGE_KEY, tabName);
+            localStorage.setItem(MAIN_STORAGE_TIME_KEY, Date.now());
         }
 
-        // Function to load the saved tab if it's not expired
+        // Function to load the saved main tab if it's not expired
         function loadSelectedTab() {
-            const hashTab = window.location.hash.slice(1); // Get tab from URL hash
-            const savedTab = localStorage.getItem(STORAGE_KEY);
-            const savedTime = localStorage.getItem(STORAGE_TIME_KEY);
+            const hash = window.location.hash.slice(1); // Get hash without '#'
+            const [hashTab, hashSubTab] = hash.split('/'); // Split into main tab and sub-tab
+
+            const savedTab = localStorage.getItem(MAIN_STORAGE_KEY);
+            const savedTime = localStorage.getItem(MAIN_STORAGE_TIME_KEY);
             let tabToActivate = DEFAULT_TAB;
+            let subTabToActivate = null;
 
             if (hashTab) {
-                tabToActivate = hashTab; // Prioritize URL hash
+                tabToActivate = hashTab;
+                if (tabToActivate === 'programming' && hashSubTab) {
+                    subTabToActivate = hashSubTab;
+                    // Save the sub-tab selection
+                    localStorage.setItem(SUB_STORAGE_KEY, subTabToActivate);
+                }
             } else if (savedTab && savedTime) {
                 const currentTime = Date.now();
                 if (currentTime - savedTime < EXPIRATION_TIME) {
-                    tabToActivate = savedTab; // Use saved tab if valid
+                    tabToActivate = savedTab;
+                    if (tabToActivate === 'programming') {
+                        subTabToActivate = localStorage.getItem(SUB_STORAGE_KEY) || 'python';
+                    }
                 } else {
                     // Expired, remove from storage
-                    localStorage.removeItem(STORAGE_KEY);
-                    localStorage.removeItem(STORAGE_TIME_KEY);
+                    localStorage.removeItem(MAIN_STORAGE_KEY);
+                    localStorage.removeItem(MAIN_STORAGE_TIME_KEY);
                 }
             }
 
-            activateTab(tabToActivate, false); // Activate without updating URL
+            activateTab(tabToActivate, subTabToActivate, false); // Activate without updating URL
         }
 
-        // Event listeners for tabs
+        // Function to activate a sub-tab by its name
+        function activateSubTab(subTabName, updateURL = true) {
+            if (!subTabs || !subTabContents) return; // No programming section
+
+            // Validate if the sub-tab exists
+            const validSubTab = Array.from(subTabs).some(st => st.getAttribute('data-subtab') === subTabName);
+            if (!validSubTab) {
+                subTabName = 'python';
+            }
+
+            subTabs.forEach(st => {
+                if (st.getAttribute('data-subtab') === subTabName) {
+                    st.classList.add('active');
+                } else {
+                    st.classList.remove('active');
+                }
+            });
+
+            subTabContents.forEach(content => {
+                if (content.id === subTabName) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+
+            // Save the selected sub-tab permanently
+            localStorage.setItem(SUB_STORAGE_KEY, subTabName);
+
+            // Update URL hash if requested
+            if (updateURL) {
+                const currentHash = window.location.hash.slice(1);
+                const [mainTab] = currentHash.split('/');
+
+                let newHash = `#${mainTab}`;
+                if (mainTab === 'programming') {
+                    newHash += `/${subTabName}`;
+                }
+                window.history.pushState(null, '', newHash);
+            }
+        }
+
+        // Event listeners for main tabs
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetTab = tab.getAttribute('data-tab');
@@ -594,13 +1032,36 @@
             });
         });
 
-        // Load the selected tab on page load
+        // Initialize sub-tab functionality
+        const programmingSection = document.getElementById('programming');
+
+        let subTabs, subTabContents;
+
+        if (programmingSection) {
+            subTabs = programmingSection.querySelectorAll('.sub-tab');
+            subTabContents = programmingSection.querySelectorAll('.subtab-content');
+
+            // Event listeners for sub-tabs
+            subTabs.forEach(subTab => {
+                subTab.addEventListener('click', () => {
+                    const targetSubTab = subTab.getAttribute('data-subtab');
+                    activateSubTab(targetSubTab);
+                });
+            });
+
+            // Optionally, activate the first sub-tab by default
+            const activeSubTab = programmingSection.querySelector('.sub-tab.active');
+            if (activeSubTab) {
+                activateSubTab(activeSubTab.getAttribute('data-subtab'), false);
+            }
+        }
+
+        // Load the selected main tab on page load
         window.addEventListener('DOMContentLoaded', loadSelectedTab);
 
-        // Handle browser back/forward navigation
+        // Handle browser back/forward navigation for main tabs
         window.addEventListener('popstate', () => {
-            const hashTab = window.location.hash.slice(1) || DEFAULT_TAB;
-            activateTab(hashTab, false); // Activate without updating URL
+            loadSelectedTab();
         });
     </script>
 </body>
