@@ -9,51 +9,64 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <!-- Custom Styles -->
     <style>
+        /* CSS Variables for Consistency */
+        :root {
+            --primary-bg: #2c3e50;
+            --secondary-bg: #34495e;
+            --accent-color: #f39c12;
+            --text-color: #ecf0f1;
+            --header-bg: #2980b9;
+            --hover-bg: #bca11a;
+            --even-row-bg: #35495e;
+            --odd-row-bg: #3d566a;
+            --font-family: 'Arial', sans-serif;
+            --border-radius: 15px;
+            --box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
         /* Reset and Base Styles */
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
         body {
-            font-family: 'Arial', sans-serif;
-            background: #2c3e50;
-            color: #ecf0f1;
+            margin: 0;
+            font-family: var(--font-family);
+            background: var(--primary-bg);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             align-items: center;
-            justify-content: flex-start;
-            padding: 40px 20px 20px 20px;
+            padding: 40px 20px 20px;
         }
         header {
-            background: #34495e;
+            background: var(--secondary-bg);
             padding: 15px 30px;
-            border-bottom: 2px solid #2c3e50;
+            border-bottom: 2px solid var(--primary-bg);
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            width: 85%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             flex-shrink: 0;
-            width: 85%; /* Span the entire width */
-            border-radius: 15px; /* Rounded corners for header */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Subtle shadow */
         }
         header h1 {
             font-size: 2rem;
-            color: #f39c12; /* Gold color for the title */
+            color: var(--accent-color);
             text-align: center;
+            margin: 0;
         }
         header a {
             text-decoration: none;
-            color: #f39c12; /* Gold color for the home icon */
+            color: var(--accent-color);
             font-size: 1.5rem;
             transition: color 0.3s;
             position: absolute;
             left: 30px;
         }
         header a:hover {
-            color: #ecf0f1;
+            color: var(--text-color);
         }
         main {
             flex: 1;
@@ -62,148 +75,95 @@
             justify-content: space-between;
             gap: 20px;
             width: 100%;
-            max-width: 1400px; /* Increased max-width for larger screens */
+            max-width: 1400px;
         }
         .list {
-            background: #34495e;
-            border-radius: 15px; /* Rounded corners for containers */
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
             padding: 25px 20px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            overflow-y: auto; /* Enable vertical scrolling within each box */
-            max-height: calc(100vh - 120px); /* Adjust height for header */
+            box-shadow: var(--box-shadow);
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
             transition: transform 0.3s;
+            width: 48%;
         }
         .list:hover {
-            transform: translateY(-2px); /* Subtle lift on hover */
+            transform: translateY(-2px);
         }
         .list h2 {
-            color: #f39c12; /* Gold color for the heading */
+            color: var(--accent-color);
             margin-bottom: 20px;
             font-size: 2rem;
             text-align: center;
-            border-bottom: 2px solid #f39c12;
+            border-bottom: 2px solid var(--accent-color);
             padding-bottom: 10px;
-        }
-        /* Adjusted widths: Hotkeys (left) 55%, Functions (right) 43% */
-        .list:first-child {
-            width: 55%;
-        }
-        .list:last-child {
-            width: 43%;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #34495e;
-            border-radius: 10px; /* Rounded corners for table */
-            overflow: hidden; /* Ensure border-radius applies */
-            table-layout: fixed; /* Ensures columns are fixed width */
-            position: relative; /* For z-index to work */
+            border-radius: 10px;
+            overflow: hidden;
+            table-layout: fixed;
         }
         table thead {
-            background-color: #2980b9;
+            background-color: var(--header-bg);
         }
         table thead th {
             padding: 12px 15px;
             text-align: left;
             font-size: 1.1rem;
-            color: #ecf0f1;
-            border-bottom: 2px solid #2c3e50;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-bg);
         }
         table tbody tr {
             transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
-            position: relative;
-            z-index: 0;
         }
         table tbody tr:hover {
-            background-color: #bca11a;
+            background-color: var(--hover-bg);
             transform: translateY(-2px) scale(1.01);
             box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-            z-index: 1;
         }
-        /* Centering Hotkeys and Functions Column */
-        table tbody td:first-child {
-            background-color: #3d566a;
-            color: #ffffff;
-            padding: 12px 15px;
-            vertical-align: middle;
-            word-wrap: break-word;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center horizontally */
-            text-align: center; /* Center text if wrapped */
-            flex-wrap: wrap;
-        }
-        /* Description Column Styling */
-        table tbody td:last-child {
-            background-color: #3d566e;
-            padding: 12px 15px;
-            vertical-align: middle;
-            word-wrap: break-word;
-            color: #ecf0f1;
-        }
-        /* Remove rounded corners from internal cells */
         table tbody td {
-            border-radius: 0;
+            padding: 12px 15px;
+            vertical-align: middle;
+            word-wrap: break-word;
+            color: var(--text-color);
+            font-size: 1rem;
         }
-        /* Rounded corners for the last row */
-        table tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 10px;
+        table tbody td:first-child {
+            background-color: var(--odd-row-bg);
+            text-align: center;
         }
-        table tbody tr:last-child td:last-child {
-            border-bottom-right-radius: 10px;
+        table tbody td:last-child {
+            background-color: var(--odd-row-bg);
         }
-        /* Styled Hotkeys */
-        .hotkey {
-            display: inline-flex;
-            align-items: center;
-            background-color: #ecf0f1;
-            color: #2c3e50;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            padding: 4px 8px; /* Reduced padding for smaller keys */
-            margin: 0 4px 4px 0; /* Added bottom margin for wrapping */
-            font-size: 0.8rem; /* Reduced font size for smaller keys */
-            font-weight: bold;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        table tbody tr:nth-child(even) td {
+            background-color: var(--even-row-bg);
         }
-        .hotkey i {
-            margin-left: 3px; /* Spacing between key and icon */
-            font-size: 0.9rem; /* Slightly smaller icons */
-        }
-        /* Styled Function Names */
-        .function-name {
+        /* Styled Hotkeys and Functions */
+        .hotkey, .function-name {
             display: inline-block;
-            background-color: #ecf0f1;
-            color: #2c3e50;
+            background-color: var(--text-color);
+            color: var(--primary-bg);
             border: 1px solid #bdc3c7;
             border-radius: 5px;
             padding: 4px 8px;
             margin: 0 4px 4px 0;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: bold;
             box-shadow: 0 1px 2px rgba(0,0,0,0.2);
             text-align: center;
         }
-        /* Styled Symbols */
         .symbol {
-            margin: 0 6px; /* Increased spacing around + symbols */
-            font-size: 1rem; /* Consistent font size */
-        }
-        /* Alternating Row Colors */
-        table tbody tr:nth-child(even) td:first-child {
-            background-color: #35495e;
-        }
-        table tbody tr:nth-child(even) td:last-child {
-            background-color: #354966;
+            margin: 0 6px;
+            font-size: 1rem;
         }
         /* Responsive Design */
         @media (max-width: 1200px) {
             main {
                 flex-direction: column;
+                align-items: center;
             }
             .list {
                 width: 100%;
@@ -214,24 +174,20 @@
                 font-size: 1.5rem;
             }
             .list h2 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
             table thead th, table tbody td {
                 padding: 10px 12px;
-                font-size: 0.95rem;
+                font-size: 0.875rem;
             }
             .hotkey, .function-name {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
                 padding: 4px 6px;
                 margin: 0 3px 3px 0;
             }
-            .hotkey i, .function-name i {
-                font-size: 0.8rem;
-                margin-left: 2px;
-            }
             .symbol {
                 margin: 0 4px;
-                font-size: 0.9rem;
+                font-size: 0.875rem;
             }
         }
         /* Custom Scrollbar Styles */
@@ -239,13 +195,13 @@
             width: 12px;
         }
         .list::-webkit-scrollbar-track {
-            background: #2c3e50;
+            background: var(--primary-bg);
             border-radius: 6px;
         }
         .list::-webkit-scrollbar-thumb {
-            background: #f39c12;
+            background: var(--accent-color);
             border-radius: 6px;
-            border: 2px solid #2c3e50;
+            border: 2px solid var(--primary-bg);
         }
         .list::-webkit-scrollbar-thumb:hover {
             background: #e67e22;
@@ -254,18 +210,19 @@
 </head>
 <body>
     <header>
-        <a href="../index.html" title="Go Back">
+        <a href="../index.html" title="Go Back" aria-label="Go Back to Home">
             <i class="fas fa-home"></i>
         </a>
         <h1>RSLogix 5000 Cheat Sheet</h1>
     </header>
     <main>
-        <div class="list">
+        <section class="list">
             <h2>Hotkeys</h2>
+            <!-- Hotkeys grouped into categories -->
             <table>
                 <colgroup>
                     <col style="width: 40%;">
-                    <col style="width: 60%;"> <!-- Defines the second column width -->
+                    <col style="width: 60%;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -274,64 +231,172 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Hotkey rows -->
+                    <!-- Editing Hotkeys -->
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">E</span></td>
-                        <td>Opens the Edit Ladder view.</td>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Editing</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">G</span></td>
-                        <td>Go to a specific rung in the ladder logic.</td>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">SHIFT</span><span class="symbol">+</span><span class="hotkey">S</span></td>
+                        <td>Start an online rung edit.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">R</span></td>
-                        <td>Verify the rung logic for errors.</td>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">R</span></td>
+                        <td>Insert a rung.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">F4</span></td>
-                        <td>Toggle force enable on a selected tag.</td>
+                        <td><span class="hotkey">DELETE</span></td>
+                        <td>Delete the character after the caret.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">ALT</span> <span class="symbol">+</span> <span class="hotkey">F12</span></td>
-                        <td>Access cross-referencing for the selected element.</td>
+                        <td><span class="hotkey">ENTER</span></td>
+                        <td>Edit the current field.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">F</span></td>
-                        <td>Search within the project file.</td>
+                        <td><span class="hotkey">F2</span></td>
+                        <td>Edit the current field.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">SHIFT</span> <span class="symbol">+</span> <span class="hotkey">F</span></td>
-                        <td>Open the Find All References window.</td>
+                        <td><span class="hotkey">ESC</span></td>
+                        <td>Cancel the current action.</td>
+                    </tr>
+                    <!-- Navigation Hotkeys -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Navigation</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">D</span></td>
-                        <td>Download the program to the PLC.</td>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">G</span></td>
+                        <td>Bring up the Go To dialog.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">SHIFT</span> <span class="symbol">+</span> <span class="hotkey">D</span></td>
-                        <td>Download with edits only.</td>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">PAGE UP</span></td>
+                        <td>Go to previous routine.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">F7</span></td>
-                        <td>Compile the ladder logic.</td>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">PAGE DOWN</span></td>
+                        <td>Go to next routine.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">W</span></td>
-                        <td>Close the current project window.</td>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">HOME</span></td>
+                        <td>Go to top rung.</td>
                     </tr>
                     <tr>
-                        <td><span class="hotkey">CTRL</span> <span class="symbol">+</span> <span class="hotkey">S</span></td>
-                        <td>Save the current project.</td>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">END</span></td>
+                        <td>Go to bottom rung.</td>
+                    </tr>
+                    <!-- View Controls -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">View Controls</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">F6</span></td>
+                        <td>Toggle between ladder editor panes.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">F6</span></td>
+                        <td>Toggle between multiple views.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">SHIFT</span><span class="symbol">+</span><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">TAB</span></td>
+                        <td>Move between views in the opposite direction.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">ALT</span><span class="symbol">+</span><span class="hotkey">0</span></td>
+                        <td>Toggle the Controller Organizer window.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">ALT</span><span class="symbol">+</span><span class="hotkey">1</span></td>
+                        <td>Toggle the Output window.</td>
+                    </tr>
+                    <!-- Searching and Help -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Searching and Help</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">F1</span></td>
+                        <td>Launch help.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">F3</span></td>
+                        <td>Find the next search result.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">SHIFT</span><span class="symbol">+</span><span class="hotkey">F3</span></td>
+                        <td>Find the previous search result.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">F</span></td>
+                        <td>Bring up the Find dialog.</td>
+                    </tr>
+                    <!-- Editing Modes -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Editing Modes</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">I</span></td>
+                        <td>Toggle between insert and append modes.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">SHIFT</span><span class="symbol">+</span><span class="hotkey">TAB</span></td>
+                        <td>Move cursor backward through dialog fields.</td>
+                    </tr>
+                    <!-- Miscellaneous Hotkeys -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Miscellaneous</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">ALT</span><span class="symbol">+</span><span class="hotkey">TAB</span></td>
+                        <td>Switch between running applications.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">ALT</span><span class="symbol">+</span><span class="hotkey">SPACE</span></td>
+                        <td>Access the Control menu.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">D</span></td>
+                        <td>Edit a description.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">E</span></td>
+                        <td>Navigate to cross reference.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">N</span></td>
+                        <td>Create a new controller.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">O</span></td>
+                        <td>Open a controller.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">S</span></td>
+                        <td>Save a controller.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">T</span></td>
+                        <td>Toggle the bit.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">Y</span></td>
+                        <td>Perform a redo.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">Z</span></td>
+                        <td>Perform an undo.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">SHIFT</span><span class="symbol">+</span><span class="hotkey">E</span></td>
+                        <td>Go to next destructive reference.</td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="list">
+        </section>
+        <section class="list">
             <h2>Functions</h2>
+            <!-- Functions grouped into categories -->
             <table>
                 <colgroup>
                     <col style="width: 30%;">
-                    <col style="width: 70%;"> <!-- Defines the second column width -->
+                    <col style="width: 70%;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -340,7 +405,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Function rows -->
+                    <!-- Math Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Math Functions</td>
+                    </tr>
                     <tr>
                         <td><span class="function-name">ADD</span></td>
                         <td>Adds two values together.</td>
@@ -358,12 +426,100 @@
                         <td>Divides one value by another.</td>
                     </tr>
                     <tr>
+                        <td><span class="function-name">MOD</span></td>
+                        <td>Calculates the remainder of division.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">SQR</span></td>
+                        <td>Calculates the square root of a value.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">NEG</span></td>
+                        <td>Negates a value.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">ABS</span></td>
+                        <td>Returns the absolute value of a number.</td>
+                    </tr>
+                    <!-- Bitwise Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Bitwise Functions</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">AND</span></td>
+                        <td>Performs bitwise AND operation.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">OR</span></td>
+                        <td>Performs bitwise OR operation.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">XOR</span></td>
+                        <td>Performs bitwise XOR operation.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">NOT</span></td>
+                        <td>Performs bitwise NOT operation.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">BSL</span></td>
+                        <td>Bit Shift Left operation.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">BSR</span></td>
+                        <td>Bit Shift Right operation.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">MVM</span></td>
+                        <td>Masked Move instruction.</td>
+                    </tr>
+                    <!-- Comparison Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Comparison Functions</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">EQU</span></td>
+                        <td>Equal comparison.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">NEQ</span></td>
+                        <td>Not equal comparison.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">GRT</span></td>
+                        <td>Greater than comparison.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">LES</span></td>
+                        <td>Less than comparison.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">GEQ</span></td>
+                        <td>Greater than or equal comparison.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">LEQ</span></td>
+                        <td>Less than or equal comparison.</td>
+                    </tr>
+                    <!-- Timer Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Timer Functions</td>
+                    </tr>
+                    <tr>
                         <td><span class="function-name">TON</span></td>
                         <td>Timer On Delay function block.</td>
                     </tr>
                     <tr>
                         <td><span class="function-name">TOF</span></td>
                         <td>Timer Off Delay function block.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">RTO</span></td>
+                        <td>Retentive Timer On Delay.</td>
+                    </tr>
+                    <!-- Counter Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Counter Functions</td>
                     </tr>
                     <tr>
                         <td><span class="function-name">CTU</span></td>
@@ -374,32 +530,104 @@
                         <td>Count Down function block.</td>
                     </tr>
                     <tr>
-                        <td><span class="function-name">RTO</span></td>
-                        <td>Retentive Timer function block.</td>
+                        <td><span class="function-name">RES</span></td>
+                        <td>Reset a timer or counter.</td>
+                    </tr>
+                    <!-- Logical Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Logical Functions</td>
                     </tr>
                     <tr>
                         <td><span class="function-name">OSR</span></td>
-                        <td>One-Shot Rising function block.</td>
+                        <td>One-Shot Rising function.</td>
                     </tr>
                     <tr>
                         <td><span class="function-name">OSF</span></td>
-                        <td>One-Shot Falling function block.</td>
+                        <td>One-Shot Falling function.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">ONS</span></td>
+                        <td>One-Shot function.</td>
+                    </tr>
+                    <!-- Move/Copy Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Move/Copy Functions</td>
                     </tr>
                     <tr>
                         <td><span class="function-name">MOV</span></td>
                         <td>Move data from one location to another.</td>
                     </tr>
                     <tr>
+                        <td><span class="function-name">MVM</span></td>
+                        <td>Masked Move instruction.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">COP</span></td>
+                        <td>Copy a block of data.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">FLL</span></td>
+                        <td>Fill a file with a value.</td>
+                    </tr>
+                    <!-- Conversion Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Conversion Functions</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">TOD</span></td>
+                        <td>Convert integer to BCD.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">FRD</span></td>
+                        <td>Convert BCD to integer.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">BTD</span></td>
+                        <td>Bit field distribute.</td>
+                    </tr>
+                    <!-- Sequencer Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Sequencer Functions</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">SQO</span></td>
+                        <td>Sequencer Output instruction.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">SQC</span></td>
+                        <td>Sequencer Compare instruction.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">SQI</span></td>
+                        <td>Sequencer Input instruction.</td>
+                    </tr>
+                    <!-- Miscellaneous Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Miscellaneous Functions</td>
+                    </tr>
+                    <tr>
                         <td><span class="function-name">LEN</span></td>
                         <td>Get the length of a string.</td>
                     </tr>
                     <tr>
-                        <td><span class="function-name">ABS</span></td>
-                        <td>Returns the absolute value of a number.</td>
+                        <td><span class="function-name">CLR</span></td>
+                        <td>Clear a value or register.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">NOP</span></td>
+                        <td>No Operation.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">MSG</span></td>
+                        <td>Message instruction for communication.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="function-name">SRT</span></td>
+                        <td>Sort an array.</td>
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </section>
     </main>
 </body>
 </html>

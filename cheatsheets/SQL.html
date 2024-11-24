@@ -24,7 +24,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow: hidden; /* Prevent horizontal scrolling */
+            overflow: hidden;
         }
         header {
             background: #34495e;
@@ -34,22 +34,22 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            flex-shrink: 0; /* Prevent header from shrinking */
-            z-index: 2; /* Ensure header is above other elements */
+            flex-shrink: 0;
+            z-index: 2;
         }
         header h1 {
             font-size: 2rem;
-            color: #f39c12; /* Gold color for the title */
+            color: #f39c12;
             text-align: center;
         }
         header a {
             text-decoration: none;
-            color: #f39c12; /* Gold color for the home icon */
+            color: #f39c12;
             font-size: 1.5rem;
             transition: color 0.3s;
             position: absolute;
             left: 30px;
-            z-index: 3; /* Ensure home icon is above shadows */
+            z-index: 3;
         }
         header a:hover {
             color: #ecf0f1;
@@ -59,31 +59,31 @@
             padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Align to top */
-            overflow: auto; /* Enable scrolling if content overflows */
+            align-items: flex-start;
+            overflow: auto;
             position: relative;
-            z-index: 1; /* Below header */
+            z-index: 1;
         }
         .list {
             background: #34495e;
-            border-radius: 15px; /* Rounded corners for containers */
-            padding: 30px 25px; /* Increased padding for better spacing */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* Enhanced box-shadow */
-            overflow-y: auto; /* Enable vertical scrolling within each box */
-            max-height: calc(100vh - 100px); /* Adjust height for header */
+            border-radius: 15px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
             transition: transform 0.3s;
-            width: 75%; /* Increased width for better visibility */
-            max-width: 1400px; /* Optimized max-width for larger screens */
+            width: 75%;
+            max-width: 1400px;
             position: relative;
             z-index: 1;
         }
         .list:hover {
-            transform: translateY(-2px); /* Subtle lift on hover */
+            transform: translateY(-2px);
         }
         .list h2 {
-            color: #f39c12; /* Gold color for the heading */
-            margin-bottom: 25px; /* Increased margin for better separation */
-            font-size: 2.2rem; /* Slightly larger font size */
+            color: #f39c12;
+            margin-bottom: 25px;
+            font-size: 2.2rem;
             text-align: center;
             border-bottom: 2px solid #f39c12;
             padding-bottom: 10px;
@@ -92,231 +92,203 @@
             width: 100%;
             border-collapse: collapse;
             background: #34495e;
-            border-radius: 10px; /* Rounded corners for table */
-            overflow: hidden; /* Ensure border-radius applies */
-            table-layout: fixed; /* Ensures columns are fixed width */
+            border-radius: 10px;
+            overflow: hidden;
+            table-layout: fixed;
         }
         table thead {
             background-color: #2980b9;
         }
         table thead th {
-            padding: 14px 18px; /* Increased padding for better spacing */
+            padding: 14px 18px;
             text-align: left;
-            font-size: 1.2rem; /* Slightly larger font size */
+            font-size: 1.2rem;
             color: #ecf0f1;
             border-bottom: 2px solid #2c3e50;
-            white-space: nowrap; /* Prevent header text from wrapping */
+            white-space: nowrap;
         }
         table tbody tr {
-            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
-            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
             position: relative;
-            z-index: 1; /* Ensure shadows appear above other elements */
+            z-index: 1;
         }
         table tbody tr:hover {
-            background-color: #bca11a; /* Brightened teal color for better contrast */
-            transform: translateY(-2px) scale(1.01); /* Subtle lift and scale */
-            box-shadow: 0 3px 8px rgba(0,0,0,0.5); /* Shadow on hover */
-            z-index: 2; /* Bring hovered row above others */
+            background-color: #bca11a;
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+            z-index: 2;
         }
         /* Function Column Styling */
         table tbody td:first-child {
-            background-color: #3d566a; /* Blue shade to fit theme */
-            color: #ffffff; /* Light text for better contrast on blue background */
-            padding: 14px 18px; /* Increased padding */
+            background-color: #3d566a;
+            color: #66d9ef; /* Light blue color for SQL keywords */
+            padding: 14px 18px;
             vertical-align: middle;
             word-wrap: break-word;
-            overflow: hidden; /* Ensure content doesn't overflow */
-            text-overflow: ellipsis; /* Add ellipsis if content is too long */
-            /* Remove rounded corners from cells */
-            border-bottom-left-radius: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: bold;
         }
         /* Description Column Styling */
         table tbody td:nth-child(2) {
-            background-color: #3d566e; /* Darker shade for Description column */
-            padding: 14px 18px; /* Increased padding */
+            background-color: #3d566e;
+            padding: 14px 18px;
             vertical-align: middle;
             word-wrap: break-word;
-            color: #ecf0f1; /* Ensure text is readable on dark background */
-            /* Remove rounded corners from cells */
-            border-bottom-right-radius: 0;
+            color: #ecf0f1;
         }
         /* Example Column Styling */
         table tbody td:nth-child(3) {
-            background-color: #3d566e; /* Darker shade for Example column */
-            padding: 14px 18px; /* Increased padding */
+            background-color: #3d566e;
+            padding: 14px 18px;
             vertical-align: middle;
             word-wrap: break-word;
-            color: #ecf0f1; /* Ensure text is readable on dark background */
-            /* Remove rounded corners from cells */
-            border-bottom-right-radius: 0;
+            color: #ecf0f1;
         }
         /* Remove rounded corners from internal cells */
         table tbody td {
             border-radius: 0;
-            position: relative; /* For positioning copy button */
+            position: relative;
         }
         /* Rounded corners for the last row */
         table tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 10px; /* Rounded corners for first cell in last row */
+            border-bottom-left-radius: 10px;
         }
         table tbody tr:last-child td:nth-child(3) {
-            border-bottom-right-radius: 10px; /* Rounded corners for third cell in last row */
-        }
-        /* Styled Hotkeys */
-        .hotkey {
-            display: inline-block;
-            background-color: #ecf0f1;
-            color: #2c3e50;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin: 0 3px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        /* Styled Function Names */
-        .function-name {
-            /* Distinct styling for functions */
-            color: #c9c9c9; /* Changed to a more neutral color for better contrast */
-            font-weight: bold;
-            font-size: 1rem;
+            border-bottom-right-radius: 10px;
         }
         /* Alternating Row Colors */
         table tbody tr:nth-child(even) td:first-child {
-            background-color: #35495e; /* Slightly darker blue for even rows */
+            background-color: #35495e;
         }
         table tbody tr:nth-child(even) td:nth-child(2),
         table tbody tr:nth-child(even) td:nth-child(3) {
-            background-color: #354966; /* Slightly darker shade for Description and Example in even rows */
+            background-color: #354966;
         }
         /* Code Block Styles */
         .code-container {
-            position: relative; /* For positioning copy button */
+            position: relative;
         }
         pre {
             background: #2c3e50;
-            padding: 14px 20px; /* Increased padding for better spacing */
-            padding-bottom: 40px; /* Additional padding for the copy button */
+            padding: 14px 20px;
+            padding-bottom: 40px;
             border-radius: 5px;
-            white-space: pre-wrap; /* Allow wrapping */
-            word-wrap: break-word; /* Break long words */
-            margin: 0; /* Remove default margin */
-            overflow: auto; /* Enable scrollbars when necessary */
-            max-height: 300px; /* Optional: Limit height for better UX */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            overflow: auto;
+            max-height: 300px;
         }
         pre code {
-            white-space: pre-wrap; /* Ensure code wraps */
+            white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 1rem; /* Slightly larger font for better readability */
+            font-size: 1rem;
         }
         .copy-btn {
             position: absolute;
-            bottom: 10px; /* Positioned at the bottom */
+            bottom: 10px;
             right: 10px;
-            background: #f39c12; /* Gold color for copy buttons */
+            background: #f39c12;
             border: none;
             color: #fff;
-            padding: 6px 10px; /* Increased padding for better click area */
+            padding: 6px 10px;
             border-radius: 3px;
             cursor: pointer;
-            font-size: 0.85rem; /* Slightly larger font */
+            font-size: 0.85rem;
             transition: background 0.3s;
-            z-index: 3; /* Ensure the button stays above the code */
+            z-index: 3;
         }
         .copy-btn:hover {
-            background: #e67e22; /* Darker gold on hover */
+            background: #e67e22;
         }
         /* Custom Scrollbar Styles for Vertical Scroll */
         body::-webkit-scrollbar {
-            width: 12px; /* Increased width for better visibility */
+            width: 12px;
         }
         body::-webkit-scrollbar-track {
             background: #2c3e50;
             border-radius: 10px;
         }
         body::-webkit-scrollbar-thumb {
-            background: #f39c12; /* Gold color for scrollbar thumb */
+            background: #f39c12;
             border-radius: 10px;
-            border: 3px solid #2c3e50; /* Matches track color for spacing */
+            border: 3px solid #2c3e50;
         }
         body::-webkit-scrollbar-thumb:hover {
-            background: #e67e22; /* Darker gold on hover */
+            background: #e67e22;
         }
         /* Custom Scrollbar Styles for .list */
         .list::-webkit-scrollbar {
-            width: 12px; /* Consistent scrollbar width */
+            width: 12px;
         }
         .list::-webkit-scrollbar-track {
-            background: #2c3e50; /* Dark background */
+            background: #2c3e50;
             border-radius: 6px;
         }
         .list::-webkit-scrollbar-thumb {
-            background: #f39c12; /* Gold color for scrollbar thumb */
+            background: #f39c12;
             border-radius: 6px;
-            border: 2px solid #2c3e50; /* Matches track color for spacing */
+            border: 2px solid #2c3e50;
         }
         .list::-webkit-scrollbar-thumb:hover {
-            background: #e67e22; /* Darker gold on hover */
+            background: #e67e22;
         }
         /* Custom Scrollbar Styles for <pre> Elements */
         pre::-webkit-scrollbar {
-            width: 6px; /* Thinner scrollbar for code blocks */
+            width: 6px;
         }
         pre::-webkit-scrollbar-track {
-            background: #2c3e50; /* Dark background */
+            background: #2c3e50;
             border-radius: 4px;
         }
         pre::-webkit-scrollbar-thumb {
-            background: #f39c12; /* Gold color for scrollbar thumb */
+            background: #f39c12;
             border-radius: 4px;
-            border: 1px solid #2c3e50; /* Matches track color for spacing */
+            border: 1px solid #2c3e50;
         }
         pre::-webkit-scrollbar-thumb:hover {
-            background: #e67e22; /* Darker gold on hover */
+            background: #e67e22;
         }
         /* Firefox Scrollbar Styles */
         pre {
-            scrollbar-width: thin; /* Thinner scrollbar */
-            scrollbar-color: #f39c12 #2c3e50; /* Thumb and track color */
+            scrollbar-width: thin;
+            scrollbar-color: #f39c12 #2c3e50;
         }
         /* Responsive Design */
         @media (max-width: 1400px) {
             .list {
-                width: 80%; /* Slightly increase width on medium screens */
-                max-width: 1200px; /* Adjust max-width accordingly */
+                width: 80%;
+                max-width: 1200px;
             }
             .list h2 {
                 font-size: 2.2rem;
             }
             table thead th {
                 font-size: 1rem;
-                padding: 10px 12px; /* Adjusted padding */
+                padding: 10px 12px;
             }
             table tbody td {
-                padding: 10px 12px; /* Adjusted padding */
+                padding: 10px 12px;
                 font-size: 0.9rem;
             }
             .copy-btn {
-                padding: 5px 8px; /* Slightly reduced padding */
+                padding: 5px 8px;
                 font-size: 0.8rem;
             }
-            .function-name {
-                font-size: 1rem;
-            }
             pre {
-                padding: 12px 16px; /* Adjusted padding */
-                padding-bottom: 40px; /* Ensure space for copy button */
+                padding: 12px 16px;
+                padding-bottom: 40px;
             }
             pre code {
-                font-size: 0.95rem; /* Slightly smaller font */
+                font-size: 0.95rem;
             }
         }
         @media (max-width: 1200px) {
             .list {
-                width: 90%; /* Increase width on smaller screens */
-                max-width: 1000px; /* Adjust max-width accordingly */
+                width: 90%;
+                max-width: 1000px;
             }
             .list h2 {
                 font-size: 2rem;
@@ -333,12 +305,9 @@
                 padding: 4px 6px;
                 font-size: 0.75rem;
             }
-            .function-name {
-                font-size: 1rem;
-            }
             pre {
                 padding: 10px 14px;
-                padding-bottom: 40px; /* Ensure space for copy button */
+                padding-bottom: 40px;
             }
             pre code {
                 font-size: 0.85rem;
@@ -359,12 +328,9 @@
                 padding: 3px 5px;
                 font-size: 0.7rem;
             }
-            .function-name {
-                font-size: 0.95rem;
-            }
             pre {
                 padding: 8px 12px;
-                padding-bottom: 40px; /* Ensure space for copy button */
+                padding-bottom: 40px;
             }
             pre code {
                 font-size: 0.8rem;
@@ -381,24 +347,25 @@
     </header>
     <main>
         <div class="list">
-            <h2>SQL Functions</h2>
+            <h2>SQL Commands and Functions</h2>
             <table>
                 <colgroup>
-                    <col style="width: 15%;"> <!-- Function Column -->
-                    <col style="width: 25%;"> <!-- Description Column -->
-                    <col style="width: 60%;"> <!-- Example Column -->
+                    <col style="width: 15%;">
+                    <col style="width: 25%;">
+                    <col style="width: 60%;">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Function</th>
+                        <th>Command</th>
                         <th>Description</th>
                         <th>Example</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Function rows -->
+                    <!-- Include all commands with their descriptions and examples -->
+                    <!-- SELECT -->
                     <tr>
-                        <td><span class="function-name">SELECT</span></td>
+                        <td>SELECT</td>
                         <td>Retrieves data from one or more tables.</td>
                         <td>
                             <div class="code-container">
@@ -407,8 +374,9 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- DISTINCT -->
                     <tr>
-                        <td><span class="function-name">DISTINCT</span></td>
+                        <td>DISTINCT</td>
                         <td>Removes duplicate records from the result.</td>
                         <td>
                             <div class="code-container">
@@ -417,8 +385,9 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- WHERE -->
                     <tr>
-                        <td><span class="function-name">WHERE</span></td>
+                        <td>WHERE</td>
                         <td>Filters records based on conditions.</td>
                         <td>
                             <div class="code-container">
@@ -427,8 +396,9 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- ORDER BY -->
                     <tr>
-                        <td><span class="function-name">ORDER BY</span></td>
+                        <td>ORDER BY</td>
                         <td>Sorts the result in ascending or descending order.</td>
                         <td>
                             <div class="code-container">
@@ -437,8 +407,9 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- GROUP BY -->
                     <tr>
-                        <td><span class="function-name">GROUP BY</span></td>
+                        <td>GROUP BY</td>
                         <td>Groups rows sharing a property.</td>
                         <td>
                             <div class="code-container">
@@ -447,8 +418,9 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- HAVING -->
                     <tr>
-                        <td><span class="function-name">HAVING</span></td>
+                        <td>HAVING</td>
                         <td>Filters groups defined by GROUP BY.</td>
                         <td>
                             <div class="code-container">
@@ -457,8 +429,9 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- LIMIT -->
                     <tr>
-                        <td><span class="function-name">LIMIT</span></td>
+                        <td>LIMIT</td>
                         <td>Limits the number of rows returned.</td>
                         <td>
                             <div class="code-container">
@@ -467,7 +440,412 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- Add more function rows as needed following the same structure -->
+                    <!-- INSERT INTO -->
+                    <tr>
+                        <td>INSERT INTO</td>
+                        <td>Inserts new rows into a table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">INSERT INTO table_name (column1, column2)
+VALUES ('value1', 'value2');</code></pre>
+                                <button class="copy-btn" data-clipboard-text="INSERT INTO table_name (column1, column2) VALUES ('value1', 'value2');" aria-label="Copy INSERT INTO statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- UPDATE -->
+                    <tr>
+                        <td>UPDATE</td>
+                        <td>Updates existing rows in a table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">UPDATE table_name
+SET column1 = 'value'
+WHERE condition;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="UPDATE table_name SET column1 = 'value' WHERE condition;" aria-label="Copy UPDATE statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- DELETE -->
+                    <tr>
+                        <td>DELETE</td>
+                        <td>Deletes rows from a table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">DELETE FROM table_name WHERE condition;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="DELETE FROM table_name WHERE condition;" aria-label="Copy DELETE statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- CREATE TABLE -->
+                    <tr>
+                        <td>CREATE TABLE</td>
+                        <td>Creates a new table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype
+);</code></pre>
+                                <button class="copy-btn" data-clipboard-text="CREATE TABLE table_name (\n    column1 datatype,\n    column2 datatype\n);" aria-label="Copy CREATE TABLE statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- ALTER TABLE -->
+                    <tr>
+                        <td>ALTER TABLE</td>
+                        <td>Modifies an existing table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">ALTER TABLE table_name
+ADD column_name datatype;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="ALTER TABLE table_name ADD column_name datatype;" aria-label="Copy ALTER TABLE statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- DROP TABLE -->
+                    <tr>
+                        <td>DROP TABLE</td>
+                        <td>Deletes a table completely.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">DROP TABLE table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="DROP TABLE table_name;" aria-label="Copy DROP TABLE statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- INNER JOIN -->
+                    <tr>
+                        <td>INNER JOIN</td>
+                        <td>Returns rows with matching values in both tables.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT table1.column1, table2.column2
+FROM table1
+INNER JOIN table2
+ON table1.common_column = table2.common_column;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT table1.column1, table2.column2 FROM table1 INNER JOIN table2 ON table1.common_column = table2.common_column;" aria-label="Copy INNER JOIN statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- LEFT JOIN -->
+                    <tr>
+                        <td>LEFT JOIN</td>
+                        <td>Returns all rows from the left table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT *
+FROM table1
+LEFT JOIN table2
+ON table1.common_column = table2.common_column;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT * FROM table1 LEFT JOIN table2 ON table1.common_column = table2.common_column;" aria-label="Copy LEFT JOIN statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- RIGHT JOIN -->
+                    <tr>
+                        <td>RIGHT JOIN</td>
+                        <td>Returns all rows from the right table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT *
+FROM table1
+RIGHT JOIN table2
+ON table1.common_column = table2.common_column;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT * FROM table1 RIGHT JOIN table2 ON table1.common_column = table2.common_column;" aria-label="Copy RIGHT JOIN statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- FULL JOIN -->
+                    <tr>
+                        <td>FULL JOIN</td>
+                        <td>Returns rows when there's a match in either table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT *
+FROM table1
+FULL JOIN table2
+ON table1.common_column = table2.common_column;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT * FROM table1 FULL JOIN table2 ON table1.common_column = table2.common_column;" aria-label="Copy FULL JOIN statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- UNION -->
+                    <tr>
+                        <td>UNION</td>
+                        <td>Combines results of two SELECT statements.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT column1 FROM table1
+UNION
+SELECT column1 FROM table2;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT column1 FROM table1\nUNION\nSELECT column1 FROM table2;" aria-label="Copy UNION statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- CASE -->
+                    <tr>
+                        <td>CASE</td>
+                        <td>Adds conditional logic to queries.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT column1,
+CASE
+    WHEN condition1 THEN 'Result1'
+    ELSE 'Default'
+END AS alias
+FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT column1,\nCASE\n    WHEN condition1 THEN 'Result1'\n    ELSE 'Default'\nEND AS alias\nFROM table_name;" aria-label="Copy CASE statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- SUBQUERY -->
+                    <tr>
+                        <td>SUBQUERY</td>
+                        <td>Embeds a query within another query.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT column1
+FROM table_name
+WHERE column2 = (SELECT column2 FROM another_table);</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT column1 FROM table_name WHERE column2 = (SELECT column2 FROM another_table);" aria-label="Copy SUBQUERY statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- CREATE INDEX -->
+                    <tr>
+                        <td>CREATE INDEX</td>
+                        <td>Creates an index on a table.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">CREATE INDEX index_name
+ON table_name (column_name);</code></pre>
+                                <button class="copy-btn" data-clipboard-text="CREATE INDEX index_name ON table_name (column_name);" aria-label="Copy CREATE INDEX statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- CREATE VIEW -->
+                    <tr>
+                        <td>CREATE VIEW</td>
+                        <td>Creates a virtual table based on a query.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">CREATE VIEW view_name AS
+SELECT column1 FROM table_name WHERE condition;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="CREATE VIEW view_name AS SELECT column1 FROM table_name WHERE condition;" aria-label="Copy CREATE VIEW statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- BEGIN TRANSACTION -->
+                    <tr>
+                        <td>BEGIN TRANSACTION</td>
+                        <td>Starts a new transaction.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">BEGIN TRANSACTION;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="BEGIN TRANSACTION;" aria-label="Copy BEGIN TRANSACTION statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- COMMIT -->
+                    <tr>
+                        <td>COMMIT</td>
+                        <td>Saves changes made during the transaction.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">COMMIT;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="COMMIT;" aria-label="Copy COMMIT statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- ROLLBACK -->
+                    <tr>
+                        <td>ROLLBACK</td>
+                        <td>Reverts changes made during the transaction.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">ROLLBACK;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="ROLLBACK;" aria-label="Copy ROLLBACK statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- COUNT() -->
+                    <tr>
+                        <td>COUNT()</td>
+                        <td>Counts the number of rows.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT COUNT(*) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT COUNT(*) FROM table_name;" aria-label="Copy COUNT() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- SUM() -->
+                    <tr>
+                        <td>SUM()</td>
+                        <td>Adds up numeric values.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT SUM(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT SUM(column1) FROM table_name;" aria-label="Copy SUM() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- AVG() -->
+                    <tr>
+                        <td>AVG()</td>
+                        <td>Calculates the average of numeric values.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT AVG(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT AVG(column1) FROM table_name;" aria-label="Copy AVG() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- MIN() -->
+                    <tr>
+                        <td>MIN()</td>
+                        <td>Finds the smallest value.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT MIN(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT MIN(column1) FROM table_name;" aria-label="Copy MIN() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- MAX() -->
+                    <tr>
+                        <td>MAX()</td>
+                        <td>Finds the largest value.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT MAX(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT MAX(column1) FROM table_name;" aria-label="Copy MAX() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- CONCAT() -->
+                    <tr>
+                        <td>CONCAT()</td>
+                        <td>Combines strings.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT CONCAT(column1, ' ', column2) AS FullName
+FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT CONCAT(column1, ' ', column2) AS FullName FROM table_name;" aria-label="Copy CONCAT() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- LENGTH() -->
+                    <tr>
+                        <td>LENGTH()</td>
+                        <td>Returns the length of a string.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT LENGTH(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT LENGTH(column1) FROM table_name;" aria-label="Copy LENGTH() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- UPPER() -->
+                    <tr>
+                        <td>UPPER()</td>
+                        <td>Converts text to uppercase.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT UPPER(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT UPPER(column1) FROM table_name;" aria-label="Copy UPPER() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- LOWER() -->
+                    <tr>
+                        <td>LOWER()</td>
+                        <td>Converts text to lowercase.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT LOWER(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT LOWER(column1) FROM table_name;" aria-label="Copy LOWER() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- SUBSTRING() -->
+                    <tr>
+                        <td>SUBSTRING()</td>
+                        <td>Extracts a part of a string.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT SUBSTRING(column1, 1, 5) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT SUBSTRING(column1, 1, 5) FROM table_name;" aria-label="Copy SUBSTRING() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- TRIM() -->
+                    <tr>
+                        <td>TRIM()</td>
+                        <td>Removes leading and trailing spaces.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT TRIM(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT TRIM(column1) FROM table_name;" aria-label="Copy TRIM() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- NOW() -->
+                    <tr>
+                        <td>NOW()</td>
+                        <td>Returns the current date and time.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT NOW();</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT NOW();" aria-label="Copy NOW() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- DATE() -->
+                    <tr>
+                        <td>DATE()</td>
+                        <td>Extracts the date part.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT DATE(column1) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT DATE(column1) FROM table_name;" aria-label="Copy DATE() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- DATEDIFF() -->
+                    <tr>
+                        <td>DATEDIFF()</td>
+                        <td>Calculates the difference between two dates.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT DATEDIFF(NOW(), column1) AS DaysPassed FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT DATEDIFF(NOW(), column1) AS DaysPassed FROM table_name;" aria-label="Copy DATEDIFF() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- DATE_ADD() -->
+                    <tr>
+                        <td>DATE_ADD()</td>
+                        <td>Adds a time interval to a date.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT DATE_ADD(column1, INTERVAL 7 DAY) FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT DATE_ADD(column1, INTERVAL 7 DAY) FROM table_name;" aria-label="Copy DATE_ADD() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- DATE_FORMAT() -->
+                    <tr>
+                        <td>DATE_FORMAT()</td>
+                        <td>Formats date values.</td>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-sql">SELECT DATE_FORMAT(column1, '%Y-%m-%d') FROM table_name;</code></pre>
+                                <button class="copy-btn" data-clipboard-text="SELECT DATE_FORMAT(column1, '%Y-%m-%d') FROM table_name;" aria-label="Copy DATE_FORMAT() statement">Copy</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- End of Commands -->
                 </tbody>
             </table>
         </div>

@@ -2,49 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Cheat Sheet</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Prism.js CSS for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <!-- Custom Styles -->
     <style>
+        /* CSS Variables for Consistency */
+        :root {
+            --primary-bg: #2c3e50;
+            --secondary-bg: #34495e;
+            --accent-color: #f39c12;
+            --text-color: #ecf0f1;
+            --header-bg: #2980b9;
+            --hover-bg: #bca11a;
+            --even-row-bg: #35495e;
+            --odd-row-bg: #3d566a;
+            --font-family: 'Arial', sans-serif;
+            --border-radius: 15px;
+            --box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
         /* Reset and Base Styles */
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
         body {
-            font-family: 'Arial', sans-serif;
-            background: #2c3e50;
-            color: #ecf0f1;
+            margin: 0;
+            font-family: var(--font-family);
+            background: var(--primary-bg);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            align-items: center;
+            padding: 40px 20px 20px;
         }
         header {
-            background: #34495e;
+            background: var(--secondary-bg);
             padding: 15px 30px;
-            border-bottom: 2px solid #2c3e50;
+            border-bottom: 2px solid var(--primary-bg);
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            width: 85%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            flex-shrink: 0;
         }
         header h1 {
-            font-size: 1.8rem;
-            color: #f39c12;
+            font-size: 2rem;
+            color: var(--accent-color);
+            text-align: center;
+            margin: 0;
         }
         header a {
             text-decoration: none;
-            color: #f39c12;
+            color: var(--accent-color);
             font-size: 1.5rem;
             transition: color 0.3s;
             position: absolute;
             left: 30px;
         }
         header a:hover {
-            color: #ecf0f1;
+            color: var(--text-color);
         }
         main {
             flex: 1;
@@ -52,72 +75,219 @@
             display: flex;
             justify-content: space-between;
             gap: 20px;
+            width: 100%;
+            max-width: 1400px;
         }
         .list {
-            width: 48%;
-            background: #34495e;
-            border-radius: 10px;
-            padding: 20px;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 25px 20px;
+            box-shadow: var(--box-shadow);
             overflow-y: auto;
-            height: calc(100vh - 90px); /* Adjust height for header */
+            max-height: calc(100vh - 120px);
+            transition: transform 0.3s;
+        }
+        .list:hover {
+            transform: translateY(-2px);
         }
         .list h2 {
-            color: #f39c12;
-            margin-bottom: 10px;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        /* Adjusted widths for the two tables */
+        .list.hotkeys {
+            width: 45%;
+        }
+        .list.functions {
+            width: 55%;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #34495e;
+            border-radius: 10px;
+            overflow: hidden;
+            table-layout: fixed;
         }
         table thead {
-            background-color: #2980b9;
+            background-color: var(--header-bg);
         }
         table thead th {
-            padding: 15px;
+            padding: 12px 15px;
             text-align: left;
-            font-size: 1.2rem;
-            color: #ecf0f1;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-bg);
         }
         table tbody tr {
-            border-bottom: 1px solid #2c3e50;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        table tbody tr:hover {
+            background-color: var(--hover-bg);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
         table tbody td {
-            padding: 15px;
-            text-align: left;
+            padding: 12px 15px;
+            vertical-align: middle;
+            word-wrap: break-word;
+            color: var(--text-color);
             font-size: 1rem;
         }
-        table tbody tr:nth-child(even) {
-            background-color: #3d566e;
+        table tbody td:first-child {
+            background-color: var(--odd-row-bg);
+            text-align: left;
         }
-        /* Custom Scrollbar Styles */
+        table tbody td:last-child {
+            background-color: var(--odd-row-bg);
+        }
+        table tbody tr:nth-child(even) td {
+            background-color: var(--even-row-bg);
+        }
+        /* Styled Hotkeys */
+        .hotkey {
+            display: inline-block;
+            background-color: var(--text-color);
+            color: var(--primary-bg);
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 4px 8px;
+            margin: 0 4px 4px 0;
+            font-size: 0.875rem;
+            font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .symbol {
+            margin: 0 6px;
+            font-size: 1rem;
+        }
+        /* Code Block Styles */
+        .code-container {
+            position: relative;
+        }
+        pre {
+            background: #2c3e50;
+            padding: 14px 20px;
+            padding-bottom: 40px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            overflow: auto;
+            max-height: 300px;
+        }
+        pre code {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 1rem;
+        }
+        .copy-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+            z-index: 3;
+        }
+        .copy-btn:hover {
+            background: #e67e22;
+        }
+        /* Custom Scrollbar Styles for Vertical Scrollbar */
         .list::-webkit-scrollbar {
             width: 12px;
         }
         .list::-webkit-scrollbar-track {
-            background: #2c3e50; /* Dark background */
+            background: var(--primary-bg);
+            border-radius: 6px;
         }
         .list::-webkit-scrollbar-thumb {
-            background: #f39c12; /* Accent color */
+            background: var(--accent-color);
             border-radius: 6px;
-            border: 2px solid #2c3e50; /* Matches track color for spacing */
+            border: 2px solid var(--primary-bg);
         }
         .list::-webkit-scrollbar-thumb:hover {
-            background: #f1c40f; /* Lighter accent on hover */
+            background: #e67e22;
+        }
+        /* Custom Scrollbar Styles for Code Blocks */
+        pre::-webkit-scrollbar {
+            height: 8px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+            border-radius: 6px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 6px;
+            border: 2px solid var(--primary-bg);
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #e67e22;
+        }
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            main {
+                flex-direction: column;
+                align-items: center;
+            }
+            .list {
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .list h2 {
+                font-size: 1.5rem;
+            }
+            table thead th, table tbody td {
+                padding: 10px 12px;
+                font-size: 0.875rem;
+            }
+            .hotkey {
+                font-size: 0.75rem;
+                padding: 4px 6px;
+                margin: 0 3px 3px 0;
+            }
+            .symbol {
+                margin: 0 4px;
+                font-size: 0.875rem;
+            }
+            .copy-btn {
+                font-size: 0.75rem;
+                padding: 4px 6px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="../index.html" title="Go Back">
+        <a href="../index.html" title="Go Back" aria-label="Go Back to Home">
             <i class="fas fa-home"></i>
         </a>
         <h1>Excel Cheat Sheet</h1>
     </header>
     <main>
-        <div class="list">
+        <section class="list hotkeys">
             <h2>Hotkeys</h2>
+            <!-- Hotkeys grouped into categories -->
             <table>
+                <colgroup>
+                    <col style="width: 40%;">
+                    <col style="width: 60%;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Hotkey</th>
@@ -125,41 +295,117 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Hotkey rows -->
-                    <tr><td>CTRL + F</td><td>Opens the Find and Replace dialog box</td></tr>
-                    <tr><td>CTRL + H</td><td>Opens the Replace tab in the Find and Replace dialog box</td></tr>
-                    <tr><td>CTRL + B</td><td>Applies or removes bold formatting</td></tr>
-                    <tr><td>CTRL + I</td><td>Applies or removes italic formatting</td></tr>
-                    <tr><td>CTRL + U</td><td>Applies or removes underline formatting</td></tr>
-                    <tr><td>CTRL + HOME</td><td>Moves to the beginning of the worksheet</td></tr>
-                    <tr><td>CTRL + END</td><td>Moves to the last cell of the worksheet</td></tr>
-                    <tr><td>CTRL + Arrow Keys</td><td>Moves to the edge of the data region</td></tr>
-                    <tr><td>CTRL + SHIFT + L</td><td>Applies or removes filters</td></tr>
-                    <tr><td>CTRL + 1</td><td>Opens the Format Cells dialog box</td></tr>
-                    <tr><td>CTRL + T</td><td>Creates a table from the selected data</td></tr>
-                    <tr><td>CTRL + D</td><td>Fills the selected cell with the content above it</td></tr>
-                    <tr><td>CTRL + R</td><td>Fills the selected cell with the content to its left</td></tr>
-                    <tr><td>F2</td><td>Edits the active cell</td></tr>
-                    <tr><td>F4</td><td>Repeats the last action</td></tr>
-                    <tr><td>CTRL + A</td><td>Selects the entire worksheet</td></tr>
-                    <tr><td>CTRL + C</td><td>Copies the selected cells</td></tr>
-                    <tr><td>CTRL + V</td><td>Pastes the copied cells</td></tr>
-                    <tr><td>CTRL + X</td><td>Cuts the selected cells</td></tr>
-                    <tr><td>CTRL + Z</td><td>Undoes the last action</td></tr>
-                    <tr><td>CTRL + Y</td><td>Redoes the last action</td></tr>
-                    <tr><td>CTRL + S</td><td>Saves the current workbook</td></tr>
-                    <tr><td>CTRL + P</td><td>Opens the print menu</td></tr>
-                    <tr><td>ALT + Enter</td><td>Starts a new line in the same cell</td></tr>
-                    <tr><td>SHIFT + Space</td><td>Selects the entire row</td></tr>
-                    <tr><td>CTRL + Space</td><td>Selects the entire column</td></tr>
-                    <tr><td>CTRL + ALT + V</td><td>Opens the Paste Special dialog box</td></tr>
-                    
+                    <!-- Editing Hotkeys -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Editing</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">F2</span></td>
+                        <td>Edit the active cell.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">C</span></td>
+                        <td>Copy selected cells.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">V</span></td>
+                        <td>Paste copied cells.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">X</span></td>
+                        <td>Cut selected cells.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">Z</span></td>
+                        <td>Undo last action.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">Y</span></td>
+                        <td>Redo last action.</td>
+                    </tr>
+                    <!-- Formatting Hotkeys -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Formatting</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">B</span></td>
+                        <td>Bold formatting.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">I</span></td>
+                        <td>Italic formatting.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">U</span></td>
+                        <td>Underline formatting.</td>
+                    </tr>
+                    <!-- Navigation Hotkeys -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Navigation</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">HOME</span></td>
+                        <td>Go to the beginning of the worksheet.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">END</span></td>
+                        <td>Go to the last cell with content.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">Arrow Keys</span></td>
+                        <td>Move to the edge of the data region.</td>
+                    </tr>
+                    <!-- Selection Hotkeys -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Selection</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">A</span></td>
+                        <td>Select the entire worksheet.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">SHIFT</span><span class="symbol">+</span><span class="hotkey">Space</span></td>
+                        <td>Select the entire row.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">Space</span></td>
+                        <td>Select the entire column.</td>
+                    </tr>
+                    <!-- Miscellaneous Hotkeys -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Miscellaneous</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">S</span></td>
+                        <td>Save the current workbook.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">P</span></td>
+                        <td>Open the print menu.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">ALT</span><span class="symbol">+</span><span class="hotkey">ENTER</span></td>
+                        <td>Start a new line in the same cell.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">F</span></td>
+                        <td>Open Find dialog box.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="hotkey">CTRL</span><span class="symbol">+</span><span class="hotkey">H</span></td>
+                        <td>Open Replace dialog box.</td>
+                    </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="list">
+        </section>
+        <section class="list functions">
             <h2>Functions</h2>
+            <!-- Functions grouped into categories -->
             <table>
+                <colgroup>
+                    <col style="width: 60%;">
+                    <col style="width: 40%;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Function</th>
@@ -167,43 +413,564 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Function rows -->
-                    <tr><td>'=SUM(A1:A10)</td><td>Adds the values in the range A1 to A10</td></tr>
-                    <tr><td>'=AVERAGE(A1:A10)</td><td>Calculates the average of the values in the range A1 to A10</td></tr>
-                    <tr><td>'=IF(A1>10,"Yes","No")</td><td>Returns 'Yes' if the value in A1 is greater than 10, otherwise returns 'No'</td></tr>
-                    <tr><td>'=VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])</td><td>Searches for a value in the first column of a range and returns a value in the same row from another column</td></tr>
-                    <tr><td>'=HLOOKUP(lookup_value, table_array, row_index_num, [range_lookup])</td><td>Searches for a value in the first row of a range and returns a value in the same column from another row</td></tr>
-                    <tr><td>'=INDEX(array, row_num, [column_num])</td><td>Returns the value of a cell in a specified row and column of a range</td></tr>
-                    <tr><td>'=MATCH(lookup_value, lookup_array, [match_type])</td><td>Returns the relative position of a value in a range</td></tr>
-                    <tr><td>'=CONCAT(A1, " ", B1)</td><td>Joins values in A1 and B1 with a space between them</td></tr>
-                    <tr><td>'=LEN(A1)</td><td>Counts the number of characters in a cell, including spaces</td></tr>
-                    <tr><td>'=TRIM(A1)</td><td>Removes all extra spaces from text except for single spaces between words</td></tr>
-                    <tr><td>'=LEFT(A1, 5)</td><td>Extracts the first 5 characters from the left side of the text in A1</td></tr>
-                    <tr><td>'=RIGHT(A1, 5)</td><td>Extracts the last 5 characters from the text in A1</td></tr>
-                    <tr><td>'=MID(A1, 2, 3)</td><td>Extracts 3 characters starting from the 2nd character in A1</td></tr>
-                    <tr><td>'=TEXT(A1, "mm/dd/yyyy")</td><td>Converts a number to a specified date format</td></tr>
-                    <tr><td>'=NOW()</td><td>Returns the current date and time</td></tr>
-                    <tr><td>'=TODAY()</td><td>Returns the current date</td></tr>
-                    <tr><td>'=ROUND(A1, 2)</td><td>Rounds the value in A1 to 2 decimal places</td></tr>
-                    <tr><td>'=ROUNDUP(A1, 2)</td><td>Rounds the value in A1 up to 2 decimal places</td></tr>
-                    <tr><td>'=ROUNDDOWN(A1, 2)</td><td>Rounds the value in A1 down to 2 decimal places</td></tr>
-                    <tr><td>'=COUNT(A1:A10)</td><td>Counts the number of numeric entries in the range A1 to A10</td></tr>
-                    <tr><td>'=COUNTA(A1:A10)</td><td>Counts the number of non-empty cells in the range A1 to A10</td></tr>
-                    <tr><td>'=COUNTIF(A1:A10,">10")</td><td>Counts the number of cells in the range A1 to A10 that are greater than 10</td></tr>
-                    <tr><td>'=PMT(rate, nper, pv, [fv], [type])</td><td>Calculates the payment for a loan based on constant interest rates and payments</td></tr>
-                    <tr><td>'=PROPER(A1)</td><td>Capitalizes the first letter of each word in A1</td></tr>
-                    <tr><td>'=UPPER(A1)</td><td>Converts text in A1 to uppercase</td></tr>
-                    <tr><td>'=LOWER(A1)</td><td>Converts text in A1 to lowercase</td></tr>
-                    <tr><td>'=TEXTJOIN(delimiter, ignore_empty, text1, [text2, ...])</td><td>Joins text strings with a specified delimiter, optionally ignoring empty cells.</td></tr>
-                    <tr><td>'=SUBSTITUTE(text, old_text, new_text, [instance_num])</td><td>Replaces occurrences of old text with new text in a string.</td></tr>
-                    <tr><td>'=DATEDIF(start_date, end_date, unit)</td><td>Calculates the difference between two dates in days, months, or years.</td></tr>
-                    <tr><td>'=WORKDAY(start_date, days, [holidays])</td><td>Returns the date after a specified number of workdays, excluding weekends and holidays.</td></tr>
-                    <tr><td>'=AND(logical1, [logical2, ...])</td><td>Returns TRUE if all the arguments evaluate to TRUE.</td></tr>
-                    <tr><td>'=OR(logical1, [logical2, ...])</td><td>Returns TRUE if any of the arguments evaluate to TRUE.</td></tr>
-                    <tr><td>'=NOT(logical)</td><td>Reverses the logical value (TRUE becomes FALSE, and vice versa).</td></tr>                                                    
+                    <!-- Math Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Math Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=SUM(A1:A10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=SUM(A1:A10)" aria-label="Copy SUM function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Adds the values in the range A1 to A10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=AVERAGE(A1:A10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=AVERAGE(A1:A10)" aria-label="Copy AVERAGE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the average of the values in the range A1 to A10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=ROUND(A1, 2)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=ROUND(A1, 2)" aria-label="Copy ROUND function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Rounds the value in A1 to 2 decimal places.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=PRODUCT(A1:A5)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=PRODUCT(A1:A5)" aria-label="Copy PRODUCT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Multiplies all the numbers in the range A1 to A5.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=INT(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=INT(A1)" aria-label="Copy INT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Rounds the number in A1 down to the nearest integer.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MOD(A1, 2)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MOD(A1, 2)" aria-label="Copy MOD function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns the remainder after dividing A1 by 2.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=POWER(A1, 3)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=POWER(A1, 3)" aria-label="Copy POWER function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Raises the value in A1 to the power of 3.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=SQRT(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=SQRT(A1)" aria-label="Copy SQRT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the square root of the value in A1.</td>
+                    </tr>
+                    <!-- Logical Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Logical Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=IF(A1&gt;10,"Yes","No")</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=IF(A1>10,"Yes","No")' aria-label="Copy IF function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns 'Yes' if A1 &gt; 10, otherwise 'No'.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=AND(A1&gt;0, B1&lt;5)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=AND(A1>0, B1<5)" aria-label="Copy AND function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns TRUE if both conditions are TRUE.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=OR(A1&gt;10, B1&gt;10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=OR(A1>10, B1>10)" aria-label="Copy OR function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns TRUE if at least one condition is TRUE.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=NOT(A1&gt;10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=NOT(A1>10)" aria-label="Copy NOT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Reverses the logical value of A1 &gt; 10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=IFERROR(A1/B1, "Error")</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=IFERROR(A1/B1, "Error")' aria-label="Copy IFERROR function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns "Error" if A1/B1 results in an error.</td>
+                    </tr>
+                    <!-- Text Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Text Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=CONCAT(A1, " ", B1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=CONCAT(A1, " ", B1)' aria-label="Copy CONCAT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Joins values in A1 and B1 with a space.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=LEN(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=LEN(A1)" aria-label="Copy LEN function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Counts the number of characters in A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=LEFT(A1, 3)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=LEFT(A1, 3)" aria-label="Copy LEFT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the first 3 characters from A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=RIGHT(A1, 2)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=RIGHT(A1, 2)" aria-label="Copy RIGHT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the last 2 characters from A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MID(A1, 2, 3)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MID(A1, 2, 3)" aria-label="Copy MID function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts 3 characters from A1 starting at position 2.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=TRIM(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=TRIM(A1)" aria-label="Copy TRIM function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Removes extra spaces from A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=SUBSTITUTE(A1, "old", "new")</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=SUBSTITUTE(A1, "old", "new")' aria-label="Copy SUBSTITUTE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Replaces "old" with "new" in A1.</td>
+                    </tr>
+                    <!-- Date and Time Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Date &amp; Time Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=NOW()</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=NOW()" aria-label="Copy NOW function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns the current date and time.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=TODAY()</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=TODAY()" aria-label="Copy TODAY function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns the current date.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=DATE(2024, 12, 25)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=DATE(2024, 12, 25)" aria-label="Copy DATE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Creates a date for December 25, 2024.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=TIME(14, 30, 0)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=TIME(14, 30, 0)" aria-label="Copy TIME function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Creates a time value for 2:30 PM.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=YEAR(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=YEAR(A1)" aria-label="Copy YEAR function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the year from the date in A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MONTH(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MONTH(A1)" aria-label="Copy MONTH function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the month from the date in A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=DAY(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=DAY(A1)" aria-label="Copy DAY function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the day from the date in A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=HOUR(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=HOUR(A1)" aria-label="Copy HOUR function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the hour from the time in A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MINUTE(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MINUTE(A1)" aria-label="Copy MINUTE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the minute from the time in A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=SECOND(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=SECOND(A1)" aria-label="Copy SECOND function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Extracts the second from the time in A1.</td>
+                    </tr>
+                    <!-- Lookup and Reference Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Lookup &amp; Reference Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=VLOOKUP(A1, B1:C10, 2, FALSE)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=VLOOKUP(A1, B1:C10, 2, FALSE)" aria-label="Copy VLOOKUP function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Searches for A1 in the first column and returns a value from the second column.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=HLOOKUP(A1, B1:C10, 2, FALSE)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=HLOOKUP(A1, B1:C10, 2, FALSE)" aria-label="Copy HLOOKUP function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Searches for A1 in the first row and returns a value from the second row.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=XLOOKUP(A1, B1:B10, C1:C10, "Not Found")</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=XLOOKUP(A1, B1:B10, C1:C10, "Not Found")' aria-label="Copy XLOOKUP function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Searches for A1 in B1:B10 and returns the corresponding value from C1:C10 or "Not Found".</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MATCH(A1, B1:B10, 0)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MATCH(A1, B1:B10, 0)" aria-label="Copy MATCH function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Finds the position of A1 within the range B1:B10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=INDEX(C1:C10, MATCH(A1, B1:B10, 0))</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=INDEX(C1:C10, MATCH(A1, B1:B10, 0))" aria-label="Copy INDEX function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns the value from C1:C10 that corresponds to the position of A1 in B1:B10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=OFFSET(A1, 2, 3)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=OFFSET(A1, 2, 3)" aria-label="Copy OFFSET function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns the cell that is 2 rows down and 3 columns to the right of A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=CHOOSE(2, "Apple", "Banana", "Cherry")</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=CHOOSE(2, "Apple", "Banana", "Cherry")' aria-label="Copy CHOOSE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns "Banana" based on the index 2.</td>
+                    </tr>
+                    <!-- Financial Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Financial Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=PMT(0.05/12, 60, 10000)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=PMT(0.05/12, 60, 10000)" aria-label="Copy PMT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the monthly payment for a loan with a 5% annual interest rate, 60 periods, and a present value of 10,000.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=FV(0.05/12, 60, -200, -10000)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=FV(0.05/12, 60, -200, -10000)" aria-label="Copy FV function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the future value of an investment with a monthly payment of 200, 60 periods, and a present value of 10,000.</td>
+                    </tr>
+                    <!-- Statistical Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Statistical Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=COUNT(A1:A10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=COUNT(A1:A10)" aria-label="Copy COUNT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Counts the number of numeric entries in A1:A10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=COUNTA(A1:A10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=COUNTA(A1:A10)" aria-label="Copy COUNTA function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Counts the number of non-empty cells in A1:A10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=COUNTIF(A1:A10, ">5")</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=COUNTIF(A1:A10, ">5")' aria-label="Copy COUNTIF function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Counts the number of cells in A1:A10 that are greater than 5.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=AVERAGEIF(A1:A10, ">5", B1:B10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=AVERAGEIF(A1:A10, ">5", B1:B10)' aria-label="Copy AVERAGEIF function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the average of B1:B10 where A1:A10 is greater than 5.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MEDIAN(A1:A10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MEDIAN(A1:A10)" aria-label="Copy MEDIAN function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Finds the median value in A1:A10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MODE(A1:A10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MODE(A1:A10)" aria-label="Copy MODE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Finds the most frequently occurring value in A1:A10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=STDEV(A1:A10)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=STDEV(A1:A10)" aria-label="Copy STDEV function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the standard deviation of the values in A1:A10.</td>
+                    </tr>
+                    <!-- Information Functions -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Information Functions</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=ISNUMBER(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=ISNUMBER(A1)" aria-label="Copy ISNUMBER function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Checks if A1 contains a number.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=ISTEXT(A1)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=ISTEXT(A1)" aria-label="Copy ISTEXT function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Checks if A1 contains text.</td>
+                    </tr>
+                    <!-- Lookup Functions Continued -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Lookup &amp; Reference Functions (Continued)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=MATCH(A1, B1:B10, 0)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=MATCH(A1, B1:B10, 0)" aria-label="Copy MATCH function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Finds the position of A1 within the range B1:B10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=INDEX(C1:C10, MATCH(A1, B1:B10, 0))</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=INDEX(C1:C10, MATCH(A1, B1:B10, 0))" aria-label="Copy INDEX function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns the value from C1:C10 that corresponds to the position of A1 in B1:B10.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=OFFSET(A1, 2, 3)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=OFFSET(A1, 2, 3)" aria-label="Copy OFFSET function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns the cell that is 2 rows down and 3 columns to the right of A1.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=CHOOSE(2, "Apple", "Banana", "Cherry")</code></pre>
+                                <button class="copy-btn" data-clipboard-text='=CHOOSE(2, "Apple", "Banana", "Cherry")' aria-label="Copy CHOOSE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Returns "Banana" based on the index 2.</td>
+                    </tr>
+                    <!-- Financial Functions Continued -->
+                    <tr>
+                        <td colspan="2" style="background-color: var(--header-bg); color: var(--text-color); font-weight: bold;">Financial Functions (Continued)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=NPER(0.05/12, -200, 10000)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=NPER(0.05/12, -200, 10000)" aria-label="Copy NPER function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the number of periods for a loan with a 5% annual interest rate, monthly payment of 200, and present value of 10,000.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="code-container">
+                                <pre><code class="language-excel">=RATE(60, -200, 10000)</code></pre>
+                                <button class="copy-btn" data-clipboard-text="=RATE(60, -200, 10000)" aria-label="Copy RATE function">Copy</button>
+                            </div>
+                        </td>
+                        <td>Calculates the interest rate per period for a loan with 60 periods, monthly payment of 200, and present value of 10,000.</td>
+                    </tr>
                 </tbody>
             </table>
-        </div>
+        </section>
     </main>
+    <!-- Prism.js for Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Include the Excel language component for Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-excel.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Clipboard.js for Copy Functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Initialize Clipboard.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const clipboard = new ClipboardJS('.copy-btn');
+
+            clipboard.on('success', function(e) {
+                e.trigger.textContent = 'Copied!';
+                e.trigger.classList.add('copied');
+                setTimeout(() => {
+                    e.trigger.textContent = 'Copy';
+                    e.trigger.classList.remove('copied');
+                }, 2000);
+                e.clearSelection();
+            });
+
+            clipboard.on('error', function(e) {
+                e.trigger.textContent = 'Error';
+                setTimeout(() => {
+                    e.trigger.textContent = 'Copy';
+                }, 2000);
+            });
+        });
+    </script>
 </body>
 </html>
