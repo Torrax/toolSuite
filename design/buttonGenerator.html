@@ -161,7 +161,7 @@
             .form-group label {
                 display: flex;
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center; /* Changed from flex-start to center */
                 margin-right: 20px;
                 margin-bottom: 10px;
                 width: calc(100% / 3 - 20px);
@@ -178,7 +178,7 @@
             }
             .form-group.label-full-width {
                 width: 100%;
-                align-items: flex-start;
+                align-items: center;
             }
             /* Center "Background Style" Title and Dropdown */
             #backgroundStyleContainer {
@@ -190,6 +190,7 @@
             #backgroundStyleContainer label {
                 width: 100%;
                 align-items: center;
+                margin-bottom: 15px; /* Added space under dropdown */
             }
             /* Styled Color Inputs as Circles with Light Border */
             .color-input-wrapper {
@@ -228,16 +229,47 @@
             }
             /* Styled Checkboxes */
             .styled-checkbox {
-                display: flex;
-                align-items: center;
-                margin-top: 5px;
+                position: relative;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
             }
             .styled-checkbox input[type="checkbox"] {
-                width: 18px;
-                height: 18px;
-                margin-right: 5px;
+                opacity: 0;
+                width: 0;
+                height: 0;
                 cursor: pointer;
-                accent-color: #f1c40f;
+            }
+            .styled-checkbox::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 20px;
+                height: 20px;
+                background-color: #34495e;
+                border: 2px solid #f1c40f;
+                border-radius: 4px;
+                transition: background-color 0.3s, border-color 0.3s;
+            }
+            .styled-checkbox input[type="checkbox"]:checked::before {
+                background-color: #f1c40f;
+                border-color: #f1c40f;
+            }
+            .styled-checkbox::after {
+                content: "";
+                position: absolute;
+                display: none;
+            }
+            .styled-checkbox input[type="checkbox"]:checked::after {
+                display: block;
+                left: 7px;
+                top: 3px;
+                width: 5px;
+                height: 10px;
+                border: solid #34495e;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
             }
             /* Dropdown for Fonts */
             .font-select-wrapper {
@@ -245,14 +277,14 @@
                 width: 100%;
             }
             .font-select-wrapper select {
-                width: 100%;
-                padding: 8px;
-                border: 1px solid #1abc9c;
-                border-radius: 6px;
-                appearance: none;
                 background-color: #34495e;
                 color: #ecf0f1;
-                background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%23999"><polygon points="0,0 14,0 7,10" /></svg>');
+                border: 1px solid #1abc9c;
+                border-radius: 6px;
+                padding: 8px;
+                width: 100%;
+                appearance: none;
+                background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%23ecf0f1"><polygon points="0,0 14,0 7,10"/></svg>');
                 background-repeat: no-repeat;
                 background-position: right 10px center;
                 background-size: 12px;
@@ -274,10 +306,16 @@
                 font-size: 16px;
                 width: 100%;
             }
-
+            .form-group label > span {
+                display: block;
+                text-align: center;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #f1c40f;
+            }
             /* Preview Area */
             #preview {
-                flex: 1; /* Updated from width: 0%; to flex: 1; */
+                width: 100%;
                 background: linear-gradient(145deg, #34495e, #2c3e50);
                 border-radius: 12px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -288,8 +326,8 @@
                 padding: 30px;
                 overflow-y: auto;
                 max-height: 80vh;
-            }        
-    
+            }
+
             #buttonContainer {
                 width: 100%;
                 flex: 1;
@@ -297,9 +335,9 @@
                 align-items: center;
                 justify-content: center;
                 background-image: linear-gradient(45deg, #d8d8d8 25%, transparent 25%), 
-                                    linear-gradient(-45deg, #d8d8d8 25%, transparent 25%), 
-                                    linear-gradient(45deg, transparent 75%, #d8d8d8 75%), 
-                                    linear-gradient(-45deg, transparent 75%, #d8d8d8 75%);
+                                linear-gradient(-45deg, #d8d8d8 25%, transparent 25%), 
+                                linear-gradient(45deg, transparent 75%, #d8d8d8 75%), 
+                                linear-gradient(-45deg, transparent 75%, #d8d8d8 75%);
                 background-size: 20px 20px;
                 background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
                 border: 2px solid #000000;
@@ -308,7 +346,7 @@
                 padding: 20px;
                 overflow: hidden;
             }
-            
+
             /* Text Button */
             #textButton {
                 font-size: 16px;
@@ -322,17 +360,15 @@
                 cursor: pointer;
                 transition: all 0.3s ease;
             }
-            
             #textButton:hover {
                 background: linear-gradient(#56d860, #1c4723);
                 border-color: #333333;
             }
-            
             #textButton:active {
                 background: linear-gradient(#3a9f40, #122915);
                 border-color: #222222;
             }
-            
+
             /* Image Button */
             #imageButton {
                 cursor: pointer;
@@ -350,7 +386,7 @@
                 box-shadow: none;
                 overflow: visible;
             }
-    
+
             #imageButtonImg {
                 width: 100%;
                 height: 100%;
@@ -401,21 +437,9 @@
             #controls::-webkit-scrollbar {
                 display: none;
             }
-
-            /* Preview Area */
             #controls {
-                width: 40%;
-                background: linear-gradient(145deg, #34495e, #2c3e50);
-                color: #ecf0f1;
-                padding: 30px;
-                overflow-y: auto;
-                border-right: 1px solid #2c3e50;
-                display: flex;
-                flex-direction: column;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                max-height: 80vh;
-                position: relative;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
             }
             /* Responsive adjustments */
             @media (max-width: 800px) {
@@ -438,19 +462,16 @@
                 }
             }
             /* Enlarged Button Text Input */
-            #buttonText, #imageButtonText {
-                font-size: 16px;
-                padding: 10px;
+            #buttonText,
+            #imageButtonText {
                 height: 50px;
-                width: 100%;
-                border-radius: 6px;
-                border: 1px solid #1abc9c;
-                background-color: #34495e;
-                color: #ecf0f1;
-                transition: border-color 0.3s, box-shadow 0.3s;
             }
-            /* Reduced Font Size Input */
-            #fontSize, #imageResizePercentage, #imageWidth, #imageHeight {
+
+            /* General Input Styles */
+            input[type="text"],
+            input[type="number"],
+            input[type="range"],
+            select {
                 font-size: 16px;
                 padding: 8px;
                 height: 35px;
@@ -461,13 +482,96 @@
                 color: #ecf0f1;
                 transition: border-color 0.3s, box-shadow 0.3s;
             }
+
+            /* Input Focus Styles */
+            input[type="text"]:focus,
+            input[type="number"]:focus,
+            input[type="range"]:focus,
+            select:focus {
+                border-color: #f39c12;
+                box-shadow: 0 0 5px #f39c12;
+                outline: none;
+            }
+
+            /* Slider Styles */
+            input[type="range"] {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 100%;
+                height: 15px;
+                background: #2c3e50;
+                outline: none;
+                border-radius: 5px;
+                overflow: hidden;
+                margin-top: 5px;
+            }
+
+            /* Slider Thumb */
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                background: #f1c40f;
+                cursor: pointer;
+                border-radius: 50%;
+                box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            }
+            input[type="range"]::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                background: #f1c40f;
+                cursor: pointer;
+                border: none;
+                border-radius: 50%;
+                box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            }
+
+            /* Styled Checkboxes */
+            input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                margin-top: 10px;
+                accent-color: #f1c40f;
+                cursor: pointer;
+            }
+
+            /* Dropdown for Fonts */
+            select {
+                background-color: #34495e;
+                color: #ecf0f1;
+                border: 1px solid #1abc9c;
+                border-radius: 6px;
+                padding: 8px;
+                width: 100%;
+                appearance: none;
+                background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%23ecf0f1"><polygon points="0,0 14,0 7,10"/></svg>');
+                background-repeat: no-repeat;
+                background-position: right 10px center;
+                background-size: 12px;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+            select:focus {
+                border-color: #f39c12;
+                box-shadow: 0 0 5px #f39c12;
+                outline: none;
+            }
+
             /* Centered Labels */
             .form-group label > span {
+                display: block;
                 text-align: center;
                 margin-bottom: 5px;
                 font-weight: bold;
                 color: #f1c40f;
             }
+
+            /* Enlarged Button Text Inputs */
+            #buttonText,
+            #imageButtonText {
+                height: 50px;
+            }
+
             /* Auto Buttons */
             .auto-button, .transform-button {
                 padding: 10px 15px;
@@ -485,6 +589,7 @@
                 transform: translateY(-2px);
                 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             }
+
             /* Image Upload Section */
             .image-upload-section {
                 margin-bottom: 20px;
@@ -517,23 +622,106 @@
                 transform: translateY(-2px);
                 box-shadow: 0 6px 12px rgba(0,0,0,0.3);
             }
+
             /* Style for Range Inputs (Sliders) */
             input[type="range"] {
+                -webkit-appearance: none;
+                appearance: none;
                 width: 100%;
+                height: 15px;
+                background: #2c3e50;
+                outline: none;
+                border-radius: 5px;
+                overflow: hidden;
                 margin-top: 5px;
-                accent-color: #f1c40f;
             }
-            /* Adjust Shadow Blur Entry Field */
-            .shadow-blur-group {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+
+            /* Slider Thumb */
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                background: #f1c40f;
+                cursor: pointer;
+                border-radius: 50%;
+                box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            }
+            input[type="range"]::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                background: #f1c40f;
+                cursor: pointer;
+                border: none;
+                border-radius: 50%;
+                box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            }
+
+            /* Specific Styles Removed */
+            /* 
+            /* Reduced Font Size Input */
+            /* #fontSize, #imageResizePercentage, #imageWidth, #imageHeight {
+                font-size: 16px;
+                padding: 8px;
+                height: 35px;
+                width: 100%;
+                border-radius: 6px;
+                border: 1px solid #1abc9c;
+                background-color: #34495e;
+                color: #ecf0f1;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            } 
+            */
+
+            /* Additional Styles for Consistency */
+
+            /* Form Group Adjustments */
+            .form-group label input[type="text"],
+            .form-group label input[type="number"],
+            .form-group label select,
+            .form-group label input[type="range"] {
                 width: 100%;
             }
-            .shadow-blur-group label {
-                width: 100%;
-                text-align: center;
+
+            /* Ensure all input elements inherit the general styles */
+            #buttonText,
+            #imageButtonText,
+            #fontSize,
+            #imageResizePercentage,
+            #imageWidth,
+            #imageHeight,
+            #shadowBlur,
+            #embossRadius,
+            #embossIntensity,
+            #textOffsetX,
+            #textOffsetY {
+                /* These elements now inherit from the general input styles */
+                /* Specific styles removed to avoid conflicts */
             }
+
+            /* Ensure the custom font input is styled consistently */
+            #customFontFamily {
+                font-size: 16px;
+                padding: 8px;
+                height: 35px;
+                width: 100%;
+                border-radius: 6px;
+                border: 1px solid #1abc9c;
+                background-color: #34495e;
+                color: #ecf0f1;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+            #customFontFamily:focus {
+                border-color: #f39c12;
+                box-shadow: 0 0 5px #f39c12;
+                outline: none;
+            }
+
+            /* Ensure space under all dropdown menus */
+            select {
+                margin-bottom: 15px; /* Added space under dropdown */
+            }
+
         </style>
 
         <!-- Dynamic Styles -->
@@ -1034,6 +1222,8 @@
                 let currentTab = 'text'; // Default active tab
                 let isInitialImageLoad = true;
 
+
+
                 // Tab Elements
                 const textTab = document.getElementById('textTab');
                 const imageTab = document.getElementById('imageTab');
@@ -1145,13 +1335,17 @@
                 // Reset Button
                 const resetEffects = document.getElementById('resetEffects');
 
-                // Transformation variables
-                let rotationAngle = 0; // in degrees
-                let flipHorizontal = 1; // 1 or -1
-                let flipVertical = 1; // 1 or -1
-
-                // Variables to store images
+                // Additional variables for image processing
                 let uploadedImage = null;
+                let originalImageData = null;
+                let rotationAngle = 0;
+                let flipHorizontal = 1;
+                let flipVertical = 1;
+
+                // Create a canvas element for image processing
+                const imageCanvas = document.createElement('canvas');
+                const imageCanvasCtx = imageCanvas.getContext('2d');
+
 
                 // Switch Tab Function
                 function switchTab(activeTab) {
@@ -1486,128 +1680,262 @@
                 
 
                 function updateImageButtonStyles() {
-                    if (!uploadedImage) return;
+                    if (uploadedImage && originalImageData) {
+                        // Process the image with current filters
+                        const processedImageDataUrl = processImage();
+                        imageButtonImg.src = processedImageDataUrl;
                 
-                    // Create a canvas
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
+                        // Only display the image button if the current tab is 'image'
+                        if (currentTab === 'image') {
+                            imageButton.style.display = 'inline-block';
+                        } else {
+                            imageButton.style.display = 'none';
+                        }
                 
-                    // Get the resize percentage
-                    const resizePercentage = parseInt(imageResizePercentage.value) || 100;
-                    const scaleFactor = resizePercentage / 100;
+                        // Retrieve filter values from the input controls
+                        const brightness = imageBrightness.value;
+                        const contrast = imageContrast.value;
+                        const hue = imageHue.value;
+                        const saturation = imageSaturation.value;
+                        const opacity = imageOpacity.value;
+                        const blur = imageBlur.value;
                 
-                    // Calculate scaled dimensions
-                    const imageWidth = uploadedImage.width * scaleFactor;
-                    const imageHeight = uploadedImage.height * scaleFactor;
+                        // Construct the CSS filter string
+                        let filterCSS = `
+                            brightness(${brightness}%)
+                            contrast(${contrast}%)
+                            hue-rotate(${hue}deg)
+                            saturate(${saturation}%)
+                            opacity(${opacity}%)
+                            blur(${blur}px)
+                        `;
                 
-                    // Determine canvas size to accommodate rotation
-                    let canvasWidth, canvasHeight;
+                        // Apply Shadow Effect if enabled
+                        if (imageShadowEffect && imageShadowEffect.checked) {
+                            const xOffset = imageShadowXOffset.value;
+                            const yOffset = imageShadowYOffset.value;
+                            const shadowBlur = imageShadowBlur.value;
+                            const color = imageShadowColor.value;
+                            filterCSS += ` drop-shadow(${xOffset}px ${yOffset}px ${shadowBlur}px ${color})`;
+                        }
                 
-                    if (rotationAngle % 180 === 0) {
-                        canvasWidth = Math.abs(imageWidth);
-                        canvasHeight = Math.abs(imageHeight);
-                    } else {
-                        canvasWidth = Math.abs(imageHeight);
-                        canvasHeight = Math.abs(imageWidth);
-                    }
+                        // Apply Transformations
+                        const resizePercentage = parseInt(imageResizePercentage.value);
+                        const resizeScale = isNaN(resizePercentage) ? 1 : resizePercentage / 100;
+                        const transform = `scale(${flipHorizontal * resizeScale}, ${flipVertical * resizeScale}) rotate(${rotationAngle}deg)`;
                 
-                    canvas.width = canvasWidth;
-                    canvas.height = canvasHeight;
+                        // Apply Manual Size if specified
+                        if (imageWidth.value) {
+                            imageButton.style.width = `${imageWidth.value}px`;
+                        } else {
+                            imageButton.style.width = 'auto';
+                        }
+                        if (imageHeight.value) {
+                            imageButton.style.height = `${imageHeight.value}px`;
+                        } else {
+                            imageButton.style.height = 'auto';
+                        }
                 
-                    ctx.save();
-                
-                    // Move to the center of the canvas
-                    ctx.translate(canvasWidth / 2, canvasHeight / 2);
-                
-                    // Apply rotation
-                    ctx.rotate(rotationAngle * Math.PI / 180);
-                
-                    // Apply flip
-                    ctx.scale(flipHorizontal, flipVertical);
-                
-                    // Draw the image onto the canvas
-                    ctx.drawImage(
-                        uploadedImage,
-                        -imageWidth / 2,
-                        -imageHeight / 2,
-                        imageWidth,
-                        imageHeight
-                    );
-                
-                    ctx.restore();
-                
-                    // Get image data for pixel manipulation
-                    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    let data = imageData.data;
-                
-                    // Only apply brightness and contrast adjustments if values differ from defaults
-                    const defaultBrightness = 100;
-                    const defaultContrast = 100;
-                    const brightnessValue = parseInt(imageBrightness.value);
-                    const contrastValue = parseInt(imageContrast.value);
-                
-                    if (brightnessValue !== defaultBrightness || contrastValue !== defaultContrast) {
-                        applyBrightnessContrast(data, brightnessValue, contrastValue);
-                        ctx.putImageData(imageData, 0, 0);
-                    }
-                
-                    // Only apply hue and saturation adjustments if values differ from defaults
-                    const defaultHue = 0;
-                    const defaultSaturation = 100;
-                    const hueValue = parseInt(imageHue.value);
-                    const saturationValue = parseInt(imageSaturation.value);
-                
-                    if (hueValue !== defaultHue || saturationValue !== defaultSaturation) {
-                        applyHueSaturation(data, hueValue, saturationValue);
-                        ctx.putImageData(imageData, 0, 0);
-                    }
-                
-                    // Set the image source to the canvas data URL
-                    imageButtonImg.src = canvas.toDataURL();
-                
-                    // Apply opacity only if it differs from default
-                    imageButtonImg.style.opacity =
-                        imageOpacity.value !== '100' ? imageOpacity.value / 100 : '';
-                
-                    // Remove CSS filters and transforms
-                    imageButtonImg.style.filter = '';
-                    imageButtonImg.style.transform = '';
-                
-                    // Handle Image Text
-                    if (showImageText.checked) {
-                        imageText.style.display = 'block';
-                        imageText.textContent = imageButtonText.value;
+                        // Position Image Text
                         const offsetX = parseInt(textOffsetX.value) || 0;
                         const offsetY = parseInt(textOffsetY.value) || 0;
-                        imageText.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-                    } else {
-                        imageText.style.display = 'none';
-                    }
+                        imageText.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
                 
-                    // Apply manual size if specified
-                    if (imageWidth.value) {
-                        imageButton.style.width = `${imageWidth.value}px`;
-                    } else {
-                        imageButton.style.width = `${canvasWidth}px`;
-                    }
-                    if (imageHeight.value) {
-                        imageButton.style.height = `${imageHeight.value}px`;
-                    } else {
-                        imageButton.style.height = `${canvasHeight}px`;
-                    }
+                        // Show or Hide Image Text based on checkbox
+                        imageText.style.display = showImageText.checked && uploadedImage ? 'block' : 'none';
                 
-                    // Apply shadow effect if enabled
-                    if (imageShadowEffect.checked) {
-                        const xOffset = imageShadowXOffset.value;
-                        const yOffset = imageShadowYOffset.value;
-                        const blurVal = imageShadowBlur.value;
-                        const color = imageShadowColor.value;
-                        imageButton.style.filter = `drop-shadow(${xOffset}px ${yOffset}px ${blurVal}px ${color})`;
-                    } else {
-                        imageButton.style.filter = 'none';
+                        // Generate CSS for imageButtonImg and its hover/active states
+                        let css = '';
+                        css += '#imageButtonImg {\n';
+                        css += `  filter: ${filterCSS};\n`;
+                        css += `  transform: ${transform};\n`;
+                        css += '  transition: filter 0.3s ease, transform 0.3s ease;\n';
+                        css += '}\n';
+                
+                        // Hover State
+                        css += '#imageButton:hover #imageButtonImg {\n';
+                        css += `  filter: brightness(${brightness * 1.1}%)
+                            contrast(${contrast}%)
+                            hue-rotate(${hue}deg)
+                            saturate(${saturation}%)
+                            opacity(${opacity}%)
+                            blur(${blur}px)
+                            ${imageShadowEffect && imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
+                        ;\n`;
+                        css += '}\n';
+                
+                        // Active State
+                        css += '#imageButton:active #imageButtonImg {\n';
+                        css += `  filter: brightness(${brightness * 0.85}%)
+                            contrast(${contrast}%)
+                            hue-rotate(${hue}deg)
+                            saturate(${saturation}%)
+                            opacity(${opacity}%)
+                            blur(${blur}px)
+                            ${imageShadowEffect && imageShadowEffect.checked ? `drop-shadow(${imageShadowXOffset.value}px ${imageShadowYOffset.value}px ${imageShadowBlur.value}px ${imageShadowColor.value})` : ''}
+                        ;\n`;
+                        css += '}\n';
+                
+                        // Apply the dynamically generated CSS
+                        dynamicStyles.textContent = css;
+                
+                        // Debugging
+                        console.log('Dynamic Styles Updated for Image Button:', css);
                     }
                 }
                 
+                function processImage() {
+                    if (!originalImageData) return uploadedImage.src;
+                
+                    const canvas = document.createElement('canvas');
+                    canvas.width = originalImageData.width;
+                    canvas.height = originalImageData.height;
+                    const ctx = canvas.getContext('2d');
+                
+                    // Create a new ImageData object to hold the processed data
+                    let imageData = ctx.createImageData(originalImageData.width, originalImageData.height);
+                
+                    // Copy original image data
+                    imageData.data.set(originalImageData.data);
+                
+                    // Apply Pixelate effect
+                    const pixelateAmount = parseInt(imagePixelate.value);
+                    if (pixelateAmount > 1) {
+                        imageData = applyPixelate(imageData, pixelateAmount);
+                    }
+                
+                    // Apply Noise effect
+                    const noiseAmount = parseInt(imageNoise.value);
+                    if (noiseAmount > 0) {
+                        imageData = applyNoise(imageData, noiseAmount);
+                    }
+                
+                    // Put the processed image data back to the canvas
+                    ctx.putImageData(imageData, 0, 0);
+                
+                    // Return the data URL
+                    return canvas.toDataURL('image/png');
+                }
+
+                function applyPixelate(imageData, pixelSize) {
+                    const width = imageData.width;
+                    const height = imageData.height;
+                    const data = imageData.data;
+                
+                    for (let y = 0; y < height; y += pixelSize) {
+                        for (let x = 0; x < width; x += pixelSize) {
+                            const offset = ((y * width) + x) * 4;
+                
+                            // Get the color of the top-left pixel in the block
+                            const r = data[offset];
+                            const g = data[offset + 1];
+                            const b = data[offset + 2];
+                            const a = data[offset + 3];
+                
+                            // Fill the block with this color
+                            for (let dy = 0; dy < pixelSize; dy++) {
+                                for (let dx = 0; dx < pixelSize; dx++) {
+                                    const px = x + dx;
+                                    const py = y + dy;
+                
+                                    if (px < width && py < height) {
+                                        const dstOffset = ((py * width) + px) * 4;
+                                        data[dstOffset] = r;
+                                        data[dstOffset + 1] = g;
+                                        data[dstOffset + 2] = b;
+                                        data[dstOffset + 3] = a;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                
+                    return imageData;
+                }
+
+                function applyPixelate(imageData, pixelSize) {
+                    const width = imageData.width;
+                    const height = imageData.height;
+                    const data = imageData.data;
+                
+                    for (let y = 0; y < height; y += pixelSize) {
+                        for (let x = 0; x < width; x += pixelSize) {
+                            const offset = ((y * width) + x) * 4;
+                
+                            // Get the color of the top-left pixel in the block
+                            const r = data[offset];
+                            const g = data[offset + 1];
+                            const b = data[offset + 2];
+                            const a = data[offset + 3];
+                
+                            // Fill the block with this color
+                            for (let dy = 0; dy < pixelSize; dy++) {
+                                for (let dx = 0; dx < pixelSize; dx++) {
+                                    const px = x + dx;
+                                    const py = y + dy;
+                
+                                    if (px < width && py < height) {
+                                        const dstOffset = ((py * width) + px) * 4;
+                                        data[dstOffset] = r;
+                                        data[dstOffset + 1] = g;
+                                        data[dstOffset + 2] = b;
+                                        data[dstOffset + 3] = a;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                
+                    return imageData;
+                }
+                                
+                function applyNoise(imageData, noiseLevel) {
+                    const width = imageData.width;
+                    const height = imageData.height;
+                    const data = imageData.data;
+                    const noiseIntensity = noiseLevel / 100;
+                
+                    for (let i = 0; i < data.length; i += 4) {
+                        // Generate random noise between -noiseIntensity and +noiseIntensity
+                        const noise = (Math.random() * 2 - 1) * 255 * noiseIntensity;
+                
+                        data[i] = Math.min(Math.max(data[i] + noise, 0), 255);     // Red
+                        data[i + 1] = Math.min(Math.max(data[i + 1] + noise, 0), 255); // Green
+                        data[i + 2] = Math.min(Math.max(data[i + 2] + noise, 0), 255); // Blue
+                        // Alpha remains unchanged
+                    }
+                
+                    return imageData;
+                }                
+
+                function generateFilterString(brightnessAdjust, contrastAdjust, hueRotateAdjust, saturateAdjust, opacityAdjust, blurAdjust, dropShadow) {
+                    let filters = [];
+                
+                    if (parseFloat(brightnessAdjust) !== 0) {
+                        filters.push(`brightness(${100 + parseFloat(brightnessAdjust)}%)`);
+                    }
+                    if (parseFloat(contrastAdjust) !== 0) {
+                        filters.push(`contrast(${100 + parseFloat(contrastAdjust)}%)`);
+                    }
+                    if (parseFloat(hueRotateAdjust) !== 0) {
+                        filters.push(`hue-rotate(${parseFloat(hueRotateAdjust)}deg)`);
+                    }
+                    if (parseFloat(saturateAdjust) !== 0) {
+                        filters.push(`saturate(${100 + parseFloat(saturateAdjust)}%)`);
+                    }
+                    if (parseFloat(opacityAdjust) !== 0) {
+                        filters.push(`opacity(${100 + parseFloat(opacityAdjust)}%)`);
+                    }
+                    if (parseFloat(blurAdjust) > 0) {
+                        filters.push(`blur(${parseFloat(blurAdjust)}px)`);
+                    }
+                
+                    if (dropShadow) {
+                        filters.push(dropShadow);
+                    }
+                
+                    return filters.join(' ') || 'none';
+                }                                   
 
                 // Helper function to copy computed styles to an element
                 function copyComputedStyles(sourceElement, targetElement) {
@@ -1618,6 +1946,13 @@
                             computedStyle.getPropertyValue(property),
                             computedStyle.getPropertyPriority(property)
                         );
+                    }
+                
+                    // Recursively copy styles for child elements
+                    if (sourceElement.children) {
+                        for (let i = 0; i < sourceElement.children.length; i++) {
+                            copyComputedStyles(sourceElement.children[i], targetElement.children[i]);
+                        }
                     }
                 }
 
@@ -1712,10 +2047,7 @@
                 }
 
                 function applyCloneImageButtonStyles(clone, state) {
-                    // Reset any existing filters and transformations
-                    clone.style.filter = 'none';
-                    clone.style.transform = 'none';
-                
+               
                     // Define filter and transform based on state
                     if (state === 'hover') {
                         const hoverBrightness = Math.min(parseFloat(imageBrightness.value) * 1.1, 200); // Increase brightness by 10%
@@ -1871,35 +2203,31 @@
                     if (file && file.type.startsWith('image/')) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            // Reset transformations
-                            rotationAngle = 0;
-                            flipHorizontal = 1;
-                            flipVertical = 1;
-
-                            // Create a new Image object
-                            uploadedImage = new Image();
-                            uploadedImage.crossOrigin = 'Anonymous'; // To avoid CORS issues
-                            uploadedImage.onload = function() {
+                            const img = new Image();
+                            img.crossOrigin = 'Anonymous'; // To avoid CORS issues
+                            img.onload = function() {
+                                // Draw the image onto the canvas
+                                imageCanvas.width = img.width;
+                                imageCanvas.height = img.height;
+                                imageCanvasCtx.clearRect(0, 0, img.width, img.height);
+                                imageCanvasCtx.drawImage(img, 0, 0);
+                                uploadedImage = img;
+                                // Store the original image data
+                                originalImageData = imageCanvasCtx.getImageData(0, 0, img.width, img.height);
                                 // Update styles
                                 if (currentTab === 'image') {
                                     imageButton.style.display = 'inline-block';
+                                    updateImageButtonStyles();
+                                    // Show Image Text if checkbox is checked
                                     imageText.style.display = showImageText.checked ? 'block' : 'none';
-                                } else {
-                                    imageButton.style.display = 'none';
-                                    imageText.style.display = 'none';
                                 }
-
-                                // Update image button styles
-                                updateImageButtonStyles();
-                            };
-                            uploadedImage.src = e.target.result;
-                        };
+                            }
+                            img.src = e.target.result;
+                        }
                         reader.readAsDataURL(file);
                     }
                 }
-
-                            
-
+                                
                 // Function to reset effects to default values
                 function resetEffectsToDefault() {
                     // Reset all effect controls to default values
@@ -2045,11 +2373,6 @@
                     input.addEventListener('input', updateDynamicStyles);
                 });
 
-                // Ensure imagePixelate and imageNoise are included
-                imagePixelate.addEventListener('input', updateDynamicStyles);
-                imageNoise.addEventListener('input', updateDynamicStyles);
-
-
                 // Event listeners for Adjustments and Filters
                 imageBrightness.addEventListener('input', updateImageButtonStyles);
                 imageContrast.addEventListener('input', updateImageButtonStyles);
@@ -2085,45 +2408,19 @@
                 }
 
                 // Function to download Text Button
-                function downloadImageButton(state) {
-                    // Clone the imageButton
-                    const clone = imageButton.cloneNode(true);
-                
+                function downloadTextButton(state) {
+                    // Clone the textButton
+                    const clone = textButton.cloneNode(true);
+
                     // Remove any existing inline styles to prevent conflicts
                     clone.removeAttribute('style');
-                
+
                     // Apply computed styles to clone
-                    copyComputedStyles(imageButton, clone);
-                
-                    // Remove CSS transforms and filters
-                    clone.style.transform = 'none';
-                    clone.style.filter = 'none';
-                
-                    // Apply shadow effect if enabled
-                    if (imageShadowEffect.checked) {
-                        const xOffset = imageShadowXOffset.value;
-                        const yOffset = imageShadowYOffset.value;
-                        const blurVal = imageShadowBlur.value;
-                        const color = imageShadowColor.value;
-                        clone.style.filter = `drop-shadow(${xOffset}px ${yOffset}px ${blurVal}px ${color})`;
-                    } else {
-                        clone.style.filter = 'none';
-                    }
-                
-                    // Handle Image Text if applicable
-                    const textClone = clone.querySelector('.image-text');
-                    if (showImageText.checked && uploadedImage) {
-                        textClone.textContent = imageButtonText.value;
-                        // Apply text offsets
-                        const offsetX = parseInt(textOffsetX.value) || 0;
-                        const offsetY = parseInt(textOffsetY.value) || 0;
-                        textClone.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-                    } else {
-                        if (textClone) {
-                            textClone.style.display = 'none';
-                        }
-                    }
-                
+                    copyComputedStyles(textButton, clone);
+
+                    // Apply state-specific styles
+                    applyCloneTextButtonStyles(clone, state);
+
                     // Create a temporary container for capturing
                     const tempContainer = document.createElement('div');
                     tempContainer.style.display = 'inline-block';
@@ -2131,33 +2428,145 @@
                     tempContainer.style.padding = '0';
                     tempContainer.style.border = 'none';
                     tempContainer.style.background = 'none';
-                
+
                     // Position the container off-screen to avoid affecting layout
                     tempContainer.style.position = 'fixed';
                     tempContainer.style.top = '-10000px';
                     tempContainer.style.left = '-10000px';
-                
+
                     tempContainer.appendChild(clone);
                     document.body.appendChild(tempContainer);
-                
-                    // Use html2canvas to capture the button as PNG with transparent background
+
+                    // Use html2canvas to capture the button as PNG with transparent background and increased scale
                     html2canvas(clone, {
                         useCORS: true,
                         allowTaint: false,
-                        backgroundColor: null,
-                        scale: 1 // Capture at actual size
+                        backgroundColor: null, // Make background transparent
+                        scale: 3 // Increase scale for better resolution
                     })
-                    .then(function (canvas) {
+                        .then(function (canvas) {
+                            const dataUrl = canvas.toDataURL('image/png');
+                            downloadDataUrl(`text-button-${state}.png`, dataUrl);
+                            document.body.removeChild(tempContainer);
+                        })
+                        .catch(function (error) {
+                            console.error('An error occurred while capturing the Text Button:', error);
+                            document.body.removeChild(tempContainer);
+                        });
+                }
+
+                function downloadImageButton(state) {
+                    // Get the processed image data URL
+                    const processedImageDataUrl = processImage();
+                
+                    // Create a new Image object
+                    const img = new Image();
+                    img.onload = function() {
+                        // Create a canvas element
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                
+                        // Set image dimensions
+                        const imgWidth = img.width;
+                        const imgHeight = img.height;
+                
+                        // Apply resize percentage
+                        const resizePercentage = parseInt(imageResizePercentage.value) || 100;
+                        const scale = resizePercentage / 100;
+                
+                        // Calculate transformed dimensions
+                        const transformedWidth = imgWidth * scale;
+                        const transformedHeight = imgHeight * scale;
+                
+                        // Calculate canvas size to accommodate rotation
+                        const angleInRadians = (rotationAngle * Math.PI) / 180;
+                        const sin = Math.abs(Math.sin(angleInRadians));
+                        const cos = Math.abs(Math.cos(angleInRadians));
+                
+                        const canvasWidth = transformedWidth * cos + transformedHeight * sin;
+                        const canvasHeight = transformedWidth * sin + transformedHeight * cos;
+                
+                        // Set canvas dimensions
+                        canvas.width = canvasWidth;
+                        canvas.height = canvasHeight;
+                
+                        // Move to the center of the canvas
+                        context.translate(canvasWidth / 2, canvasHeight / 2);
+                
+                        // Apply rotation
+                        context.rotate(angleInRadians);
+                
+                        // Apply flip transformations
+                        context.scale(flipHorizontal, flipVertical);
+                
+                        // Apply scaling
+                        context.scale(scale, scale);
+                
+                        // **Adjust brightness based on state**
+                        let brightnessValue = parseFloat(imageBrightness.value);
+                        if (state === 'hover') {
+                            brightnessValue = Math.min(brightnessValue * 1.1, 200); // Increase brightness by 10%
+                        } else if (state === 'active') {
+                            brightnessValue = Math.max(brightnessValue * 0.85, 0);  // Decrease brightness by 15%
+                        }
+                
+                        // Apply filters
+                        context.filter = `
+                            brightness(${brightnessValue}%)
+                            contrast(${imageContrast.value}%)
+                            hue-rotate(${imageHue.value}deg)
+                            saturate(${imageSaturation.value}%)
+                            opacity(${imageOpacity.value}%)
+                            blur(${imageBlur.value}px)
+                        `.trim();
+                
+                        // Apply shadow if enabled
+                        if (imageShadowEffect.checked) {
+                            context.shadowColor = imageShadowColor.value;
+                            context.shadowBlur = parseInt(imageShadowBlur.value);
+                            context.shadowOffsetX = parseInt(imageShadowXOffset.value);
+                            context.shadowOffsetY = parseInt(imageShadowYOffset.value);
+                        } else {
+                            context.shadowColor = 'transparent';
+                        }
+                
+                        // Draw the image centered at the origin
+                        context.drawImage(img, -imgWidth / 2, -imgHeight / 2);
+                
+                        // Draw text if necessary
+                        if (showImageText.checked && uploadedImage) {
+                            // Reset transformations and filters for text
+                            context.setTransform(1, 0, 0, 1, 0, 0);
+                            context.filter = 'none';
+                
+                            // Set text properties
+                            context.font = '18px Arial';
+                            context.fillStyle = '#ecf0f1';
+                            context.textAlign = 'center';
+                            context.textBaseline = 'middle';
+                
+                            // Apply text shadow if needed
+                            context.shadowColor = '#000';
+                            context.shadowOffsetX = 1;
+                            context.shadowOffsetY = 1;
+                            context.shadowBlur = 2;
+                
+                            // Calculate text position
+                            const offsetX = canvasWidth / 2 + (parseInt(textOffsetX.value) || 0);
+                            const offsetY = canvasHeight / 2 + (parseInt(textOffsetY.value) || 0);
+                
+                            // Draw the text
+                            context.fillText(imageButtonText.value, offsetX, offsetY);
+                        }
+                
+                        // Convert the canvas to data URL and download
                         const dataUrl = canvas.toDataURL('image/png');
                         downloadDataUrl(`image-button-${state}.png`, dataUrl);
-                        document.body.removeChild(tempContainer);
-                    })
-                    .catch(function (error) {
-                        console.error('An error occurred while capturing the Image Button:', error);
-                        document.body.removeChild(tempContainer);
-                    });
-                }                
-
+                    };
+                
+                    img.src = processedImageDataUrl;
+                }
+                                                        
             });
         </script>
     
